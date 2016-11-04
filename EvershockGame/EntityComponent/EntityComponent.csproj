@@ -57,7 +57,6 @@
   <ItemGroup>
     <Compile Include="Camera\CameraTarget.cs" />
     <Compile Include="Component.cs" />
-    <Compile Include="Components\AttributesComponent.cs" />
     <Compile Include="Components\CameraComponent.cs" />
     <Compile Include="Components\Collider\CircleColliderComponent.cs" />
     <Compile Include="Components\Collider\RectColliderComponent.cs" />
@@ -72,10 +71,12 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Factory\ComponentFactory.cs" />
     <Compile Include="Factory\EntityFactory.cs" />
+    <Compile Include="GameActionCollection.cs" />
     <Compile Include="ICameraComponent.cs" />
     <Compile Include="IComponent.cs" />
     <Compile Include="IDrawableComponent.cs" />
     <Compile Include="IEntity.cs" />
+    <Compile Include="IInputReceiver.cs" />
     <Compile Include="ILightingComponent.cs" />
     <Compile Include="ITickableComponent.cs" />
     <Compile Include="Manager\CameraManager.cs" />

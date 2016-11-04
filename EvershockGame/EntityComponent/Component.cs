@@ -34,5 +34,17 @@ namespace EntityComponent
             }
             return default(T);
         }
+
+        //---------------------------------------------------------------------------
+
+        public List<IComponent> GetComponents()
+        {
+            IEntity entity = EntityManager.Get().Find(Entity);
+            if (entity != null)
+            {
+                return entity.GetComponents();
+            }
+            return null;
+        }
     }
 }

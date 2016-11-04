@@ -14,5 +14,6 @@ namespace EntityComponent
         //---------------------------------------------------------------------------
         
         T GetComponent<T>() where T : IComponent;
+        List<IComponent> GetComponents();
     }
 }

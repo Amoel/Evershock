@@ -1,6 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EntityComponent;
+using EntityComponent.Factory;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using EvershockGame.Code;
+using EntityComponent.Components;
+using EntityComponent.Manager;
 
 namespace EvershockGame
 {
@@ -26,9 +32,12 @@ namespace EvershockGame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
+
+            IEntity entity = EntityFactory.Create<Entity>();
+            entity.AddComponent<AttributesComponent>();
+            InputComponent input = entity.AddComponent<InputComponent>();
+            input.MapAction(EGameAction.ADD_HEALTH, EInput.KEYBOARD_SPACE);
         }
 
         /// <summary>
@@ -62,8 +71,7 @@ namespace EvershockGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-
+            ComponentManager.Get().TickComponents(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
             base.Update(gameTime);
         }
 
@@ -74,9 +82,6 @@ namespace EvershockGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-
             base.Draw(gameTime);
         }
     }

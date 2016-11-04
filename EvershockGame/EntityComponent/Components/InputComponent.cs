@@ -39,6 +39,22 @@ namespace EntityComponent.Components
             //    }
             //}
 
+            GameActionCollection actions = new GameActionCollection();
+            foreach (EGameAction action in m_Mappings.Keys)
+            {
+                actions.Actions.Add(action, GetValue(action));
+            }
+
+            foreach (IComponent component in GetComponents())
+            {
+                if (component.Equals(this)) continue;
+
+                if (component is IInputReceiver)
+                {
+                    (component as IInputReceiver).ReceiveInput(actions);
+                }
+            }
+
             PhysicsComponent physics = GetComponent<PhysicsComponent>();
             if (physics != null)
             {
@@ -54,21 +70,21 @@ namespace EntityComponent.Components
 
             //Health manipulation
 
-            AttributesComponent attribute = GetComponent<AttributesComponent>();
-            if (attribute != null)
-            {
-                float keyValue = GetValue(EGameAction.ADD_HEALTH);
-                if (keyValue > 0)
-                {
-                    attribute.ReplenishHealth(1);
-                }
+            //AttributesComponent attribute = GetComponent<AttributesComponent>();
+            //if (attribute != null)
+            //{
+            //    float keyValue = GetValue(EGameAction.ADD_HEALTH);
+            //    if (keyValue > 0)
+            //    {
+            //        attribute.ReplenishHealth(1);
+            //    }
 
-                keyValue = GetValue(EGameAction.REDUCE_HEALTH);
-                if (keyValue > 0)
-                {
-                    attribute.TakeDamage(1);
-                }
-            }
+            //    keyValue = GetValue(EGameAction.REDUCE_HEALTH);
+            //    if (keyValue > 0)
+            //    {
+            //        attribute.TakeDamage(1);
+            //    }
+            //}
         }
 
         //---------------------------------------------------------------------------
