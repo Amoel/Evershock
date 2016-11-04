@@ -43,6 +43,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="EntityComponent">
+      <HintPath>..\EntityComponent\bin\Debug\EntityComponent.dll</HintPath>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -54,6 +57,14 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Code\Components\" />
+    <Folder Include="Code\Managers\" />
+    <Folder Include="Content\Effects\" />
+    <Folder Include="Content\Fonts\" />
+    <Folder Include="Content\Graphics\" />
+    <Folder Include="Content\Sounds\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
