@@ -12,25 +12,30 @@ namespace EvershockGame.Code
     [Serializable]
     public class AttributesComponent : Component, IInputReceiver
     {
-        private int MaxHealth;
-        private float Movement_speed;
-        private int health;
+        private int m_MaxHealth;
+        private byte m_MaxInventorySlots;
+
+        private float m_BaseMovementSpeed;
+        private float m_BaseDamage;
+        private float m_BaseArmor;
+
+        private int m_CurrentHealth;
+        private float m_CurrentMovementSpeed;
+
 
         public int Health
         {
-            get { return health; }
-            set
-            {
-                health = MathHelper.Clamp(value, 0, MaxHealth);
-                Console.WriteLine(health);
-            }
+            get { return m_CurrentHealth; }
+            set { m_CurrentHealth = MathHelper.Clamp(value, 0, m_MaxHealth); }
         }
 
         public AttributesComponent(Guid entity) : base(entity)
         {
+            m_MaxHealth = 500;
+            m_BaseMovementSpeed = 1.0f;
+            m_MaxInventorySlots = 0;
+
             Health = 50;
-            MaxHealth = 500;
-            Movement_speed = 1.0f;
         }
 
         /*--------------------------------------------------------------------------
@@ -39,13 +44,13 @@ namespace EvershockGame.Code
 
         public void Init(int max_health)
         {
-            MaxHealth = max_health;
+            m_MaxHealth = max_health;
         }
 
         public void Init(int max_health, float movement_speed)
         {
-            MaxHealth = max_health;
-            Movement_speed = movement_speed;
+            m_MaxHealth = max_health;
+            m_BaseMovementSpeed = movement_speed;
         }
 
         /*--------------------------------------------------------------------------
@@ -56,9 +61,9 @@ namespace EvershockGame.Code
         {
             Health -= damage_dealt;
 
-            if (Health <= 0)
+            if (Health == 0)
             {
-                //Despawn character
+                //TODO: Despawn character
             }
         }
 
