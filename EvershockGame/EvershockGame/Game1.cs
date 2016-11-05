@@ -1,12 +1,11 @@
 ﻿using EntityComponent;
+using EntityComponent.Components;
 using EntityComponent.Factory;
+using EntityComponent.Manager;
+using EvershockGame.Code;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
-using EvershockGame.Code;
-using EntityComponent.Components;
-using EntityComponent.Manager;
 
 namespace EvershockGame
 {
@@ -38,6 +37,9 @@ namespace EvershockGame
             entity.AddComponent<AttributesComponent>();
             InputComponent input = entity.AddComponent<InputComponent>();
             input.MapAction(EGameAction.ADD_HEALTH, EInput.KEYBOARD_SPACE);
+
+            IEntity apple = EntityFactory.Create<Entity>();
+            apple.AddComponent<AttributesComponent>().Init(20, 25);
         }
 
         /// <summary>
