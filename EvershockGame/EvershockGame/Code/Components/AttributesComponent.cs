@@ -71,7 +71,6 @@ namespace EvershockGame.Code
         {
             if (actions[EGameAction.ADD_HEALTH] > 0.0f)
             {
-                ReplenishHealth(EntityManager.Get().Find(.) // Ich will irgendwie an die apple Entity rankommen.
                 Console.WriteLine(m_CurrentHealth);
             }
         }

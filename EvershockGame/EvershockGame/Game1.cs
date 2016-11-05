@@ -40,8 +40,19 @@ namespace EvershockGame
 
             IEntity apple = EntityFactory.Create<Entity>();
             apple.AddComponent<AttributesComponent>().Init(20, 25);
-        }
 
+            if (apple.HasComponent<AttributesComponent>())
+            {
+                AttributesComponent atr = apple.GetComponent<AttributesComponent>();
+
+                if (entity.HasComponent<AttributesComponent>())
+                {
+                    AttributesComponent playerAtr = entity.GetComponent<AttributesComponent>();
+                    playerAtr.ReplenishHealth(atr.m_transmittableHealth);
+                }
+            }
+
+        }
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
