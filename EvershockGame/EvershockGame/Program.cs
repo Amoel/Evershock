@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EntityComponent.Manager;
+using System;
 
 namespace EvershockGame
 {
@@ -12,8 +13,19 @@ namespace EvershockGame
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            if (args != null)
+            {
+                foreach (string arg in args)
+                {
+                    switch (arg)
+                    {
+                        case "ShowDebugView": CollisionManager.Get().IsDebugViewActive = true; break;
+                    }
+                }
+            }
+
             using (var game = new Game1())
                 game.Run();
         }

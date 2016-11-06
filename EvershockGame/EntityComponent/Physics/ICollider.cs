@@ -1,4 +1,6 @@
-﻿using EntityComponent.Manager;
+﻿using EntityComponent.Components;
+using EntityComponent.Manager;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,11 @@ namespace EntityComponent
 {
     public interface ICollider
     {
-        EColliderType Type { get; set; }
-        EColliderMobility Mobility { get; set; }
+        event CollisionEnterEventHandler Enter;
+        event CollisionLeaveEventHandler Leave;
+
+        //---------------------------------------------------------------------------
+
+        Vector2 Step(Vector2 force);
     }
 }

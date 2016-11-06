@@ -59,7 +59,9 @@
     <Compile Include="Component.cs" />
     <Compile Include="Components\CameraComponent.cs" />
     <Compile Include="Components\Collider\CircleColliderComponent.cs" />
+    <Compile Include="Components\Collider\ColliderComponent.cs" />
     <Compile Include="Components\Collider\RectColliderComponent.cs" />
+    <Compile Include="Components\Collider\WallColliderComponent.cs" />
     <Compile Include="Components\DespawnComponent.cs" />
     <Compile Include="Components\EngineComponent.cs" />
     <Compile Include="Components\InputComponent.cs" />
@@ -95,6 +97,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Farseer Physics Engine 3.5\Farseer Physics MonoGame.csproj">
+      <Project>{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}</Project>
+      <Name>Farseer Physics MonoGame</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

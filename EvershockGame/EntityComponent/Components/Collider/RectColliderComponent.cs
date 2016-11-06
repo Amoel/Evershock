@@ -1,5 +1,8 @@
 ﻿using EntityComponent.Manager;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,30 +12,78 @@ namespace EntityComponent.Components
 {
     [Serializable]
     [RequireComponent(typeof(PhysicsComponent))]
-    public class RectColliderComponent : Component, ICollider
+    public class RectColliderComponent : ColliderComponent
     {
-        public EColliderType Type { get; set; }
-        public EColliderMobility Mobility { get; set; }
-
         public float Width { get; set; }
         public float Height { get; set; }
-        public Vector2 Offset { get; set; }
 
         //---------------------------------------------------------------------------
 
         public RectColliderComponent(Guid entity) : base(entity)
         {
             CollisionManager.Get().Register(Entity);
-
-            Init(EColliderType.Solid, EColliderMobility.Static);
         }
 
         //---------------------------------------------------------------------------
 
-        public void Init(EColliderType type, EColliderMobility mobility)
+        public void Init(int width, int height)
         {
-            Type = type;
-            Mobility = mobility;
+            Init(width, height, Vector2.Zero, BodyType.Static, 0.0f);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Init(int width, int height, Vector2 offset)
+        {
+            Init(width, height, offset, BodyType.Static, 0.0f);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Init(int width, int height, BodyType bodyType)
+        {
+            Init(width, height, Vector2.Zero, bodyType, 0.0f);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Init(int width, int height, Vector2 offset, BodyType bodyType, float dampening)
+        {
+            Width = width;
+            Height = height;
+            Body = BodyFactory.CreateRectangle(PhysicsManager.Get().World, width, height, 0.0f, Entity);
+            foreach (Fixture fix in Body.FixtureList)
+            {
+                fix.UserData = Entity;
+            }
+            Body.BodyType = bodyType;
+            Body.IgnoreGravity = true;
+            Body.LinearDamping = dampening;
+
+            TransformComponent transform = GetComponent<TransformComponent>();
+            if (transform != null)
+            {
+                Body.Position = transform.Location.To2D() + Offset;
+            }
+
+            Body.OnCollision += OnCollision;
+            Body.OnSeparation += OnSeparation;
+        }
+        
+        //---------------------------------------------------------------------------
+
+        public override void Draw(SpriteBatch batch, CameraData data)
+        {
+            if (CollisionManager.Get().IsDebugViewActive)
+            {
+                TransformComponent transform = GetComponent<TransformComponent>();
+                Texture2D tex = CollisionManager.Get().RectTexture;
+                if (transform != null && tex != null && Body != null)
+                {
+                    Vector2 position = Body.Position.ToLocal(data);
+                    batch.Draw(tex, new Rectangle((int)(position.X - Width / 2), (int)(position.Y - Height / 2), (int)Width, (int)Height), Color.White);
+                }
+            }
         }
     }
 }

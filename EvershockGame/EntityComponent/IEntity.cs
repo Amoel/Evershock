@@ -9,6 +9,7 @@ namespace EntityComponent
     public interface IEntity
     {
         Guid GUID { get; }
+        string Name { get; }
 
         Guid Parent { get; }
         List<Guid> Children { get; }

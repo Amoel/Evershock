@@ -1,4 +1,6 @@
 ﻿using EntityComponent.Manager;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -7,45 +9,74 @@ namespace EntityComponent.Components
 {
     [Serializable]
     [RequireComponent(typeof(PhysicsComponent))]
-    public class CircleColliderComponent : Component, ICollider, IDrawableComponent
+    public class CircleColliderComponent : ColliderComponent
     {
-        public EColliderType Type { get; set; }
-        public EColliderMobility Mobility { get; set; }
-
         public float Radius { get; set; }
-        public Vector2 Offset { get; set; }
 
         //---------------------------------------------------------------------------
 
         public CircleColliderComponent(Guid entity) : base(entity)
         {
-            Radius = 26;
-            Offset = Vector2.Zero;
             CollisionManager.Get().Register(Entity);
-
-            Init(EColliderType.Solid, EColliderMobility.Static);
         }
 
         //---------------------------------------------------------------------------
 
-        public void Init(EColliderType type, EColliderMobility mobility)
+        public void Init(int radius)
         {
-            Type = type;
-            Mobility = mobility;
+            Init(radius, Vector2.Zero, BodyType.Static, 0.0f);
         }
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch, CameraData data)
+        public void Init(int radius, Vector2 offset)
+        {
+            Init(radius, offset, BodyType.Static, 0.0f);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Init(int radius, BodyType bodyType)
+        {
+            Init(radius, Vector2.Zero, bodyType, 0.0f);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Init(int radius, Vector2 offset, BodyType bodyType, float dampening)
+        {
+            Radius = radius;
+            Body = BodyFactory.CreateCircle(PhysicsManager.Get().World, radius, 0.0f, Entity);
+            foreach (Fixture fix in Body.FixtureList)
+            {
+                fix.UserData = Entity;
+            }
+            Body.BodyType = bodyType;
+            Body.IgnoreGravity = true;
+            Body.LinearDamping = dampening;
+
+            TransformComponent transform = GetComponent<TransformComponent>();
+            if (transform != null)
+            {
+                Body.Position = transform.Location.To2D();
+            }
+
+            Body.OnCollision += OnCollision;
+            Body.OnSeparation += OnSeparation;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public override void Draw(SpriteBatch batch, CameraData data)
         {
             if (CollisionManager.Get().IsDebugViewActive)
             {
                 TransformComponent transform = GetComponent<TransformComponent>();
                 Texture2D tex = CollisionManager.Get().CircleTexture;
-                if (transform != null && tex != null)
+                if (transform != null && tex != null && Body != null)
                 {
-                    Vector2 center = transform.Location.ToLocal2D(data);
-                    batch.Draw(tex, new Rectangle((int)(center.X - Offset.X - Radius), (int)(center.Y - Offset.Y - Radius), (int)(Radius * 2), (int)(Radius * 2)), Color.White);
+                    Vector2 position = Body.Position.ToLocal(data);
+                    batch.Draw(tex, new Rectangle((int)(position.X - Radius), (int)(position.Y - Radius), (int)(Radius * 2), (int)(Radius * 2)), Color.White);
                 }
             }
         }

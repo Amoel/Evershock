@@ -46,5 +46,9 @@ namespace EntityComponent
             }
             return null;
         }
+
+        //---------------------------------------------------------------------------
+
+        public virtual void OnCleanup() { }
     }
 }

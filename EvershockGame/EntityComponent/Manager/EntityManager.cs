@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Managers;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace EntityComponent.Manager
 {
@@ -97,6 +98,19 @@ namespace EntityComponent.Manager
                 return m_Entities[guid].Data;
             }
             return null;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Load()
+        {
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Save()
+        {
+
         }
     }
 }

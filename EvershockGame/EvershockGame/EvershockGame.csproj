@@ -55,16 +55,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Effects\DeferredLighting.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Camera\BackgroundTexture1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Camera\BackgroundTexture2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Debug\CircleTextureDebug.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Debug\RectTextureDebug.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Lights\CircleLight.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Code\Entities\" />
     <Folder Include="Code\Managers\" />
-    <Folder Include="Content\Effects\" />
     <Folder Include="Content\Fonts\" />
-    <Folder Include="Content\Graphics\" />
     <Folder Include="Content\Sounds\" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +91,10 @@
     <ProjectReference Include="..\EntityComponent\EntityComponent.csproj">
       <Project>{e047e35a-8534-4685-adbe-733cb7997d87}</Project>
       <Name>EntityComponent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Farseer Physics Engine 3.5\Farseer Physics MonoGame.csproj">
+      <Project>{0aad36e3-51a5-4a07-ab60-5c8a66bd38b7}</Project>
+      <Name>Farseer Physics MonoGame</Name>
     </ProjectReference>
     <ProjectReference Include="..\Managers\Managers.csproj">
       <Project>{85eb4dea-38a6-45dc-b308-5d333073440e}</Project>

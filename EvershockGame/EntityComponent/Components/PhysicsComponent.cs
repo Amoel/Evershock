@@ -6,7 +6,7 @@ namespace EntityComponent.Components
 {
     [Serializable]
     [RequireComponent(typeof(TransformComponent))]
-    public class PhysicsComponent : Component, ITickableComponent
+    public class PhysicsComponent : Component, ITickableComponent, IInputReceiver
     {
         public float Inertia { get; set; }
         public float Weight { get; set; }
@@ -40,37 +40,7 @@ namespace EntityComponent.Components
 
         public void Tick(float deltaTime)
         {
-            CircleColliderComponent circleCollider = GetComponent<CircleColliderComponent>();
-
-            if (circleCollider != null)
-            {
-                if (circleCollider.Mobility == EColliderMobility.Dynamic)
-                {
-                    
-                }
-                TickForce(deltaTime);
-            }
-            
-
-            //if (force.Length() > 0.01f)
-            //{
-            //    if (-force.Z > transform.Location.Z)
-            //    {
-            //        //Vector3 forceAfterCollision = CollisionManager.Get().CheckCollision(Entity, transform.Location, new Vector3(force.X, force.Y, -transform.Location.Z), deltaTime);
-
-            //        transform.MoveBy(new Vector3(force.X, force.Y, -transform.Location.Z));
-            //        //transform.MoveBy(new Vector3(forceAfterCollision.X, forceAfterCollision.Y, -transform.Location.Z));
-            //        m_Gravity = Vector3.Zero;
-            //        if (force.Z < -1.0f) m_Force = force.Reflect(new Vector3(0, 0, 1)) * Softness;
-            //    }
-            //    else
-            //    {
-            //        //Vector3 forceAfterCollision = CollisionManager.Get().CheckCollision(Entity, transform.Location, force, deltaTime);
-
-            //        transform.MoveBy(force);
-            //        //transform.MoveBy(forceAfterCollision);
-            //    }
-            //}
+            TickForce(deltaTime);
         }
 
         //---------------------------------------------------------------------------
@@ -81,7 +51,7 @@ namespace EntityComponent.Components
 
             if (transform != null && m_Force != null)
             {
-                ApplyGravity();
+                //ApplyGravity();
 
                 if (m_Force.Length() < 0.01f)
                 {
@@ -92,20 +62,24 @@ namespace EntityComponent.Components
                     m_Force *= Inertia;
                 }
 
+                Vector2 newForce = CollisionManager.Get().CheckCollision(Entity, GetForce().To2D());
+                transform.MoveTo(new Vector3(newForce.X, newForce.Y, GetForce().Z));
+
                 if (GetForce().Length() > 0.01f)
                 {
-                    Vector3 forceAfterCollision = CollisionManager.Get().CheckCollision(Entity, transform.Location, GetForce());
-                    if (forceAfterCollision.Length() > 0.01f)
-                    {
-                        if (-forceAfterCollision.Z > transform.Location.Z)
-                        {
-                            transform.MoveBy(new Vector3(forceAfterCollision.X, forceAfterCollision.Y, -transform.Location.Z));
-                        }
-                        else
-                        {
-                            transform.MoveBy(forceAfterCollision);
-                        }
-                    }
+                    //CollisionResult result = CollisionManager.Get().CheckCollision(Entity, GetForce());// transform.Location, GetForce());
+                    //if (result.ForceAfterCollision.Length() > 0.01f)
+                    //{
+                    //    transform.MoveBy(result.ForceAfterCollision);
+                    //    //if (-result.ForceAfterCollision.Z > transform.Location.Z)
+                    //    //{
+                    //    //    transform.MoveBy(new Vector3(result.ForceAfterCollision.X, result.ForceAfterCollision.Y, -transform.Location.Z));
+                    //    //}
+                    //    //else
+                    //    //{
+                    //    //    transform.MoveBy(result.ForceAfterCollision);
+                    //    //}
+                    //}
                 }
             }
         }
@@ -132,6 +106,17 @@ namespace EntityComponent.Components
             {
                 m_Gravity += PhysicsManager.Get().Gravity * Weight;
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void ReceiveInput(GameActionCollection actions, float deltaTime)
+        {
+            float xMovement = (actions[EGameAction.MOVE_RIGHT] - actions[EGameAction.MOVE_LEFT]) * deltaTime * 500;
+            float yMovement = (actions[EGameAction.MOVE_DOWN] - actions[EGameAction.MOVE_UP]) * deltaTime * 500;
+
+            Vector3 movement = new Vector3(xMovement, yMovement, 0);
+            if (movement.Length() > 0.01f) ApplyForce(new Vector3(xMovement, yMovement, 0));
         }
     }
 }

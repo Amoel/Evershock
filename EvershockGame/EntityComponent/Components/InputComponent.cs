@@ -51,22 +51,22 @@ namespace EntityComponent.Components
 
                 if (component is IInputReceiver)
                 {
-                    (component as IInputReceiver).ReceiveInput(actions);
+                    (component as IInputReceiver).ReceiveInput(actions, deltaTime);
                 }
             }
 
-            PhysicsComponent physics = GetComponent<PhysicsComponent>();
-            if (physics != null)
-            {
-                float xMovement = (GetValue(EGameAction.MOVE_RIGHT) - GetValue(EGameAction.MOVE_LEFT)) * deltaTime * 200;
-                float yMovement = (GetValue(EGameAction.MOVE_DOWN) - GetValue(EGameAction.MOVE_UP)) * deltaTime * 200;
+            //PhysicsComponent physics = GetComponent<PhysicsComponent>();
+            //if (physics != null)
+            //{
+            //    float xMovement = (GetValue(EGameAction.MOVE_RIGHT) - GetValue(EGameAction.MOVE_LEFT)) * deltaTime * 200;
+            //    float yMovement = (GetValue(EGameAction.MOVE_DOWN) - GetValue(EGameAction.MOVE_UP)) * deltaTime * 200;
 
-                Vector3 movement = new Vector3(xMovement, yMovement, 0);
-                if (movement.Length() > 0.0f)
-                {
-                    physics.ApplyForce(movement);
-                }
-            }
+            //    Vector3 movement = new Vector3(xMovement, yMovement, 0);
+            //    if (movement.Length() > 0.0f)
+            //    {
+            //        physics.ApplyForce(movement);
+            //    }
+            //}
 
             //Health manipulation
 

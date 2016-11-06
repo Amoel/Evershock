@@ -8,6 +8,6 @@ namespace EntityComponent
 {
     public interface IInputReceiver
     {
-        void ReceiveInput(GameActionCollection actions);
+        void ReceiveInput(GameActionCollection actions, float deltaTime);
     }
 }

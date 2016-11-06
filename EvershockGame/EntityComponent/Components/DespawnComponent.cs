@@ -19,13 +19,13 @@ namespace EntityComponent.Components
 
         public void Tick(float deltaTime)
         {
-            m_Timer += deltaTime;
-            if (m_Timer > 1.0f) Despawn();
+            //m_Timer += deltaTime;
+            //if (m_Timer > 1.0f) Trigger();
         }
 
         //---------------------------------------------------------------------------
 
-        private void Despawn()
+        public void Trigger()
         {
             EntityManager.Get().Unregister(Entity);
         }

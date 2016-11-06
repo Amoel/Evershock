@@ -12,6 +12,7 @@ namespace EntityComponent
     public class Entity : IEntity
     {
         public Guid GUID { get; private set; }
+        public string Name { get; private set; }
 
         public Guid Parent { get; private set; }
         public List<Guid> Children { get; private set; }
@@ -19,9 +20,10 @@ namespace EntityComponent
 
         //---------------------------------------------------------------------------
 
-        public Entity()
+        public Entity(string name)
         {
             GUID = Guid.NewGuid();
+            Name = name;
 
             Children = new List<Guid>();
             Components = new List<Guid>();

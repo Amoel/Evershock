@@ -9,16 +9,17 @@ namespace EntityComponent.Factory
 {
     public static class EntityFactory
     {
-        public static T Create<T>() where T : IEntity, new()
+        public static T Create<T>(string name) where T : IEntity
         {
-            return Create<T>(Guid.Empty);
+            return Create<T>(Guid.Empty, name);
         }
 
         //---------------------------------------------------------------------------
 
-        public static T Create<T>(Guid parent) where T : IEntity, new()
+        public static T Create<T>(Guid parent, string name) where T : IEntity
         {
-            T entity = Activator.CreateInstance<T>();
+            
+            T entity = (T)Activator.CreateInstance(typeof(T),  name);
             if (entity != null)
             {
                 entity.SetParent(parent);

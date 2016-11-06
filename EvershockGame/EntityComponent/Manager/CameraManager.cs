@@ -86,7 +86,7 @@ namespace EntityComponent.Manager
             batch.Begin();
             for (int i = 0; i < targets.Count; i++)
             {
-                batch.Draw(targets[i], new Rectangle(i * device.PresentationParameters.BackBufferWidth / 2, 0, device.PresentationParameters.BackBufferWidth / 2, device.PresentationParameters.BackBufferHeight), Color.White);
+                batch.Draw(targets[i], new Rectangle(i * device.PresentationParameters.BackBufferWidth / targets.Count, 0, device.PresentationParameters.BackBufferWidth / targets.Count, device.PresentationParameters.BackBufferHeight), Color.White);
             }
             batch.End();
         }

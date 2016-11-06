@@ -1,4 +1,5 @@
 ﻿using EntityComponent;
+using EntityComponent.Components;
 using EntityComponent.Manager;
 using Microsoft.Xna.Framework;
 using System;
@@ -36,6 +37,16 @@ namespace EvershockGame.Code
             m_MaxInventorySlots = 0;
 
             Health = 50;
+
+            // Collision test
+            ICollider collider = GetComponent<ColliderComponent>();
+            if (collider != null)
+            {
+                collider.Enter += (source, target) =>
+                {
+                    Console.WriteLine("Test");
+                };
+            }
         }
 
         /*--------------------------------------------------------------------------
@@ -74,7 +85,7 @@ namespace EvershockGame.Code
 
         //---------------------------------------------------------------------------
 
-        public void ReceiveInput(GameActionCollection actions)
+        public void ReceiveInput(GameActionCollection actions, float deltaTime)
         {
             if (actions[EGameAction.ADD_HEALTH] > 0.0f)
             {
