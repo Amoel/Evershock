@@ -1,42 +1,26 @@
 ﻿using EntityComponent;
 using EntityComponent.Components;
 using EntityComponent.Manager;
-using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvershockGame.Code
 {
     [Serializable]
     public class AttributesComponent : Component, IInputReceiver
     {
-        private int m_MaxHealth;
-        private byte m_MaxInventorySlots;
-
-        private float m_BaseMovementSpeed;
-        private float m_BaseDamage;
-        private float m_BaseArmor;
-
+        private int m_MaxHealth = 500;
         private int m_CurrentHealth;
-        private float m_CurrentMovementSpeed;
+        //private byte m_MaxInventorySlots = 0;
+        public int m_transmittableHealth;
 
-
-        public int Health
-        {
-            get { return m_CurrentHealth; }
-            set { m_CurrentHealth = MathHelper.Clamp(value, 0, m_MaxHealth); }
-        }
+        private float m_BaseMovementSpeed = 1.0f;
+        //private float m_BaseDamage = 1.0f;
+        //private float m_BaseArmor = 1.0f;
 
         public AttributesComponent(Guid entity) : base(entity)
         {
             m_MaxHealth = 500;
             m_BaseMovementSpeed = 1.0f;
-            m_MaxInventorySlots = 0;
-
-            Health = 50;
 
             // Collision test
             ICollider collider = GetComponent<ColliderComponent>();
@@ -47,6 +31,8 @@ namespace EvershockGame.Code
                     Console.WriteLine("Test");
                 };
             }
+            m_CurrentHealth = m_MaxHealth;
+            m_transmittableHealth = m_MaxHealth;
         }
 
         /*--------------------------------------------------------------------------
@@ -56,6 +42,12 @@ namespace EvershockGame.Code
         public void Init(int max_health)
         {
             m_MaxHealth = max_health;
+        }
+
+        public void Init(int max_health, int transmittable_health)
+        {
+            m_MaxHealth = max_health;
+            m_transmittableHealth = transmittable_health;
         }
 
         public void Init(int max_health, float movement_speed)
@@ -70,9 +62,9 @@ namespace EvershockGame.Code
 
         public void TakeDamage(int damage_dealt)
         {
-            Health -= damage_dealt;
+            m_CurrentHealth -= damage_dealt;
 
-            if (Health == 0)
+            if (m_CurrentHealth == 0)
             {
                 //TODO: Despawn character
             }
@@ -80,7 +72,10 @@ namespace EvershockGame.Code
 
         public void ReplenishHealth(int health_gained)
         {
-            Health += health_gained;
+            m_CurrentHealth += health_gained;
+
+            if (m_CurrentHealth > m_MaxHealth)
+                m_CurrentHealth = m_MaxHealth;
         }
 
         //---------------------------------------------------------------------------
@@ -89,7 +84,7 @@ namespace EvershockGame.Code
         {
             if (actions[EGameAction.ADD_HEALTH] > 0.0f)
             {
-                Console.WriteLine("TEST");
+                Console.WriteLine(m_CurrentHealth);
             }
         }
     }

@@ -1,14 +1,12 @@
 ﻿using EntityComponent;
+using EntityComponent.Components;
 using EntityComponent.Factory;
+using EntityComponent.Manager;
+using EvershockGame.Code;
+using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
-using EvershockGame.Code;
-using EntityComponent.Components;
-using EntityComponent.Manager;
-using FarseerPhysics.Dynamics;
-using System.Diagnostics;
 
 namespace EvershockGame
 {
@@ -36,7 +34,7 @@ namespace EvershockGame
         protected override void Initialize()
         {
             base.Initialize();
-
+            
             graphics.PreferredBackBufferWidth = 940;
             graphics.PreferredBackBufferHeight = 560;
             graphics.ApplyChanges();
@@ -101,7 +99,11 @@ namespace EvershockGame
             wall.AddComponent<TransformComponent>().Init(new Vector3(0, 300, 0));
             wall.AddComponent<WallColliderComponent>().Init(new Vector2(0, 0), new Vector2(100, -100));
         }
-        
+
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
