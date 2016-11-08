@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="TilesetViewer.LevelCanvas"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TilesetViewer"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Rectangle>
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="Resource/GridSegment.png" TileMode="Tile" ViewportUnits="Absolute" Viewport="{Binding CanvasViewport, UpdateSourceTrigger=PropertyChanged}"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Grid ClipToBounds="True">
+            <Canvas Name="TilesCanvas" Background="Transparent" ClipToBounds="True" IsHitTestVisible="False">
+                <Canvas.RenderTransform>
+                    <TranslateTransform x:Name="TilesTranslate"/>
+                </Canvas.RenderTransform>
+            </Canvas>
+            <Canvas Name="SelectionCanvas" Background="Transparent" ClipToBounds="True">
+                <Canvas.RenderTransform>
+                    <TranslateTransform x:Name="SelectionTranslate"/>
+                </Canvas.RenderTransform>
+                <Border Name="BorderRect" Background="Transparent" BorderBrush="#33FFFFFF" BorderThickness="1" MouseMove="OnMouseMove" MouseDown="OnMouseDown" MouseUp="OnMouseUp" MouseWheel="OnMouseWheel"/>
+                <Border Name="HighlightRect" Width="16" Height="16" Background="#33FFFFFF" BorderBrush="White" BorderThickness="1" IsHitTestVisible="False"/>
+            </Canvas>
+        </Grid>
+    </Grid>
+</UserControl>

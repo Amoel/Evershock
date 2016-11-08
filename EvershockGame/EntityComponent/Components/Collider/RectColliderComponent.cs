@@ -81,7 +81,7 @@ namespace EntityComponent.Components
                 if (transform != null && tex != null && Body != null)
                 {
                     Vector2 position = Body.Position.ToLocal(data);
-                    batch.Draw(tex, new Rectangle((int)(position.X - Width / 2), (int)(position.Y - Height / 2), (int)Width, (int)Height), Color.White);
+                    batch.Draw(tex, new Rectangle((int)((int)position.X - Width / 2), (int)((int)position.Y - Height / 2), (int)Width, (int)Height), tex.Bounds, GetDebugColor(), 0, Vector2.Zero, SpriteEffects.None, 1.0f);
                 }
             }
         }

@@ -107,7 +107,7 @@ namespace EntityComponent.Components
                     batch.Draw(
                         m_BackgroundTexture, 
                         Vector2.Zero, 
-                        new Rectangle((int)location.X % m_BackgroundTexture.Width, (int)location.Y % m_BackgroundTexture.Height, m_ComponentsTarget.Width, m_ComponentsTarget.Height), 
+                        new Rectangle((int)(location.X % m_BackgroundTexture.Width), (int)(location.Y % m_BackgroundTexture.Height), m_ComponentsTarget.Width, m_ComponentsTarget.Height), 
                         Color.White, 
                         0, 
                         Vector2.Zero, 

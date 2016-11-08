@@ -98,5 +98,18 @@ namespace EntityComponent.Components
         //---------------------------------------------------------------------------
 
         public abstract void Draw(SpriteBatch batch, CameraData data);
+
+        //---------------------------------------------------------------------------
+
+        protected Color GetDebugColor()
+        {
+            if (Body == null) return Color.White;
+            switch (Body.BodyType)
+            {
+                case BodyType.Dynamic: return new Color(0.067f, 0.812f, 0.129f);
+                case BodyType.Static: return new Color(0.812f, 0.067f, 0.153f);
+                default: return Color.White;
+            }
+        }
     }
 }

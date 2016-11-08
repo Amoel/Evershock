@@ -3,13 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvershockGame", "EvershockGame\EvershockGame.csproj", "{7983F8AD-F539-4701-9A0E-3F79F60FDBEF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Managers", "Managers\Managers.csproj", "{85EB4DEA-38A6-45DC-B308-5D333073440E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityComponent", "EntityComponent\EntityComponent.csproj", "{E047E35A-8534-4685-ADBE-733CB7997D87}"
+	ProjectSection(ProjectDependencies) = postProject
+		{85EB4DEA-38A6-45DC-B308-5D333073440E} = {85EB4DEA-38A6-45DC-B308-5D333073440E}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TilesetViewer", "TilesetViewer\TilesetViewer.csproj", "{6A32590E-DC9A-4E35-B646-EA70B6AC14C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Farseer Physics MonoGame", "Farseer Physics Engine 3.5\Farseer Physics MonoGame.csproj", "{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvershockGame", "EvershockGame\EvershockGame.csproj", "{DE8ED430-DF2D-4009-8F55-FEDF88580893}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,12 +24,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7983F8AD-F539-4701-9A0E-3F79F60FDBEF}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{7983F8AD-F539-4701-9A0E-3F79F60FDBEF}.Debug|x86.ActiveCfg = Debug|x86
-		{7983F8AD-F539-4701-9A0E-3F79F60FDBEF}.Debug|x86.Build.0 = Debug|x86
-		{7983F8AD-F539-4701-9A0E-3F79F60FDBEF}.Release|Any CPU.ActiveCfg = Release|x86
-		{7983F8AD-F539-4701-9A0E-3F79F60FDBEF}.Release|x86.ActiveCfg = Release|x86
-		{7983F8AD-F539-4701-9A0E-3F79F60FDBEF}.Release|x86.Build.0 = Release|x86
 		{85EB4DEA-38A6-45DC-B308-5D333073440E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{85EB4DEA-38A6-45DC-B308-5D333073440E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85EB4DEA-38A6-45DC-B308-5D333073440E}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -41,12 +40,26 @@ Global
 		{E047E35A-8534-4685-ADBE-733CB7997D87}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E047E35A-8534-4685-ADBE-733CB7997D87}.Release|x86.ActiveCfg = Release|Any CPU
 		{E047E35A-8534-4685-ADBE-733CB7997D87}.Release|x86.Build.0 = Release|Any CPU
+		{6A32590E-DC9A-4E35-B646-EA70B6AC14C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A32590E-DC9A-4E35-B646-EA70B6AC14C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A32590E-DC9A-4E35-B646-EA70B6AC14C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6A32590E-DC9A-4E35-B646-EA70B6AC14C4}.Debug|x86.Build.0 = Debug|Any CPU
+		{6A32590E-DC9A-4E35-B646-EA70B6AC14C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A32590E-DC9A-4E35-B646-EA70B6AC14C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A32590E-DC9A-4E35-B646-EA70B6AC14C4}.Release|x86.ActiveCfg = Release|Any CPU
+		{6A32590E-DC9A-4E35-B646-EA70B6AC14C4}.Release|x86.Build.0 = Release|Any CPU
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Debug|x86.ActiveCfg = Debug|x86
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Debug|x86.Build.0 = Debug|x86
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Release|Any CPU.ActiveCfg = Release|x86
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Release|x86.ActiveCfg = Release|x86
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Release|x86.Build.0 = Release|x86
+		{DE8ED430-DF2D-4009-8F55-FEDF88580893}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{DE8ED430-DF2D-4009-8F55-FEDF88580893}.Debug|x86.ActiveCfg = Debug|x86
+		{DE8ED430-DF2D-4009-8F55-FEDF88580893}.Debug|x86.Build.0 = Debug|x86
+		{DE8ED430-DF2D-4009-8F55-FEDF88580893}.Release|Any CPU.ActiveCfg = Release|x86
+		{DE8ED430-DF2D-4009-8F55-FEDF88580893}.Release|x86.ActiveCfg = Release|x86
+		{DE8ED430-DF2D-4009-8F55-FEDF88580893}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

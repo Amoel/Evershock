@@ -57,7 +57,7 @@ namespace EntityComponent.Components
                     Vector2 position = Body.Position.ToLocal(data);
                     float length = Vector2.Distance(Start, End);
                     float angle = (float)Math.Atan2(End.Y - Start.Y, End.X - Start.X);
-                    batch.Draw(tex, new Rectangle((int)(position.X), (int)(position.Y), (int)length, 2), tex.Bounds, Color.White, angle, Vector2.Zero, SpriteEffects.None, 1.0f);
+                    batch.Draw(tex, new Rectangle((int)(position.X), (int)(position.Y), (int)length, 2), tex.Bounds, GetDebugColor(), angle, Vector2.Zero, SpriteEffects.None, 1.0f);
                 }
             }
         }
