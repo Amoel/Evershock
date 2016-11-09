@@ -28,6 +28,7 @@ namespace TilesetViewer
         {
             Tileset = new Tileset(source, pxTileWidth, pxTileHeight);
             m_Canvas?.Update();
+            LevelManager.Get().UpdateTiles();
         }
 
         //---------------------------------------------------------------------------

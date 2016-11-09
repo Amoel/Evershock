@@ -38,7 +38,8 @@ namespace EntityComponent.Components
             if (Body == null) return force;
             if (Body.BodyType != BodyType.Static)
             {
-                Body.ApplyLinearImpulse(force * 10.0f, Body.WorldCenter);
+                Body.LinearVelocity = force * 50;
+                //Body.ApplyLinearImpulse(force * 10.0f, Body.WorldCenter);
             }
             return Body.Position - Offset;
         }

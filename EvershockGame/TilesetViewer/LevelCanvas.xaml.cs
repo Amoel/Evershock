@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,7 @@ namespace TilesetViewer
 
         private Tile[,] m_Tiles;
         private bool m_Dragging;
+        private bool m_CursorOverLevel;
         private Point m_LastClicked;
         private Point m_LastMoved;
 
@@ -76,6 +78,16 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
+        public void UpdateTiles()
+        {
+            foreach (Tile tile in m_Tiles)
+            {
+                tile.UpdateImage();
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
         private void SetHighlight(Point point, bool isHovering)
         {
             if (isHovering)
@@ -83,25 +95,25 @@ namespace TilesetViewer
                 int beginX = (int)(point.X / m_TileWidth);
                 int beginY = (int)(point.Y / m_TileHeight);
                 SelectionRect selection = TilesetManager.Get().GetSelection();
-                SetHighlight(beginX, beginY, selection != null ? selection.Width : 1, selection != null ? selection.Height : 1);
+                SetHighlight(beginX, beginY, selection != null ? selection.Width : 1, selection != null ? selection.Height : 1, true);
             }
             else
             {
-                SetHighlight(0, 0, 0, 0);
+                SetHighlight(0, 0, 0, 0, false);
             }
         }
 
         //---------------------------------------------------------------------------
 
-        private void SetHighlight(int x, int y, int width, int height)
+        private void SetHighlight(int x, int y, int width, int height, bool checkBounds)
         {
             if (Highlight == null)
             {
-                Highlight = new SelectionRect(x, y, width, height, Bounds);
+                Highlight = new SelectionRect(x, y, width, height, checkBounds ? Bounds : null);
             }
             else
             {
-                Highlight.Update(x, y, width, height, Bounds);
+                Highlight.Update(x, y, width, height, checkBounds ? Bounds : null);
             }
 
             Canvas.SetLeft(HighlightRect, Highlight.X * m_TileWidth);
@@ -203,6 +215,53 @@ namespace TilesetViewer
                 TilesTranslate.Y = 0;
                 SelectionTranslate.X = 0;
                 SelectionTranslate.Y = 0;
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            SetHighlight(0, 0, 0, 0, false);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SaveAsImage(string fileName)
+        {
+            SaveToPng(TilesCanvas, fileName);
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void SaveToPng(FrameworkElement visual, string fileName)
+        {
+            var encoder = new PngBitmapEncoder();
+            SaveUsingEncoder(visual, fileName, encoder);
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
+        {
+            RenderTargetBitmap bitmap = new RenderTargetBitmap(m_Tiles.GetLength(0) * m_TileWidth, m_Tiles.GetLength(1) * m_TileHeight, 96, 96, PixelFormats.Pbgra32);
+            //bitmap.Render(visual);
+
+            Rect bounds = VisualTreeHelper.GetDescendantBounds(visual);
+            DrawingVisual dv = new DrawingVisual();
+            using (DrawingContext ctx = dv.RenderOpen())
+            {
+                VisualBrush vb = new VisualBrush(visual);
+                ctx.DrawRectangle(vb, null, new Rect(new Point(), bounds.Size));
+            }
+            bitmap.Render(dv);
+
+            BitmapFrame frame = BitmapFrame.Create(bitmap);
+            encoder.Frames.Add(frame);
+
+            using (var stream = File.Create(fileName))
+            {
+                encoder.Save(stream);
             }
         }
 

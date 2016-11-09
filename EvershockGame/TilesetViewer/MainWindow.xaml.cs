@@ -46,6 +46,13 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
+        private void OnExportTilesetClicked(object sender, EventArgs e)
+        {
+            LevelManager.Get().SaveAsTileset();
+        }
+
+        //---------------------------------------------------------------------------
+
         private void OnCreateLevelClicked(object sender, EventArgs e)
         {
             LevelCreationWindow window = new LevelCreationWindow();

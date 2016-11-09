@@ -23,7 +23,7 @@ namespace TilesetViewer
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public BitmapImage Image { get { return TilesetManager.Get().Tileset.Source; } }
+        public BitmapImage Image { get { return TilesetManager.Get().Tileset?.Source; } }
         public Rect View { get; set; }
 
         private int m_TileWidth = 16;
@@ -45,9 +45,14 @@ namespace TilesetViewer
             Canvas.SetTop(this, y * m_tileHeight);
             Width = m_TileWidth;
             Height = m_tileHeight;
-            OnPropertyChanged("Image");
+            UpdateImage();
+        }
 
-            Update(x, y);
+        //---------------------------------------------------------------------------
+        
+        public void UpdateImage()
+        {
+            OnPropertyChanged("Image");
         }
 
         //---------------------------------------------------------------------------

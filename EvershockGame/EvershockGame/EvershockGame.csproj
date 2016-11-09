@@ -43,6 +43,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Code\Components\AttributesComponent.cs" />
+    <Compile Include="Code\Components\MovementAnimationComponent.cs" />
+    <Compile Include="Code\GameTags.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,11 +69,19 @@
     <Content Include="Content\Graphics\Debug\CircleTextureDebug.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\Debug\RectTextureDebug.png" />
+    <Content Include="Content\Graphics\Debug\RectTextureDebug.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Lights\CircleLight.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Tilesets\Tileset1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Tilesets\WalkingAnimation.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Tiles\Barrel1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Tiles\ChestClosed1.png">

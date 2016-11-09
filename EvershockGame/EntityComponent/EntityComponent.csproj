@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Camera\CameraTarget.cs" />
     <Compile Include="Component.cs" />
+    <Compile Include="Components\AnimationComponent.cs" />
     <Compile Include="Components\AreaSpriteComponent.cs" />
     <Compile Include="Components\CameraComponent.cs" />
     <Compile Include="Components\Collider\CircleColliderComponent.cs" />

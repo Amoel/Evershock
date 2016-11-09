@@ -52,6 +52,8 @@ namespace TilesetViewer
 
         public void Update()
         {
+            TilesTranslate.X = 0;
+            TilesTranslate.Y = 0;
             Tileset.Source = TilesetManager.Get().Tileset.Source;
             Tileset.Width = TilesetManager.Get().Tileset.PxWidth;
             Tileset.Height = TilesetManager.Get().Tileset.PxHeight;

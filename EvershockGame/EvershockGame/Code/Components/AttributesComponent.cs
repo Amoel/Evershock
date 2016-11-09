@@ -24,16 +24,7 @@ namespace EvershockGame.Code
         {
             m_MaxHealth = 500;
             m_BaseMovementSpeed = 1.0f;
-
-            // Collision test
-            ICollider collider = GetComponent<ColliderComponent>();
-            if (collider != null)
-            {
-                collider.Enter += (source, target) =>
-                {
-                    Console.WriteLine("Test");
-                };
-            }
+            
             m_CurrentHealth = m_MaxHealth;
             m_transmittableHealth = m_MaxHealth;
         }

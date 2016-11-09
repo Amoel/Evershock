@@ -13,7 +13,7 @@
             </Rectangle.Fill>
         </Rectangle>
         <Grid ClipToBounds="True">
-            <Canvas Name="TilesCanvas" Background="Transparent" ClipToBounds="True" IsHitTestVisible="False">
+            <Canvas Name="TilesCanvas" Background="Transparent" IsHitTestVisible="False">
                 <Canvas.RenderTransform>
                     <TranslateTransform x:Name="TilesTranslate"/>
                 </Canvas.RenderTransform>
@@ -22,7 +22,7 @@
                 <Canvas.RenderTransform>
                     <TranslateTransform x:Name="SelectionTranslate"/>
                 </Canvas.RenderTransform>
-                <Border Name="BorderRect" Background="Transparent" BorderBrush="#33FFFFFF" BorderThickness="1" MouseMove="OnMouseMove" MouseDown="OnMouseDown" MouseUp="OnMouseUp" MouseWheel="OnMouseWheel"/>
+                <Border Name="BorderRect" Background="Transparent" BorderBrush="#33FFFFFF" BorderThickness="1" MouseMove="OnMouseMove" MouseDown="OnMouseDown" MouseUp="OnMouseUp" MouseWheel="OnMouseWheel" MouseLeave="OnMouseLeave"/>
                 <Border Name="HighlightRect" Width="16" Height="16" Background="#33FFFFFF" BorderBrush="White" BorderThickness="1" IsHitTestVisible="False"/>
             </Canvas>
         </Grid>

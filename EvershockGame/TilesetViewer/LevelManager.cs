@@ -1,9 +1,14 @@
 ﻿using Managers;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace TilesetViewer
 {
@@ -26,9 +31,30 @@ namespace TilesetViewer
 
         public void Create(int width, int height)
         {
-            if (m_Canvas != null)
+            m_Canvas?.Create(width, height);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void UpdateTiles()
+        {
+            m_Canvas?.UpdateTiles();
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SaveAsTileset()
+        {
+            if (m_Canvas == null)
             {
-                m_Canvas.Create(width, height);
+                MessageBox.Show("No level available. Create or load level first.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "Image file (*.png)|*.png";
+            if (dialog.ShowDialog() == true)
+            {
+                m_Canvas.SaveAsImage(dialog.FileName);
             }
         }
     }
