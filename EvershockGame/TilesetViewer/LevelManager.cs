@@ -57,5 +57,19 @@ namespace TilesetViewer
                 m_Canvas.SaveAsImage(dialog.FileName);
             }
         }
+
+        //---------------------------------------------------------------------------
+
+        public Map GetMap()
+        {
+            return m_Canvas?.GetMap();
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SetMap(Map map)
+        {
+            m_Canvas?.SetMap(map);
+        }
     }
 }

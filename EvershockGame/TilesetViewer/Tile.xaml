@@ -6,11 +6,17 @@
              xmlns:local="clr-namespace:TilesetViewer"
              mc:Ignorable="d" 
              d:DesignHeight="16" d:DesignWidth="16">
+
+    <UserControl.Resources>
+        <local:BoolToTintConverter x:Key="BoolToTintConverter"/>
+    </UserControl.Resources>
+
     <Grid Margin="0" Background="#44000000" IsHitTestVisible="False">
         <Rectangle Margin="0">
             <Rectangle.Fill>
                 <ImageBrush ImageSource="{Binding Image, UpdateSourceTrigger=PropertyChanged}" Viewbox="{Binding View, UpdateSourceTrigger=PropertyChanged}"/>
             </Rectangle.Fill>
         </Rectangle>
+        <Rectangle Name="BlockerTint" Fill="{Binding IsBlocked, Converter={StaticResource BoolToTintConverter}}"/>
     </Grid>
 </UserControl>

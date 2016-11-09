@@ -19,8 +19,8 @@
                 <MenuItem Header="Export tileset" Click="OnExportTilesetClicked"/>
                 <Separator/>
                 <MenuItem Header="Create new level" Click="OnCreateLevelClicked"/>
-                <MenuItem Header="Load level"/>
-                <MenuItem Header="Save level"/>
+                <MenuItem Header="Load level" Click="OnLoadLevelClicked"/>
+                <MenuItem Header="Save level" Click="OnSaveLevelClicked"/>
                 <Separator/>
                 <MenuItem Header="Exit"/>
             </MenuItem>

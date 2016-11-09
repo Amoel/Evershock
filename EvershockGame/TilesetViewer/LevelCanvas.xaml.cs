@@ -51,6 +51,11 @@ namespace TilesetViewer
             DataContext = this;
 
             LevelManager.Get().RegisterCanvas(this);
+
+            ModeManager.Get().Register(EEditMode.Tiles, TilesEditMode);
+            ModeManager.Get().Register(EEditMode.Blocker, BlockerEditMode);
+
+            ModeManager.Get().ChangeMode(EEditMode.Tiles);
         }
 
         //---------------------------------------------------------------------------
@@ -67,7 +72,7 @@ namespace TilesetViewer
                     Tile tile = new Tile();
 
                     TilesCanvas.Children.Add(tile);
-                    tile.Init(x, y, 0);
+                    tile.Init(x, y);
                     m_Tiles[x, y] = tile;
                 }
             }
@@ -94,8 +99,17 @@ namespace TilesetViewer
             {
                 int beginX = (int)(point.X / m_TileWidth);
                 int beginY = (int)(point.Y / m_TileHeight);
-                SelectionRect selection = TilesetManager.Get().GetSelection();
-                SetHighlight(beginX, beginY, selection != null ? selection.Width : 1, selection != null ? selection.Height : 1, true);
+
+                switch (ModeManager.Get().Mode)
+                {
+                    case EEditMode.Tiles:
+                        SelectionRect selection = TilesetManager.Get().GetSelection();
+                        SetHighlight(beginX, beginY, selection != null ? selection.Width : 1, selection != null ? selection.Height : 1, true);
+                        break;
+                    case EEditMode.Blocker:
+                        SetHighlight(beginX, beginY, 1, 1, true);
+                        break;
+                }
             }
             else
             {
@@ -156,16 +170,83 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
+        private void SetBlocker(Point point, bool isBlocked)
+        {
+            int x = (int)(point.X / m_TileWidth);
+            int y = (int)(point.Y / m_TileHeight);
+            //SelectionRect selection = TilesetManager.Get().GetSelection();
+            SetBlocker(x, y, isBlocked);
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void SetBlocker(int x, int y, bool isBlocked)
+        {
+            if (x < 0 || x >= Bounds.Width || y < 0 || y >= Bounds.Height) return;
+            m_Tiles[x, y].Update(isBlocked);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public Map GetMap()
+        {
+            return new Map(m_Tiles);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SetMap(Map map)
+        {
+            int width = map.Data.GetLength(0);
+            int height = map.Data.GetLength(1);
+
+            TilesCanvas.Children.Clear();
+
+            m_Tiles = new Tile[width, height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    Tile tile = new Tile();
+
+                    TilesCanvas.Children.Add(tile);
+                    tile.Init(x, y, map.Data[x, y]);
+                    m_Tiles[x, y] = tile;
+                }
+            }
+            BorderRect.Width = width * m_TileWidth;
+            BorderRect.Height = height * m_TileHeight;
+            Bounds = new SelectionRect(0, 0, width, height);
+        }
+
+        //---------------------------------------------------------------------------
+
         private void OnMouseDown(object sender, MouseEventArgs e)
         {
             Border border = (Border)sender;
             m_LastClicked = e.GetPosition(border);
             m_LastMoved = m_LastClicked;
 
-            if (e.LeftButton == MouseButtonState.Pressed)
+            switch (ModeManager.Get().Mode)
             {
-                PasteTiles(m_LastClicked);
+                case EEditMode.Tiles:
+                    if (e.LeftButton == MouseButtonState.Pressed)
+                    {
+                        PasteTiles(m_LastClicked);
+                    }
+                    break;
+                case EEditMode.Blocker:
+                    if (e.LeftButton == MouseButtonState.Pressed)
+                    {
+                        SetBlocker(e.GetPosition(border), false);
+                    }
+                    else if(e.RightButton == MouseButtonState.Pressed)
+                    {
+                        SetBlocker(e.GetPosition(border), true);
+                    }
+                    break;
             }
+            
             m_Dragging = true;
             border.CaptureMouse();
         }
@@ -184,23 +265,37 @@ namespace TilesetViewer
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             Border border = (Border)sender;
-            if (e.RightButton == MouseButtonState.Pressed)
+            SetHighlight(e.GetPosition(border), IsMouseOver);
+            switch (ModeManager.Get().Mode)
             {
-                double x = (e.GetPosition(border).X - m_LastMoved.X);
-                double y = (e.GetPosition(border).Y - m_LastMoved.Y);
-                TilesTranslate.X += x;
-                TilesTranslate.Y += y;
-                SelectionTranslate.X += x;
-                SelectionTranslate.Y += y;
-            }
-            else
-            {
-                SetHighlight(e.GetPosition(border), IsMouseOver);
-
-                if (m_Dragging && e.LeftButton == MouseButtonState.Pressed)
-                {
-                    PasteTiles(e.GetPosition(border));
-                }
+                case EEditMode.Tiles:
+                    if (e.RightButton == MouseButtonState.Pressed)
+                    {
+                        double x = (e.GetPosition(border).X - m_LastMoved.X);
+                        double y = (e.GetPosition(border).Y - m_LastMoved.Y);
+                        TilesTranslate.X += x;
+                        TilesTranslate.Y += y;
+                        SelectionTranslate.X += x;
+                        SelectionTranslate.Y += y;
+                    }
+                    else
+                    {
+                        if (m_Dragging && e.LeftButton == MouseButtonState.Pressed)
+                        {
+                            PasteTiles(e.GetPosition(border));
+                        }
+                    }
+                    break;
+                case EEditMode.Blocker:
+                    if (e.LeftButton == MouseButtonState.Pressed)
+                    {
+                        SetBlocker(e.GetPosition(border), false);
+                    }
+                    else if (e.RightButton == MouseButtonState.Pressed)
+                    {
+                        SetBlocker(e.GetPosition(border), true);
+                    }
+                    break;
             }
             m_LastMoved = e.GetPosition(border);
         }

@@ -62,6 +62,28 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
+        private void OnLoadLevelClicked(object sender, EventArgs e)
+        {
+            Map map = ResourceManager.Get().Load();
+            if (map != null)
+            {
+                LevelManager.Get().SetMap(map);
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void OnSaveLevelClicked(object sender, EventArgs e)
+        {
+            Map map = LevelManager.Get().GetMap();
+            if (map != null)
+            {
+                ResourceManager.Get().Save(map);
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
         private void LoadTileset(string path)
         {
             try
