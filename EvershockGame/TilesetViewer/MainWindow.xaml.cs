@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Level;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -91,14 +92,20 @@ namespace TilesetViewer
                 BitmapImage bitmap = new BitmapImage(new Uri(path));
                 if (bitmap != null)
                 {
-                    TilesetManager.Get().CreateTileset(bitmap, 16, 16);
-                    //LevelManager.Get().Create(20, 20);
+                    TilesetManager.Get().CreateTileset(path, 16, 16);
                 }
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void OnUndo(object sender, EventArgs e)
+        {
+            UndoManager.Get().Undo();
         }
 
         //---------------------------------------------------------------------------

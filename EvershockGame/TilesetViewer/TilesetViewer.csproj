@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>TilesetViewerIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -58,27 +61,41 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BoolToTintConverter.cs" />
-    <Compile Include="LevelCanvas.xaml.cs">
+    <Compile Include="Code\BoolToTintConverter.cs" />
+    <Compile Include="Code\Managers\EditManager.cs" />
+    <Compile Include="Code\Extensions.cs" />
+    <Compile Include="Code\Managers\InputManager.cs" />
+    <Compile Include="Code\Managers\LayerManager.cs" />
+    <Compile Include="Code\Managers\ZoomManager.cs" />
+    <Compile Include="Controls\LevelCanvas.xaml.cs">
       <DependentUpon>LevelCanvas.xaml</DependentUpon>
     </Compile>
     <Compile Include="LevelCreationWindow.xaml.cs">
       <DependentUpon>LevelCreationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LevelManager.cs" />
-    <Compile Include="Map.cs" />
-    <Compile Include="ModeManager.cs" />
-    <Compile Include="ResourceManager.cs" />
-    <Compile Include="SelectionRect.cs" />
-    <Compile Include="Tile.xaml.cs">
-      <DependentUpon>Tile.xaml</DependentUpon>
+    <Compile Include="Code\Managers\LevelManager.cs" />
+    <Compile Include="Controls\MapControl.xaml.cs">
+      <DependentUpon>MapControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tileset.cs" />
-    <Compile Include="TilesetCanvas.xaml.cs">
+    <Compile Include="Controls\MapLayerControl.xaml.cs">
+      <DependentUpon>MapLayerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Code\Managers\MapManager.cs" />
+    <Compile Include="Code\MapSizeConverter.cs" />
+    <Compile Include="Code\Managers\ModeManager.cs" />
+    <Compile Include="Code\Managers\ResourceManager.cs" />
+    <Compile Include="Code\SelectionRect.cs" />
+    <Compile Include="Code\Tileset.cs" />
+    <Compile Include="Controls\TilesetCanvas.xaml.cs">
       <DependentUpon>TilesetCanvas.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TilesetManager.cs" />
-    <Page Include="LevelCanvas.xaml">
+    <Compile Include="Code\Managers\TilesetManager.cs" />
+    <Compile Include="Code\Managers\UndoManager.cs" />
+    <Page Include="ButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\LevelCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -98,15 +115,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Tile.xaml">
+    <Page Include="Controls\MapControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TilesetCanvas.xaml">
+    <Page Include="Controls\MapLayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TilesetCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ToggleButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TooltipStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -145,6 +170,10 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Level\Level.csproj">
+      <Project>{7f7e17f7-8732-4265-8d97-6167c6cc91c4}</Project>
+      <Name>Level</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Managers\Managers.csproj">
       <Project>{85eb4dea-38a6-45dc-b308-5d333073440e}</Project>
       <Name>Managers</Name>
@@ -160,6 +189,66 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resource\TilesIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\FirstLayerIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resource\SecondLayerIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resource\ThirdLayerIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\RedoIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resource\UndoIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TilesetViewerIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\TilesetViewerIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\OverviewIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\ZoomInIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resource\ZoomOutIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\EraserIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\FillIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\SelectionIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\AddFileIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

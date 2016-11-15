@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,8 +44,14 @@ namespace TilesetViewer
                 HeightInput.Focus();
                 return;
             }
-
-            LevelManager.Get().Create(width, height);
+            
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            MapManager.Get().Reset(width, height);
+            MapManager.Get().UpdateImage();
+            //LevelManager.Get().Create(width, height);
+            watch.Stop();
+            Console.WriteLine(watch.ElapsedMilliseconds);
             Close();
         }
     }

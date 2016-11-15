@@ -1,9 +1,11 @@
 ﻿using Managers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace TilesetViewer
@@ -24,11 +26,23 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
-        public void CreateTileset(BitmapImage source, int pxTileWidth, int pxTileHeight)
+        public void CreateTileset(string path, int pxTileWidth, int pxTileHeight)
         {
-            Tileset = new Tileset(source, pxTileWidth, pxTileHeight);
-            m_Canvas?.Update();
-            LevelManager.Get().UpdateTiles();
+            try
+            {
+                BitmapImage bitmap = new BitmapImage(new Uri(path));
+                if (bitmap != null)
+                {
+                    Tileset = new Tileset(Path.GetFileNameWithoutExtension(path), bitmap, pxTileWidth, pxTileHeight);
+                    m_Canvas?.Update();
+                    LevelManager.Get().UpdateTiles();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            
         }
 
         //---------------------------------------------------------------------------
@@ -42,7 +56,7 @@ namespace TilesetViewer
 
         public SelectionRect GetSelection()
         {
-            return m_Canvas?.Selection;
+            return m_Canvas?.Selection ?? new SelectionRect(0, 0, 0, 0);
         }
     }
 }

@@ -8,37 +8,27 @@ using System.Windows.Controls.Primitives;
 
 namespace TilesetViewer
 {
-    public enum EEditMode
-    {
-        None,
-        Tiles,
-        Blocker
-    }
+    public delegate void ModeChangedEventHandler<T>(T mode);
 
     //---------------------------------------------------------------------------
 
-    public delegate void ModeChangedEventHandler(EEditMode mode);
-
-    //---------------------------------------------------------------------------
-
-    public class ModeManager : BaseManager<ModeManager>
+    public class ModeManager<T> : BaseManager<ModeManager<T>> where T : IComparable
     {
-        public EEditMode Mode { get; private set; }
-        public event ModeChangedEventHandler ModeChanged;
+        public T Mode { get; private set; }
+        public event ModeChangedEventHandler<T> ModeChanged;
 
-        private Dictionary<EEditMode, ToggleButton> m_Buttons;
+        private Dictionary<T, ToggleButton> m_Buttons;
 
         //---------------------------------------------------------------------------
 
         protected ModeManager()
         {
-            m_Buttons = new Dictionary<EEditMode, ToggleButton>();
-            Mode = EEditMode.None;
+            m_Buttons = new Dictionary<T, ToggleButton>();
         }
 
         //---------------------------------------------------------------------------
 
-        public void Register(EEditMode mode, ToggleButton button)
+        public void Register(T mode, ToggleButton button)
         {
             m_Buttons.Add(mode, button);
             button.Checked += (sender, e) => { ChangeMode(mode); };
@@ -47,12 +37,12 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
-        public void ChangeMode(EEditMode mode)
+        public void ChangeMode(T mode)
         {
-            if (mode == Mode) return;
+            if (mode.Equals(Mode)) return;
             if (m_Buttons.ContainsKey(mode))
             {
-                if (Mode != EEditMode.None)
+                if (m_Buttons.ContainsKey(Mode))
                 {
                     m_Buttons[Mode].IsChecked = false;
                 }
@@ -64,7 +54,7 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
-        private void OnModeChanged(EEditMode mode)
+        private void OnModeChanged(T mode)
         {
             ModeChanged?.Invoke(mode);
         }

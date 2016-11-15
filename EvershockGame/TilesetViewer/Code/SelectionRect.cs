@@ -43,5 +43,16 @@ namespace TilesetViewer
             Width = (bounds != null ? Math.Min(Math.Max(width, 1), bounds.X + bounds.Width - X) : width);
             Height = (bounds != null ? Math.Min(Math.Max(height, 1), bounds.Y + bounds.Height - Y) : height);
         }
+
+        //---------------------------------------------------------------------------
+
+        public SelectionRect Within(SelectionRect bounds)
+        {
+            int x = (bounds != null ? Math.Min(bounds.X + bounds.Width - 1, Math.Max(X, bounds.X)) : X);
+            int y = (bounds != null ? Math.Min(bounds.Y + bounds.Height - 1, Math.Max(Y, bounds.Y)) : Y);
+            int width = (bounds != null ? Math.Min(Math.Max(Width, 1), bounds.X + bounds.Width - X) : Width);
+            int height = (bounds != null ? Math.Min(Math.Max(Height, 1), bounds.Y + bounds.Height - Y) : Height);
+            return new SelectionRect(x, y, width, height);
+        }
     }
 }

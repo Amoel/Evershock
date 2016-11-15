@@ -155,6 +155,7 @@ namespace TilesetViewer
             {
                 TilesTranslate.X += (e.GetPosition(image).X - m_LastMoved.X);
                 TilesTranslate.Y += (e.GetPosition(image).Y - m_LastMoved.Y);
+                CanvasViewport = new Rect((int)TilesTranslate.X % 16, (int)TilesTranslate.Y % 16, 16, 16);
             }
             else
             {
@@ -176,6 +177,17 @@ namespace TilesetViewer
             {
                 TilesTranslate.X = 0;
                 TilesTranslate.Y = 0;
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void OnDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                TilesetManager.Get().CreateTileset(files[0], 16, 16);
             }
         }
 

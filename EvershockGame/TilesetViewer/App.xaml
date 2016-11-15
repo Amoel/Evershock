@@ -3,10 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:TilesetViewer"
              StartupUri="MainWindow.xaml">
+    
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ToggleButtonStyle.xaml"/>
+                <ResourceDictionary Source="ButtonStyle.xaml"/>
+                <ResourceDictionary Source="TooltipStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

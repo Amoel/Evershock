@@ -1,0 +1,196 @@
+﻿<UserControl x:Class="TilesetViewer.LevelCanvas"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TilesetViewer"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <local:MapSizeConverter x:Key="MapSizeConverter"/>
+        <!--<RoutedUICommand x:Key="UndoCommand" Text="Text"/>-->
+    </UserControl.Resources>
+
+    <!--<UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource UndoCommand}" Executed="OnUndoClicked"/>
+    </UserControl.CommandBindings>
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="Z" Command="{StaticResource UndoCommand}"/>
+    </UserControl.InputBindings>-->
+
+    <Grid Background="#FF151515">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="Undo" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Click="OnUndoClicked">
+                    <Button.ToolTip>
+                        <TextBlock Text="Undo">
+                            <Run Foreground="#FF007ACC" Text=" (Ctrl+Z)"/>
+                        </TextBlock>
+                    </Button.ToolTip>
+                    <Image Source="/Resource/UndoIcon.png" Width="25" Height="25"/>
+                </Button>
+                <Button x:Name="Redo" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Click="OnRedoClicked">
+                    <Button.ToolTip>
+                        <TextBlock Text="Redo">
+                         <Run Foreground="#FF007ACC" Text=" (Ctrl+Y)"/>
+                        </TextBlock>
+                    </Button.ToolTip>
+                    <Image Source="/Resource/RedoIcon.png" Width="25" Height="25"/>
+                </Button>
+                <Separator Background="#FF46464A" Margin="5,2,5,4">
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
+                <ToggleButton x:Name="TilesEditMode" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Style="{StaticResource ToggleButtonStyle}">
+                    <ToggleButton.ToolTip>
+                        <TextBlock Text="Tiles">
+                         <Run Foreground="#FF007ACC" Text=" (Ctrl+T)"/>
+                        </TextBlock>
+                    </ToggleButton.ToolTip>
+                    <Image Source="/Resource/TilesIcon.png" Width="25" Height="25"/>
+                </ToggleButton>
+                <ToggleButton x:Name="EraserEditMode" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Style="{StaticResource ToggleButtonStyle}">
+                    <ToggleButton.ToolTip>
+                        <TextBlock Text="Eraser">
+                         <Run Foreground="#FF007ACC" Text=" (Ctrl+E)"/>
+                        </TextBlock>
+                    </ToggleButton.ToolTip>
+                    <Image Source="/Resource/EraserIcon.png" Width="25" Height="25"/>
+                </ToggleButton>
+                <ToggleButton x:Name="SelectionEditMode" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Style="{StaticResource ToggleButtonStyle}">
+                    <ToggleButton.ToolTip>
+                        <TextBlock Text="Selection">
+                         <Run Foreground="#FF007ACC" Text=" (Ctrl+S)"/>
+                        </TextBlock>
+                    </ToggleButton.ToolTip>
+                    <Image Source="/Resource/SelectionIcon.png" Width="25" Height="25"/>
+                </ToggleButton>
+                <ToggleButton x:Name="FillEditMode" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Style="{StaticResource ToggleButtonStyle}">
+                    <ToggleButton.ToolTip>
+                        <TextBlock Text="Fill">
+                         <Run Foreground="#FF007ACC" Text=" (Ctrl+F)"/>
+                        </TextBlock>
+                    </ToggleButton.ToolTip>
+                    <Image Source="/Resource/FillIcon.png" Width="25" Height="25"/>
+                </ToggleButton>
+                <ToggleButton x:Name="BlockerEditMode" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Style="{StaticResource ToggleButtonStyle}">
+                    <ToggleButton.ToolTip>
+                        <TextBlock Text="Blocker">
+                         <Run Foreground="#FF007ACC" Text=" (Ctrl+B)"/>
+                        </TextBlock>
+                    </ToggleButton.ToolTip>
+                    <Image Source="/Resource/BlockerIcon.png" Width="25" Height="25"/>
+                </ToggleButton>
+                <Separator Background="#FF46464A" Margin="5,2,5,4">
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
+                <ToggleButton x:Name="FirstLayer" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Style="{StaticResource ToggleButtonStyle}">
+                    <ToggleButton.ToolTip>
+                        <TextBlock Text="First layer">
+                         <Run Foreground="#FF007ACC" Text=" (F1)"/>
+                        </TextBlock>
+                    </ToggleButton.ToolTip>
+                    <Image Source="/Resource/FirstLayerIcon.png" Width="25" Height="25"/>
+                </ToggleButton>
+                <ToggleButton x:Name="SecondLayer" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Style="{StaticResource ToggleButtonStyle}">
+                    <ToggleButton.ToolTip>
+                        <TextBlock Text="Second layer">
+                         <Run Foreground="#FF007ACC" Text=" (F2)"/>
+                        </TextBlock>
+                    </ToggleButton.ToolTip>
+                    <Image Source="/Resource/SecondLayerIcon.png" Width="25" Height="25"/>
+                </ToggleButton>
+                <ToggleButton x:Name="ThirdLayer" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Style="{StaticResource ToggleButtonStyle}">
+                    <ToggleButton.ToolTip>
+                        <TextBlock Text="Third layer">
+                         <Run Foreground="#FF007ACC" Text=" (F3)"/>
+                        </TextBlock>
+                    </ToggleButton.ToolTip>
+                    <Image Source="/Resource/ThirdLayerIcon.png" Width="25" Height="25"/>
+                </ToggleButton>
+                <Separator Background="#FF46464A" Margin="5,2,5,4">
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
+                <Button x:Name="ZoomIn" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Click="OnRedoClicked">
+                    <Button.ToolTip>
+                        <TextBlock Text="Zoom in"/>
+                    </Button.ToolTip>
+                    <Image Source="/Resource/ZoomInIcon.png" Width="25" Height="25"/>
+                </Button>
+                <Button x:Name="ZoomOut" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Click="OnRedoClicked">
+                    <Button.ToolTip>
+                        <TextBlock Text="Zoom out"/>
+                    </Button.ToolTip>
+                    <Image Source="/Resource/ZoomOutIcon.png" Width="25" Height="25"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1" AllowDrop="True" MouseMove="OnMouseMove" MouseDown="OnMouseDown" MouseUp="OnMouseUp" MouseWheel="OnMouseWheel" Drop="OnDrop">
+            <Rectangle>
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="/Resource/GridSegment.png" TileMode="Tile" ViewportUnits="Absolute" Viewport="{Binding CanvasViewport, UpdateSourceTrigger=PropertyChanged}"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Grid Name="TilesContainer"  ClipToBounds="True">
+                <Canvas 
+                    Name="TilesCanvas" 
+                    IsHitTestVisible="True"
+                    Margin="0"
+                    Width="{Binding ActualWidth, ElementName=TilesContainer, Converter={StaticResource MapSizeConverter}}" 
+                    Height="{Binding ActualHeight, ElementName=TilesContainer, Converter={StaticResource MapSizeConverter}}">
+                    <Canvas.RenderTransform>
+                        <ScaleTransform x:Name="TilesScale" CenterX="0.5" CenterY="0.5"/>
+                    </Canvas.RenderTransform>
+                    <local:MapControl x:Name="TilesMap" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                </Canvas>
+            </Grid>
+            <Grid x:Name="DragHoverOverlay" Background="#66000000" IsHitTestVisible="False" Opacity="0">
+                <Image x:Name="DragHoverIcon" Source="/Resource/AddFileIcon.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100"/>
+            </Grid>
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="Grid.DragEnter">
+                            <BeginStoryboard x:Name="DragEnterAnimation">
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.Target="{x:Reference DragHoverOverlay}" Storyboard.TargetProperty="Opacity" Duration="0:0:0.1" To="1.0"/>
+                                    <DoubleAnimation Storyboard.Target="{x:Reference DragHoverIcon}" Storyboard.TargetProperty="Width" To="120" Duration="0:0:0.1"/>
+                                    <DoubleAnimation Storyboard.Target="{x:Reference DragHoverIcon}" Storyboard.TargetProperty="Height" To="120" Duration="0:0:0.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Grid.DragLeave">
+                            <BeginStoryboard x:Name="DragLeaveAnimation">
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.Target="{x:Reference DragHoverOverlay}" Storyboard.TargetProperty="Opacity" Duration="0:0:0.1" To="0.0"/>
+                                    <DoubleAnimation Storyboard.Target="{x:Reference DragHoverIcon}" Storyboard.TargetProperty="Width" To="100" Duration="0:0:0.1"/>
+                                    <DoubleAnimation Storyboard.Target="{x:Reference DragHoverIcon}" Storyboard.TargetProperty="Height" To="100" Duration="0:0:0.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Grid.Drop">
+                            <BeginStoryboard x:Name="DropAnimation">
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.Target="{x:Reference DragHoverOverlay}" Storyboard.TargetProperty="Opacity" Duration="0:0:0.1" To="0.0"/>
+                                    <DoubleAnimation Storyboard.Target="{x:Reference DragHoverIcon}" Storyboard.TargetProperty="Width" To="100" Duration="0:0:0.1"/>
+                                    <DoubleAnimation Storyboard.Target="{x:Reference DragHoverIcon}" Storyboard.TargetProperty="Height" To="100" Duration="0:0:0.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+        </Grid>
+    </Grid>
+</UserControl>

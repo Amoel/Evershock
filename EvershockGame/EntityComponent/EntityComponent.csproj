@@ -111,6 +111,10 @@
       <Project>{0aad36e3-51a5-4a07-ab60-5c8a66bd38b7}</Project>
       <Name>Farseer Physics MonoGame</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Level\Level.csproj">
+      <Project>{7f7e17f7-8732-4265-8d97-6167c6cc91c4}</Project>
+      <Name>Level</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

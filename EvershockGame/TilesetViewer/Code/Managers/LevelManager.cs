@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using Level;
+using Managers;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -31,14 +32,21 @@ namespace TilesetViewer
 
         public void Create(int width, int height)
         {
-            m_Canvas?.Create(width, height);
+            //m_Canvas?.Create(width, height);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SetTile(ELayerMode mode, int sourceX, int sourceY, int destinationX, int destinationY, bool isBlocked)
+        {
+            //m_Canvas?.SetTile(mode, sourceX, sourceY, destinationX, destinationY, isBlocked);
         }
 
         //---------------------------------------------------------------------------
 
         public void UpdateTiles()
         {
-            m_Canvas?.UpdateTiles();
+            //m_Canvas?.UpdateTiles();
         }
 
         //---------------------------------------------------------------------------
@@ -62,14 +70,15 @@ namespace TilesetViewer
 
         public Map GetMap()
         {
-            return m_Canvas?.GetMap();
+            return null;
+            //return m_Canvas?.GetMap();
         }
 
         //---------------------------------------------------------------------------
 
         public void SetMap(Map map)
         {
-            m_Canvas?.SetMap(map);
+            //m_Canvas?.SetMap(map);
         }
     }
 }

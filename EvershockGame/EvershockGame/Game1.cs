@@ -98,6 +98,9 @@ namespace EvershockGame
             IEntity wall = EntityFactory.Create<Entity>("Wall");
             wall.AddComponent<TransformComponent>().Init(new Vector3(0, 300, 0));
             wall.AddComponent<WallColliderComponent>().Init(new Vector2(0, 0), new Vector2(100, -100));
+
+            IEntity map = EntityFactory.Create<Entity>("Map");
+            map.AddComponent<MapComponent>().Init(AssetManager.Get().Find<Level.Map>("TestMap"));
         }
 
         private void AddBarrel(int x, int y)
@@ -113,6 +116,7 @@ namespace EvershockGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             AssetManager.Get().Content = Content;
+            AssetManager.Get().LoadMaps();
 
 #if DEBUG
             // Load debug content

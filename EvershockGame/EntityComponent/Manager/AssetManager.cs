@@ -1,8 +1,10 @@
-﻿using Managers;
+﻿using Level;
+using Managers;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +22,21 @@ namespace EntityComponent.Manager
         protected AssetManager()
         {
             m_Assets = new Dictionary<Type, Dictionary<string, dynamic>>();
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void LoadMaps()
+        {
+            string[] files = Directory.GetFiles("C:/Users/Max/Desktop/Maps");
+            foreach (string file in files)
+            {
+                Map map = Map.Load(file);
+                if (map != null)
+                {
+                    Store(Path.GetFileNameWithoutExtension(file), map);
+                }
+            }
         }
 
         //---------------------------------------------------------------------------

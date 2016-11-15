@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using Level;
+using Managers;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
@@ -24,20 +25,7 @@ namespace TilesetViewer
 
             if (dialog.ShowDialog() == true)
             {
-                try
-                {
-                    using (FileStream stream = new FileStream(dialog.FileName, FileMode.Create))
-                    {
-                        using (StreamWriter writer = new StreamWriter(stream))
-                        {
-                            writer.Write(JsonConvert.SerializeObject(map, Formatting.Indented));
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-
-                }
+                Map.Save(map, dialog.FileName);
             }
         }
 
@@ -51,20 +39,7 @@ namespace TilesetViewer
 
             if (dialog.ShowDialog() == true)
             {
-                try
-                {
-                    using (FileStream stream = new FileStream(dialog.FileName, FileMode.Open))
-                    {
-                        using (StreamReader reader = new StreamReader(stream))
-                        {
-                            map = JsonConvert.DeserializeObject<Map>(reader.ReadToEnd());
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-
-                }
+                map = Map.Load(dialog.FileName);
             }
             return map;
         }

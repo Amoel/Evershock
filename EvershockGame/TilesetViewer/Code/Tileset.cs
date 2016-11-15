@@ -10,6 +10,7 @@ namespace TilesetViewer
 {
     public class Tileset
     {
+        public string Name { get; set; }
         public BitmapImage Source { get; set; }
         public int PxTileWidth { get; set; }
         public int PxTileHeight { get; set; }
@@ -23,29 +24,30 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
-        public Tileset(BitmapImage source, int pxTileWidth, int pxTileHeight)
+        public Tileset(string name, BitmapImage source, int pxTileWidth, int pxTileHeight)
         {
-            Update(source, pxTileWidth, pxTileHeight);
+            Update(name, source, pxTileWidth, pxTileHeight);
         }
 
         //---------------------------------------------------------------------------
 
         public void Update(BitmapImage source)
         {
-            Update(source, PxTileWidth, PxTileHeight);
+            Update(Name, source, PxTileWidth, PxTileHeight);
         }
 
         //---------------------------------------------------------------------------
 
         public void Update(int pxTileWidth, int pxTileHeight)
         {
-            Update(Source, pxTileWidth, pxTileHeight);
+            Update(Name, Source, pxTileWidth, pxTileHeight);
         }
 
         //---------------------------------------------------------------------------
 
-        public void Update(BitmapImage source, int pxTileWidth, int pxTileHeight)
+        public void Update(string name, BitmapImage source, int pxTileWidth, int pxTileHeight)
         {
+            Name = name;
             Source = source;
             PxTileWidth = pxTileWidth;
             PxTileHeight = pxTileHeight;
