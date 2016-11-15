@@ -130,14 +130,14 @@ namespace EvershockGame
 
             AssetManager.Get().Store<Texture2D>("Background1", "Graphics/Camera/BackgroundTexture1");
             AssetManager.Get().Store<Texture2D>("Background2", "Graphics/Camera/BackgroundTexture1");
-            AssetManager.Get().Store<Texture2D>("GroundTile1", "Graphics/Tiles/GroundTile1");
+            AssetManager.Get().Store<Texture2D>("GroundTile1", "Levels/Debug/TestPNG");
 
             AssetManager.Get().Store<Texture2D>("ChestClosed1", "Graphics/Tiles/ChestClosed1");
             AssetManager.Get().Store<Texture2D>("ChestOpened1", "Graphics/Tiles/ChestOpened1");
             AssetManager.Get().Store<Texture2D>("Barrel1", "Graphics/Tiles/Barrel1");
 
-            AssetManager.Get().Store<Texture2D>("Tileset1", "Graphics/Tilesets/Tileset1");
-            AssetManager.Get().Store<Texture2D>("WalkingAnimation", "Graphics/Tilesets/WalkingAnimation");
+            AssetManager.Get().Store<Texture2D>("Kakariko_Village_Tiles", "Graphics/Tilesets/Debug/Kakariko_Village_Tiles");
+            AssetManager.Get().Store<Texture2D>("WalkingAnimation", "Graphics/Tilesets/Debug/WalkingAnimation");
 
             AssetManager.Get().Store<Texture2D>("CircleLight", "Graphics/Lights/CircleLight");
             AssetManager.Get().Store<Effect>("LightingEffect", "Effects/DeferredLighting");
