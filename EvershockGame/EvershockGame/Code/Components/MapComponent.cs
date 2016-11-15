@@ -45,8 +45,8 @@ namespace EvershockGame.Code
                     {
                         for (int y = 0; y < Map.Height; y++)
                         {
-                            ViewRect view = Map.Data[x, y].View;
-                            batch.Draw(m_Tileset, new Rectangle((int)location.X + x * 16, (int)location.Y + y * 16, 16, 16), new Rectangle((int)(view.X * m_Tileset.Width), (int)(view.Y * m_Tileset.Height), (int)(view.Width * m_Tileset.Width), (int)(view.Height * m_Tileset.Height)), Color.White);
+                            //ViewRect view = Map.Data[x, y].View;
+                            //batch.Draw(m_Tileset, new Rectangle((int)location.X + x * 16, (int)location.Y + y * 16, 16, 16), new Rectangle((int)(view.X * m_Tileset.Width), (int)(view.Y * m_Tileset.Height), (int)(view.Width * m_Tileset.Width), (int)(view.Height * m_Tileset.Height)), Color.White);
                         }
                     }
                 }

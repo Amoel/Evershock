@@ -3,8 +3,7 @@ using EntityComponent.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace EntityComponent
 {
@@ -294,6 +293,7 @@ namespace EntityComponent
                 {
                     foreach (Type type in attribute.Types)
                     {
+                        Debug.Assert(false, string.Format("Missing Component of type: {0}", type.Name));
                         var genericMethod = method.MakeGenericMethod(new[] { type });
                         genericMethod.Invoke(this, null);
                     }

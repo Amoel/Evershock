@@ -110,9 +110,9 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        public void ReceiveInput(GameActionCollection actions, float deltaTime)
+        public virtual void ReceiveInput(GameActionCollection actions, float deltaTime)
         {
-            float xMovement = (actions[EGameAction.MOVE_RIGHT] - actions[EGameAction.MOVE_LEFT]) * deltaTime * 500;
+            float xMovement = (actions[EGameAction.MOVE_RIGHT] - actions[EGameAction.MOVE_LEFT]) * deltaTime * 500 ;
             float yMovement = (actions[EGameAction.MOVE_DOWN] - actions[EGameAction.MOVE_UP]) * deltaTime * 500;
 
             Vector3 movement = new Vector3(xMovement, yMovement, 0);

@@ -2,9 +2,7 @@
 using EntityComponent.Components;
 using EntityComponent.Manager;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace EvershockGame.Code
 {
@@ -13,21 +11,18 @@ namespace EvershockGame.Code
     {
         private int m_MaxHealth = 500;
         private int m_CurrentHealth;
-        //private byte m_MaxInventorySlots = 0;
         public int m_transmittableHealth;
 
-        private float m_BaseMovementSpeed = 1.0f;
-        //private float m_BaseDamage = 1.0f;
-        //private float m_BaseArmor = 1.0f;
+        public float BaseMovementSpeed = 1.0f;
 
         public AttributesComponent(Guid entity) : base(entity)
         {
             m_MaxHealth = 500;
-            m_BaseMovementSpeed = 1.0f;
+            BaseMovementSpeed = 1.0f;
             
             m_CurrentHealth = m_MaxHealth;
             m_transmittableHealth = m_MaxHealth;
-        }
+    }
 
         /*--------------------------------------------------------------------------
                     Init
@@ -47,7 +42,7 @@ namespace EvershockGame.Code
         public void Init(int max_health, float movement_speed)
         {
             m_MaxHealth = max_health;
-            m_BaseMovementSpeed = movement_speed;
+            BaseMovementSpeed = movement_speed;
         }
 
         /*--------------------------------------------------------------------------

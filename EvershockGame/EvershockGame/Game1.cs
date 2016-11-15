@@ -47,7 +47,7 @@ namespace EvershockGame
             input.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_UP);
             input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_DOWN);
 
-            player.AddComponent<PhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
+            player.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
             player.AddComponent<CircleColliderComponent>().Init(18, BodyType.Dynamic);
 
             player.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(2, 2));
@@ -68,7 +68,7 @@ namespace EvershockGame
             input2.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_W);
             input2.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_S);
 
-            player2.AddComponent<PhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
+            player2.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
             player2.AddComponent<CircleColliderComponent>().Init(18, BodyType.Dynamic);
 
             player2.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(2, 2));
@@ -99,8 +99,8 @@ namespace EvershockGame
             wall.AddComponent<TransformComponent>().Init(new Vector3(0, 300, 0));
             wall.AddComponent<WallColliderComponent>().Init(new Vector2(0, 0), new Vector2(100, -100));
 
-            IEntity map = EntityFactory.Create<Entity>("Map");
-            map.AddComponent<MapComponent>().Init(AssetManager.Get().Find<Level.Map>("TestMap"));
+            //IEntity map = EntityFactory.Create<Entity>("Map");
+            //map.AddComponent<MapComponent>().Init(AssetManager.Get().Find<Level.Map>("TestMap"));
         }
 
         private void AddBarrel(int x, int y)
@@ -116,7 +116,7 @@ namespace EvershockGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             AssetManager.Get().Content = Content;
-            AssetManager.Get().LoadMaps();
+            //AssetManager.Get().LoadMaps();
 
 #if DEBUG
             // Load debug content
