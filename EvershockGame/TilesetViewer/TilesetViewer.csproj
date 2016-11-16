@@ -67,6 +67,7 @@
     <Compile Include="Code\Managers\InputManager.cs" />
     <Compile Include="Code\Managers\LayerManager.cs" />
     <Compile Include="Code\Managers\ZoomManager.cs" />
+    <Compile Include="Code\SelectionPoint.cs" />
     <Compile Include="Controls\LevelCanvas.xaml.cs">
       <DependentUpon>LevelCanvas.xaml</DependentUpon>
     </Compile>

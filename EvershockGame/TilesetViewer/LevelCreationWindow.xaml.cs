@@ -45,13 +45,9 @@ namespace TilesetViewer
                 return;
             }
             
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-            MapManager.Get().Reset(width, height);
+            MapManager.Get().Create(width, height);
             MapManager.Get().UpdateImage();
             //LevelManager.Get().Create(width, height);
-            watch.Stop();
-            Console.WriteLine(watch.ElapsedMilliseconds);
             Close();
         }
     }

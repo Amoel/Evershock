@@ -6,7 +6,6 @@ using System.Collections.Generic;
 namespace EntityComponent.Components
 {
     [Serializable]
-    [RequireComponent(typeof(PhysicsComponent))]
     public class InputComponent : Component, ITickableComponent
     {
         private Dictionary<EGameAction, EInput[]> m_Mappings;

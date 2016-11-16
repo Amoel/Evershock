@@ -19,9 +19,10 @@
         Height="{Binding PxHeight, UpdateSourceTrigger=PropertyChanged}"
         MouseMove="OnMouseMove"
         MouseDown="OnMouseDown"
+        MouseUp="OnMouseUp"
         MouseLeave="OnMouseLeave">
         <Grid IsHitTestVisible="False">
-            <Grid Name="LayerContainer" AllowDrop="False"/>
+            <Grid Name="LayerContainer"/>
             <Border Name="HighlightBorder" BorderThickness="1" BorderBrush="White" Background="#11FFFFFF"/>
         </Grid>
     </Border>

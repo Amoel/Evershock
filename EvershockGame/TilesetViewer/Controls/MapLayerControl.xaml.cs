@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Level;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -70,6 +71,7 @@ namespace TilesetViewer
             m_ScaleX = scaleX;
             m_ScaleY = scaleY;
             Reset(width, height);
+            OnModeChanged(mode);
         }
 
         //---------------------------------------------------------------------------
@@ -89,29 +91,15 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
-        public void SetTiles(int sourceX, int sourceY)
+        public void SetTile(int sourceX, int sourceY, int targetX, int targetY)
         {
-            SelectionRect tilesetSelection = TilesetManager.Get().GetSelection();
-            SelectionRect rect = new SelectionRect(sourceX, sourceY, tilesetSelection.Width, tilesetSelection.Height).Within(new SelectionRect(0, 0, MapWidth, MapHeight));
-            if (rect != null)
-            {
-                
-                //for (int y = 0; y < rect.Height; y++)
-                //{
-                //    for (int x = 0; x < rect.Width; x++)
-                //    {
-                //        UndoState before = new UndoState()
-                //    }
-                //}
+            BitmapSource source = TilesetManager.Get().Tileset.Source;
+            int sourceStride = source.PixelWidth * (source.Format.BitsPerPixel + 7) / 8;
+            int size = source.PixelHeight * sourceStride;
+            byte[] data = new byte[size];
 
-                BitmapSource source = TilesetManager.Get().Tileset.Source;
-                int sourceStride = source.PixelWidth * (source.Format.BitsPerPixel + 7) / 8;
-                int size = source.PixelHeight * sourceStride;
-                byte[] data = new byte[size];
-
-                TilesetManager.Get().Tileset.Source.CopyPixels(new Int32Rect(tilesetSelection.X * m_ScaleX, tilesetSelection.Y * m_ScaleY, tilesetSelection.Width * m_ScaleX, tilesetSelection.Height * m_ScaleY), data, sourceStride, 0);
-                Image.WritePixels(new Int32Rect(rect.X * m_ScaleX, rect.Y * m_ScaleY, rect.Width * m_ScaleX, rect.Height * m_ScaleY), data, sourceStride, 0);
-            }
+            TilesetManager.Get().Tileset.Source.CopyPixels(new Int32Rect(targetX * m_ScaleX, targetY * m_ScaleY, m_ScaleX, m_ScaleY), data, sourceStride, 0);
+            Image.WritePixels(new Int32Rect(sourceX * m_ScaleX, sourceY * m_ScaleY, m_ScaleX, m_ScaleY), data, sourceStride, 0);
         }
 
         //---------------------------------------------------------------------------
@@ -125,6 +113,13 @@ namespace TilesetViewer
                 data[i] = 0;
             }
             Image.WritePixels(new Int32Rect(sourceX * m_ScaleX, sourceY * m_ScaleY, m_ScaleX, m_ScaleY), data, stride, 0);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void FillTiles(int sourceX, int sourceY)
+        {
+
         }
 
         //---------------------------------------------------------------------------

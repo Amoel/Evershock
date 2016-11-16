@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using Level;
+using Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,7 @@ namespace TilesetViewer
                 m_RedoActions.Clear();
                 m_UndoActions.Push(m_CurrentUndo);
             }
+            m_CurrentUndo = null;
         }
 
         //---------------------------------------------------------------------------

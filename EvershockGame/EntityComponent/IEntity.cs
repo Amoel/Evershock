@@ -43,7 +43,7 @@ namespace EntityComponent
 
         //---------------------------------------------------------------------------
 
-        T AddComponent<T>() where T : IComponent;
+        T AddComponent<T>(bool isRequiredComponent = false) where T : IComponent;
         void RemoveComponent<T>() where T : IComponent;
         T GetComponent<T>() where T : IComponent;
         bool HasComponent<T>() where T : IComponent;

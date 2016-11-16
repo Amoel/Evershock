@@ -36,6 +36,8 @@ namespace EvershockGame
             IEntity player = EntityFactory.Create<Entity>("Player");
             player.AddComponent<TransformComponent>().Init(new Vector3(-300, 0, 0));
 
+            player.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
+
             MovementAnimationComponent animation = player.AddComponent<MovementAnimationComponent>();
             animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"));
             animation.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true));
@@ -46,8 +48,7 @@ namespace EvershockGame
             input.MapAction(EGameAction.MOVE_RIGHT, EInput.KEYBOARD_RIGHT);
             input.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_UP);
             input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_DOWN);
-
-            player.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
+            
             player.AddComponent<CircleColliderComponent>().Init(18, BodyType.Dynamic);
 
             player.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(2, 2));

@@ -88,7 +88,18 @@ namespace TilesetViewer
         {
             SelectionRect tilesetSelection = TilesetManager.Get().GetSelection();
             SelectionRect rect = new SelectionRect(x, y, tilesetSelection.Width, tilesetSelection.Height).Within(new SelectionRect(0, 0, MapWidth, MapHeight));
-            UpdateHighlight(rect.X, rect.Y, rect.Width, rect.Height);
+            switch (EditManager.Get().Mode)
+            {
+                case EEditMode.Tiles:
+                    UpdateHighlight(rect.X, rect.Y, rect.Width, rect.Height);
+                    break;
+                case EEditMode.Eraser:
+                    UpdateHighlight(rect.X, rect.Y, 1, 1);
+                    break;
+                case EEditMode.Fill:
+                    UpdateHighlight(rect.X, rect.Y, 1, 1);
+                    break;
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -100,11 +111,11 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
-        public void SetTiles(ELayerMode mode, int sourceX, int sourceY)
+        public void SetTile(ELayerMode mode, int sourceX, int sourceY, int targetX, int targetY)
         {
             if (m_Layers.ContainsKey(mode))
             {
-                m_Layers[mode].SetTiles(sourceX, sourceY);
+                m_Layers[mode].SetTile(sourceX, sourceY, targetX, targetY);
             }
         }
 
@@ -128,23 +139,22 @@ namespace TilesetViewer
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 UndoManager.Get().StartUndo(LayerManager.Get().Mode);
-                switch (EditManager.Get().Mode)
-                {
-                    case EEditMode.Tiles:
-                        SetTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                        break;
-                    case EEditMode.Eraser:
-                        EraseTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                        break;
-                    case EEditMode.Fill:
-                        EraseTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                        break;
-                    case EEditMode.Blocker:
-                        break;
-                }
+                //switch (EditManager.Get().Mode)
+                //{
+                //    case EEditMode.Tiles:
+                //        SetTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
+                //        break;
+                //    case EEditMode.Eraser:
+                //        EraseTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
+                //        break;
+                //    case EEditMode.Fill:
+                //        EraseTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
+                //        break;
+                //    case EEditMode.Blocker:
+                //        break;
+                //}
+                MapManager.Get().ExecuteAction((int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
             }
-
-            //Mouse.Capture(this, CaptureMode.SubTree);
         }
 
         //---------------------------------------------------------------------------
@@ -152,7 +162,6 @@ namespace TilesetViewer
         private void OnMouseUp(object sender, MouseEventArgs e)
         {
             UndoManager.Get().StopUndo();
-            //Mouse.Capture(null);
         }
 
         //---------------------------------------------------------------------------
@@ -165,20 +174,21 @@ namespace TilesetViewer
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                switch (EditManager.Get().Mode)
-                {
-                    case EEditMode.Tiles:
-                        SetTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                        break;
-                    case EEditMode.Eraser:
-                        EraseTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                        break;
-                    case EEditMode.Fill:
-                        EraseTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                        break;
-                    case EEditMode.Blocker:
-                        break;
-                }
+                //    switch (EditManager.Get().Mode)
+                //    {
+                //        case EEditMode.Tiles:
+                //            SetTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
+                //            break;
+                //        case EEditMode.Eraser:
+                //            EraseTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
+                //            break;
+                //        case EEditMode.Fill:
+                //            FillTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
+                //            break;
+                //        case EEditMode.Blocker:
+                //            break;
+                //    }
+                MapManager.Get().ExecuteAction((int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
             }
         }
 

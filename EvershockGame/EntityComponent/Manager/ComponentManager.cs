@@ -145,12 +145,12 @@ namespace EntityComponent.Manager
 
         public T Find<T>(Guid guid) where T : IComponent
         {
-            if (m_Components.ContainsKey(guid) && m_Components[guid].Data is T)
+            if (m_Components.ContainsKey(guid) && typeof(T).IsAssignableFrom(m_Components[guid].Data.GetType()))
             {
                 return (T)m_Components[guid].Data;
             }
             IComponent newComponent = m_RegisterQueue.FirstOrDefault(component => component.GUID == guid);
-            return ((newComponent != null && newComponent is T) ? (T)newComponent : default(T));
+            return ((newComponent != null && typeof(T).IsAssignableFrom(newComponent.GetType())) ? (T)newComponent : default(T));
         }
 
         //---------------------------------------------------------------------------

@@ -8,16 +8,26 @@ using System.Threading.Tasks;
 
 namespace Level
 {
+    public enum ELayerMode
+    {
+        None,
+        First,
+        Second,
+        Third
+    }
+
+    //---------------------------------------------------------------------------
+
     [Serializable]
     public class Map
     {
         public string Tileset { get; set; }
-        public Cell[,] Data { get; set; }
+        public Cell[,] Cells { get; set; }
 
         [JsonIgnore]
-        public int Width { get { return Data != null ? Data.GetLength(0) : 0; } }
+        public int Width { get { return Cells != null ? Cells.GetLength(0) : 0; } }
         [JsonIgnore]
-        public int Height { get { return Data != null ? Data.GetLength(1) : 0; } }
+        public int Height { get { return Cells != null ? Cells.GetLength(1) : 0; } }
 
         //---------------------------------------------------------------------------
 
@@ -27,27 +37,50 @@ namespace Level
 
         public Map(int width, int height)
         {
-            Data = new Cell[width, height];
+            Cells = new Cell[width, height];
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    Data[x, y] = new Cell(x, y);
+                    Cells[x, y] = new Cell(x, y, false);
                 }
             }
         }
 
         //---------------------------------------------------------------------------
 
-        public bool SetTile(int sourceX, int sourceY, int targetX, int targetY)
+        public Cell this[int x, int y]
+        {
+            get { return (x >= 0 && x < Width && y >= 0 && y < Height) ? Cells[x, y] : null; }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public Layer this[ELayerMode mode, int x, int y]
+        {
+            get
+            {
+                Cell cell = this[x, y];
+                return cell != null ? cell[mode] : null;
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public bool SetTile(ELayerMode mode, int sourceX, int sourceY, int targetX, int targetY)
         {
             if (sourceX < 0 || sourceX >= Width || sourceY < 0 || sourceY >= Height) return false;
-
-            //Cell cell = Data[sourceX, sourceY];
-            //if (cell.X == targetX && cell.Y == targetY) return false;
-            //cell.X = targetX;
-            //cell.Y = targetY;
-            return true;
+            Layer layer = Cells[sourceX, sourceY][mode];
+            if (layer != null)
+            {
+                if (layer.TargetX != targetX || layer.TargetY != targetY)
+                {
+                    layer.TargetX = targetX;
+                    layer.TargetY = targetY;
+                    return true;
+                }
+            }
+            return false;
         }
 
         //---------------------------------------------------------------------------
@@ -100,6 +133,8 @@ namespace Level
     {
         public int X { get; set; }
         public int Y { get; set; }
+        public Dictionary<ELayerMode, Layer> Layers { get; set; }
+
         public ViewRect ViewFirstLayer { get; set; }
         public ViewRect ViewSecondLayer { get; set; }
         public ViewRect ViewThirdLayer { get; set; }
@@ -107,10 +142,39 @@ namespace Level
 
         //---------------------------------------------------------------------------
 
-        public Cell(int x, int y)
+        public Cell(int x, int y, bool isBlocked)
         {
             X = x;
             Y = y;
+            Layers = new Dictionary<ELayerMode, Layer>();
+            foreach (ELayerMode mode in Enum.GetValues(typeof(ELayerMode)))
+            {
+                Layers.Add(mode, new Layer(-1, -1));
+            }
+            IsBlocked = isBlocked;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public Layer this[ELayerMode mode]
+        {
+            get { return Layers.ContainsKey(mode) ? Layers[mode] : null; }
+        }
+    }
+
+    //---------------------------------------------------------------------------
+
+    public class Layer
+    {
+        public int TargetX { get; set; }
+        public int TargetY { get; set; }
+
+        //---------------------------------------------------------------------------
+
+        public Layer(int targetX, int targetY)
+        {
+            TargetX = targetX;
+            TargetY = targetY;
         }
     }
 }

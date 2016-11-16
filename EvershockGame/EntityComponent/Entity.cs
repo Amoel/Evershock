@@ -162,12 +162,13 @@ namespace EntityComponent
 
         //---------------------------------------------------------------------------
 
-        public T AddComponent<T>() where T : IComponent
+        public T AddComponent<T>(bool isRequiredComponent = false) where T : IComponent
         {
             AddRequirements<T>();
 
             if (!HasComponent<T>())
             {
+                AssertManager.Get().Show(!isRequiredComponent, string.Format("{0} is missing {1}.", Name, typeof(T).Name));
                 T component = ComponentFactory.Create<T>(GUID);
                 if (component != null)
                 {
@@ -293,9 +294,8 @@ namespace EntityComponent
                 {
                     foreach (Type type in attribute.Types)
                     {
-                        Debug.Assert(false, string.Format("Missing Component of type: {0}", type.Name));
                         var genericMethod = method.MakeGenericMethod(new[] { type });
-                        genericMethod.Invoke(this, null);
+                        genericMethod.Invoke(this, new object[] { true });
                     }
                 }
             }

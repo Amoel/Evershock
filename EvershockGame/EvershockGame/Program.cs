@@ -22,6 +22,7 @@ namespace EvershockGame
                     switch (arg)
                     {
                         case "ShowDebugView": CollisionManager.Get().IsDebugViewActive = true; break;
+                        case "HideAssert": AssertManager.Get().HideAsserts = true; break;
                     }
                 }
             }
