@@ -14,7 +14,8 @@ namespace EntityComponent.Manager
     public class EntityManager : BaseManager<EntityManager>
     {
         [JsonIgnore]
-        private Dictionary<Guid, SmartContainer<IEntity>> m_Entities;
+        private Dictionary<Guid, IEntity> m_Entities;
+        private Dictionary<Guid, Guid> m_Hierarchy;
 
         //---------------------------------------------------------------------------
 
@@ -24,7 +25,8 @@ namespace EntityComponent.Manager
 
         protected override void Init()
         {
-            m_Entities = new Dictionary<Guid, SmartContainer<IEntity>>();
+            m_Entities = new Dictionary<Guid, IEntity>();
+            m_Hierarchy = new Dictionary<Guid, Guid>();
         }
 
         //---------------------------------------------------------------------------
@@ -33,7 +35,7 @@ namespace EntityComponent.Manager
         {
             if (m_Entities == null)
             {
-                m_Entities = new Dictionary<Guid, SmartContainer<IEntity>>();
+                m_Entities = new Dictionary<Guid, IEntity>();
             }
         }
 
@@ -43,7 +45,7 @@ namespace EntityComponent.Manager
         {
             if (entity != null)
             {
-                if (!m_Entities.ContainsKey(entity.GUID)) m_Entities.Add(entity.GUID, new SmartContainer<IEntity>(entity));
+                if (!m_Entities.ContainsKey(entity.GUID)) m_Entities.Add(entity.GUID, (entity));
             }
         }
 
@@ -67,37 +69,39 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
-        public void AddReference(Guid source, Guid target)
-        {
-            if (m_Entities.ContainsKey(target))
-            {
-                m_Entities[target].AddReference(source);
-            }
-        }
-
-        //---------------------------------------------------------------------------
-
-        public void RemoveReference(Guid source, Guid target)
-        {
-            if (m_Entities.ContainsKey(target))
-            {
-                bool hasReferences = m_Entities[target].RemoveReference(source);
-                if (!hasReferences)
-                {
-                    m_Entities.Remove(target);
-                }
-            }
-        }
-
-        //---------------------------------------------------------------------------
-
         public IEntity Find(Guid guid)
         {
             if (m_Entities.ContainsKey(guid))
             {
-                return m_Entities[guid].Data;
+                return m_Entities[guid];
             }
             return null;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void UpdateParent(Guid child, Guid parent)
+        {
+            m_Hierarchy[child] = parent;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public Guid GetParent(Guid child)
+        {
+            if (m_Hierarchy.ContainsKey(child)) return m_Hierarchy[child];
+            return Guid.Empty;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public Guid GetRoot(Guid child)
+        {
+            while (m_Hierarchy.ContainsKey(child))
+            {
+                child = m_Hierarchy[child];
+            }
+            return child;
         }
 
         //---------------------------------------------------------------------------

@@ -5,33 +5,93 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TilesetViewer"
         mc:Ignorable="d"
-        Title="LevelCreationWindow" 
-        Height="110" 
-        Width="200" 
+        Title="TilesetViewer" 
+        Height="170" 
+        Width="250" 
         WindowStartupLocation="CenterOwner" 
         ResizeMode="NoResize" 
-        ShowInTaskbar="False">
+        ShowInTaskbar="False"
+        Icon="Resource/TilesetViewerIcon.png">
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="4,3,3,3">
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="4,5,3,3" FocusManager.FocusedElement="{Binding ElementName=NameInput}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="60"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Width"/>
-                <TextBox Name="WidthInput" Grid.Column="1"/>
+                <TextBlock Grid.Column="0" Text="Name"/>
+                <TextBox Name="NameInput" Grid.Column="1"/>
+                <TextBlock Grid.Column="3" Text="?" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">
+                    <TextBlock.ToolTip>
+                        <TextBlock Text="Name of the map"/>
+                    </TextBlock.ToolTip>
+                </TextBlock>
             </Grid>
             <Grid Margin="0,3,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="60"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Width"/>
+                <TextBox Name="WidthInput" Grid.Column="1"/>
+                <TextBlock Grid.Column="3" Text="?" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">
+                    <TextBlock.ToolTip>
+                        <TextBlock Text="Number of tiles in a row"/>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+            </Grid>
+            <Grid Margin="0,3,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Height"/>
                 <TextBox Name="HeightInput" Grid.Column="1"/>
+                <TextBlock Grid.Column="3" Text="?" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">
+                    <TextBlock.ToolTip>
+                        <TextBlock Text="Number of tiles in a column"/>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+            </Grid>
+            <Grid Margin="0,3,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="TileWidth"/>
+                <TextBox Name="TileWidthInput" Grid.Column="1"/>
+                <TextBlock Grid.Column="2" Text="px" Margin="4,0,0,0"/>
+                <TextBlock Grid.Column="3" Text="?" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">
+                    <TextBlock.ToolTip>
+                        <TextBlock Text="Width of a tile in pixel"/>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+            </Grid>
+            <Grid Margin="0,3,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="TileHeight"/>
+                <TextBox Name="TileHeightInput" Grid.Column="1"/>
+                <TextBlock Grid.Column="2" Text="px" Margin="4,0,0,0"/>
+                <TextBlock Grid.Column="3" Text="?" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black">
+                    <TextBlock.ToolTip>
+                        <TextBlock Text="Height of a tile in pixel"/>
+                    </TextBlock.ToolTip>
+                </TextBlock>
             </Grid>
         </StackPanel>
         <Button Grid.Row="1" Content="Create level" Height="22" VerticalAlignment="Bottom" Margin="3" Click="OnCreateLevelClicked"/>

@@ -85,6 +85,7 @@
     <Compile Include="Components\CameraComponent.cs" />
     <Compile Include="Components\Collider\CircleColliderComponent.cs" />
     <Compile Include="Components\Collider\ColliderComponent.cs" />
+    <Compile Include="Components\Collider\MultiPathColliderComponent.cs" />
     <Compile Include="Components\Collider\RectColliderComponent.cs" />
     <Compile Include="Components\Collider\WallColliderComponent.cs" />
     <Compile Include="Components\DespawnComponent.cs" />

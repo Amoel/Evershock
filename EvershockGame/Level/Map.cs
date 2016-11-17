@@ -85,6 +85,20 @@ namespace Level
 
         //---------------------------------------------------------------------------
 
+        public bool SetBlocker(int sourceX, int sourceY, bool isBlocker)
+        {
+            if (sourceX < 0 || sourceX >= Width || sourceY < 0 || sourceY >= Height) return false;
+            Cell cell = Cells[sourceX, sourceY];
+            if (cell != null && cell.IsBlocked != isBlocker)
+            {
+                cell.IsBlocked = isBlocker;
+                return true;
+            }
+            return false;
+        }
+
+        //---------------------------------------------------------------------------
+
         public static void Save(Map map, string path)
         {
             try
@@ -134,10 +148,6 @@ namespace Level
         public int X { get; set; }
         public int Y { get; set; }
         public Dictionary<ELayerMode, Layer> Layers { get; set; }
-
-        public ViewRect ViewFirstLayer { get; set; }
-        public ViewRect ViewSecondLayer { get; set; }
-        public ViewRect ViewThirdLayer { get; set; }
         public bool IsBlocked { get; set; }
 
         //---------------------------------------------------------------------------

@@ -135,16 +135,17 @@ namespace EntityComponent.Components
                     Rectangle frame = GetActiveSetting().GetFrame(Spritesheet);
                     if (frame != null)
                     {
+                        Vector3 absoluteLocation = transform.AbsoluteLocation;
                         batch.Draw(
                             Spritesheet,
-                            transform.Location.ToLocal2D(data),
+                            absoluteLocation.ToLocal2D(data),
                             frame,
                             Color * Opacity,
                             transform.Rotation,
                             new Vector2(frame.Width / 2 + Offset.X, frame.Height / 2 + Offset.Y),
                             Scale,
                             SpriteEffects.None,
-                            Math.Max(0.0001f, transform.Location.Z / 1000.0f) + (transform.Location.Y + 10000.0f) / 100000.0f);
+                            Math.Max(0.0001f, absoluteLocation.Z / 1000.0f) + (absoluteLocation.Y + 10000.0f) / 100000.0f);
                     }
                 }
             }

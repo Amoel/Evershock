@@ -77,13 +77,14 @@ namespace EntityComponent.Components
                 TransformComponent transform = GetComponent<TransformComponent>();
                 if (transform != null)
                 {
+                    Vector3 absoluteLocation = transform.AbsoluteLocation;
                     if (transform.Location.Z > 0.0f)
                     {
                         batch.Draw(
                             GetTex(),
-                            transform.Location.ToLocal2DShadow(data),
+                            absoluteLocation.ToLocal2DShadow(data),
                             Texture.Bounds,
-                            Color.Black * (0.3f - MathHelper.Clamp(transform.Location.Z / 400.0f, 0.0f, 0.3f)),
+                            Color.Black * (0.3f - MathHelper.Clamp(absoluteLocation.Z / 400.0f, 0.0f, 0.3f)),
                             transform.Rotation,
                             new Vector2(Texture.Width / 2 + Offset.X, Texture.Height / 2 + Offset.Y),
                             1.0f,
@@ -91,15 +92,15 @@ namespace EntityComponent.Components
                             0.0f);
                     }
                     batch.Draw(
-                        GetTex(), 
-                        transform.Location.ToLocal2D(data),
+                        GetTex(),
+                        absoluteLocation.ToLocal2D(data),
                         GetTex().Bounds, 
                         Color * Opacity, 
                         transform.Rotation, 
                         new Vector2(GetTex().Width / 2 + Offset.X, GetTex().Height / 2 + Offset.Y), 
                         1.0f,
                         SpriteEffects.None, 
-                        Math.Max(0.0001f, transform.Location.Z / 1000.0f) + (transform.Location.Y + 10000.0f) / 100000.0f);
+                        Math.Max(0.0001f, absoluteLocation.Z / 1000.0f) + (absoluteLocation.Y + 10000.0f) / 100000.0f);
                 }
             }
         }

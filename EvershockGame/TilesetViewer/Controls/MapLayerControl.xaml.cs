@@ -23,8 +23,9 @@ namespace TilesetViewer
     public partial class MapLayerControl : UserControl, INotifyPropertyChanged, IDisposable
     {
         private ELayerMode m_Mode;
-        private int m_ScaleX;
-        private int m_ScaleY;
+
+        public int PxTileWidth { get { return MapManager.Get().PxTileWidth; } }
+        public int PxTileHeight { get { return MapManager.Get().PxTileHeight; } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -35,8 +36,8 @@ namespace TilesetViewer
         public int MapWidth { get; set; }
         public int MapHeight { get; set; }
 
-        public int PxWidth { get { return MapWidth * 16; } }
-        public int PxHeight { get { return MapHeight * 16; } }
+        public int PxWidth { get { return MapWidth * PxTileWidth; } }
+        public int PxHeight { get { return MapHeight * PxTileHeight; } }
 
         //---------------------------------------------------------------------------
 
@@ -65,11 +66,9 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
-        public void Init(ELayerMode mode, int scaleX, int scaleY, int width, int height)
+        public void Init(ELayerMode mode, int width, int height)
         {
             m_Mode = mode;
-            m_ScaleX = scaleX;
-            m_ScaleY = scaleY;
             Reset(width, height);
             OnModeChanged(mode);
         }
@@ -98,8 +97,8 @@ namespace TilesetViewer
             int size = source.PixelHeight * sourceStride;
             byte[] data = new byte[size];
 
-            TilesetManager.Get().Tileset.Source.CopyPixels(new Int32Rect(targetX * m_ScaleX, targetY * m_ScaleY, m_ScaleX, m_ScaleY), data, sourceStride, 0);
-            Image.WritePixels(new Int32Rect(sourceX * m_ScaleX, sourceY * m_ScaleY, m_ScaleX, m_ScaleY), data, sourceStride, 0);
+            TilesetManager.Get().Tileset.Source.CopyPixels(new Int32Rect(targetX * PxTileWidth, targetY * PxTileHeight, PxTileWidth, PxTileHeight), data, sourceStride, 0);
+            Image.WritePixels(new Int32Rect(sourceX * PxTileWidth, sourceY * PxTileHeight, PxTileWidth, PxTileHeight), data, sourceStride, 0);
         }
 
         //---------------------------------------------------------------------------
@@ -112,7 +111,7 @@ namespace TilesetViewer
             {
                 data[i] = 0;
             }
-            Image.WritePixels(new Int32Rect(sourceX * m_ScaleX, sourceY * m_ScaleY, m_ScaleX, m_ScaleY), data, stride, 0);
+            Image.WritePixels(new Int32Rect(sourceX * PxTileWidth, sourceY * PxTileHeight, PxTileWidth, PxTileHeight), data, stride, 0);
         }
 
         //---------------------------------------------------------------------------

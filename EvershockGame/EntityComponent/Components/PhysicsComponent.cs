@@ -64,23 +64,8 @@ namespace EntityComponent.Components
 
                 Vector2 newForce = CollisionManager.Get().CheckCollision(Entity, GetForce().To2D());
                 transform.MoveTo(new Vector3(newForce.X, newForce.Y, GetForce().Z));
+                
 
-                if (GetForce().Length() > 0.01f)
-                {
-                    //CollisionResult result = CollisionManager.Get().CheckCollision(Entity, GetForce());// transform.Location, GetForce());
-                    //if (result.ForceAfterCollision.Length() > 0.01f)
-                    //{
-                    //    transform.MoveBy(result.ForceAfterCollision);
-                    //    //if (-result.ForceAfterCollision.Z > transform.Location.Z)
-                    //    //{
-                    //    //    transform.MoveBy(new Vector3(result.ForceAfterCollision.X, result.ForceAfterCollision.Y, -transform.Location.Z));
-                    //    //}
-                    //    //else
-                    //    //{
-                    //    //    transform.MoveBy(result.ForceAfterCollision);
-                    //    //}
-                    //}
-                }
             }
         }
 
@@ -89,6 +74,18 @@ namespace EntityComponent.Components
         public Vector3 GetForce()
         {
             return (m_Force + m_Gravity);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public Vector3 GetAbsoluteForce()
+        {
+            PhysicsComponent parentPhysics = GetComponentInParent<PhysicsComponent>();
+            if (parentPhysics != null)
+            {
+                return GetForce() + parentPhysics.GetAbsoluteForce();
+            }
+            return GetForce();
         }
 
         //---------------------------------------------------------------------------

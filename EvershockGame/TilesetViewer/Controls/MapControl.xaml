@@ -23,7 +23,10 @@
         MouseLeave="OnMouseLeave">
         <Grid IsHitTestVisible="False">
             <Grid Name="LayerContainer"/>
-            <Border Name="HighlightBorder" BorderThickness="1" BorderBrush="White" Background="#11FFFFFF"/>
+            <Border Name="HighlightBorder" BorderThickness="1" BorderBrush="White" Background="#11FFFFFF">
+                <Image VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+            </Border>
+            <local:MapBlockerControl x:Name="BlockerContainer"/>
         </Grid>
     </Border>
 </UserControl>

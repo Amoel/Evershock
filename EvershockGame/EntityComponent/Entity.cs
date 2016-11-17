@@ -35,6 +35,7 @@ namespace EntityComponent
         public void SetParent(Guid guid)
         {
             Parent = guid;
+            EntityManager.Get().UpdateParent(GUID, Parent);
         }
 
         public void SetParent(IEntity parent)
@@ -47,6 +48,7 @@ namespace EntityComponent
             {
                 Parent = Guid.Empty;
             }
+            EntityManager.Get().UpdateParent(GUID, Parent);
         }
 
         //---------------------------------------------------------------------------

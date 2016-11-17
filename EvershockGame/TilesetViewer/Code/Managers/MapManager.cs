@@ -13,14 +13,19 @@ namespace TilesetViewer
         private MapControl m_Control;
         private Map m_Map;
 
+        public int PxTileWidth { get; private set; }
+        public int PxTileHeight { get; private set; }
+
         //---------------------------------------------------------------------------
 
         protected MapManager() { }
 
         //---------------------------------------------------------------------------
 
-        public void Create(int width, int height)
+        public void Create(int width, int height, int tileWidth, int tileHeight)
         {
+            PxTileWidth = tileWidth;
+            PxTileHeight = tileHeight;
             m_Map = new Map(width, height);
             m_Control?.Reset(width, height);
         }
@@ -39,9 +44,18 @@ namespace TilesetViewer
             SelectionRect selection = TilesetManager.Get().GetSelection();
             switch (EditManager.Get().Mode)
             {
-                case EEditMode.Tiles: SetTile(LayerManager.Get().Mode, sourceX, sourceY, selection.X, selection.Y, selection.Width, selection.Height); break;
-                case EEditMode.Eraser: ClearTile(LayerManager.Get().Mode, sourceX, sourceY); break;
-                case EEditMode.Fill: FillTile(LayerManager.Get().Mode, sourceX, sourceY, selection.X, selection.Y); break;
+                case EEditMode.Tiles:
+                    SetTile(LayerManager.Get().Mode, sourceX, sourceY, selection.X, selection.Y, selection.Width, selection.Height);
+                    break;
+                case EEditMode.Eraser:
+                    ClearTile(LayerManager.Get().Mode, sourceX, sourceY);
+                    break;
+                case EEditMode.Fill:
+                    FillTile(LayerManager.Get().Mode, sourceX, sourceY, selection.X, selection.Y);
+                    break;
+                case EEditMode.Blocker:
+                    SetBlocker(sourceX, sourceY, true);
+                    break;
             }
         }
 
@@ -89,8 +103,23 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
+        public void SetBlocker(int sourceX, int sourceY, bool isBlocker)
+        {
+            if (m_Map != null)
+            {
+                if (m_Map.SetBlocker(sourceX, sourceY, isBlocker))
+                {
+                    m_Control?.SetBlocker(sourceX, sourceY, isBlocker);
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
         private void FloodFill(ELayerMode mode, SelectionPoint center, SelectionPoint fill)
         {
+            if (IsMatch(mode, center.X, center.Y, fill.X, fill.Y)) return;
+
             Layer layer = m_Map[mode, center.X, center.Y];
             if (layer != null)
             {

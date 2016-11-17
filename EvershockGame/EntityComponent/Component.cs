@@ -37,6 +37,19 @@ namespace EntityComponent
 
         //---------------------------------------------------------------------------
 
+        public T GetComponentInParent<T>() where T : IComponent
+        {
+            Guid parent = EntityManager.Get().GetParent(Entity);
+            IEntity entity = EntityManager.Get().Find(parent);
+            if (entity != null)
+            {
+                return entity.GetComponent<T>();
+            }
+            return default(T);
+        }
+
+        //---------------------------------------------------------------------------
+
         public List<IComponent> GetComponents()
         {
             IEntity entity = EntityManager.Get().Find(Entity);

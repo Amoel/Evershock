@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TilesetViewer"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
 
     <UserControl.Resources>
         <local:MapSizeConverter x:Key="MapSizeConverter"/>
@@ -134,6 +134,81 @@
                     </Button.ToolTip>
                     <Image Source="/Resource/ZoomOutIcon.png" Width="25" Height="25"/>
                 </Button>
+                <!--<Separator Background="#FF46464A" Margin="5,2,5,4">
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
+                <TextBox Width="40" Margin="3,3,5,4" Padding="0,5,0,0" BorderThickness="0" Foreground="White" HorizontalAlignment="Stretch" CaretBrush="White">
+                    <TextBox.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"/>
+                    </TextBox.Resources>
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                            <Style.Resources>
+                                <VisualBrush x:Key="CueBannerBrush" AlignmentX="Center" Stretch="None">
+                                    <VisualBrush.Visual>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBlock Text="Width" Foreground="White" Opacity="0.2"/>
+                                        </StackPanel>
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Style.Resources>
+                            <Style.Setters>
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                    <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                </Trigger>
+                                <Trigger Property="Text" Value="{x:Null}">
+                                    <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter Property="Background" Value="Transparent" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <Grid Name="parent" Margin="2,13,2,0">
+                    <Line  X1="0" Y1="0" X2="8" Y2="8" Stroke="White" StrokeThickness="1.5" />
+                    <Line  X1="0" Y1="8" X2="8" Y2="0" Stroke="White" StrokeThickness="1.5" />
+                </Grid>
+                <TextBox Width="40" Margin="3,3,5,4" Padding="0,5,0,0" BorderThickness="0" Foreground="White" HorizontalAlignment="Stretch" CaretBrush="White">
+                    <TextBox.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"/>
+                    </TextBox.Resources>
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                            <Style.Resources>
+                                <VisualBrush x:Key="CueBannerBrush" AlignmentX="Center" Stretch="None" Viewport="0,0.045,1,1">
+                                    <VisualBrush.Visual>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <TextBlock Text="Height" Foreground="White" Opacity="0.2"/>
+                                        </StackPanel>
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Style.Resources>
+                            <Style.Setters>
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                    <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                </Trigger>
+                                <Trigger Property="Text" Value="{x:Null}">
+                                    <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter Property="Background" Value="Transparent" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>-->
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1" AllowDrop="True" MouseMove="OnMouseMove" MouseDown="OnMouseDown" MouseUp="OnMouseUp" MouseWheel="OnMouseWheel" Drop="OnDrop">

@@ -24,21 +24,19 @@ namespace TilesetViewer
     /// </summary>
     public partial class MapControl : UserControl, INotifyPropertyChanged
     {
-        public readonly int ScaleX = 16;
-        public readonly int ScaleY = 16;
+        public int PxTileWidth { get { return MapManager.Get().PxTileWidth; } }
+        public int PxTileHeight { get { return MapManager.Get().PxTileHeight; } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public int MapWidth { get; set; }
         public int MapHeight { get; set; }
 
-        public int PxWidth { get { return MapWidth * ScaleX; } }
-        public int PxHeight { get { return MapHeight * ScaleY; } }
+        public int PxWidth { get { return MapWidth * PxTileWidth; } }
+        public int PxHeight { get { return MapHeight * PxTileHeight; } }
         
         private Dictionary<ELayerMode, MapLayerControl> m_Layers;
-
-        private Map m_Map;
-
+        
         private Point m_Dragged;
         private Point m_Clicked;
 
@@ -68,8 +66,9 @@ namespace TilesetViewer
         {
             foreach (KeyValuePair<ELayerMode, MapLayerControl> kvp in m_Layers)
             {
-                kvp.Value.Init(kvp.Key, ScaleX, ScaleY, width, height);
+                kvp.Value.Init(kvp.Key, width, height);
             }
+            BlockerContainer.Init(width, height);
 
             MapWidth = width;
             OnPropertyChanged("MapWidth");
@@ -78,8 +77,6 @@ namespace TilesetViewer
             MapHeight = height;
             OnPropertyChanged("MapHeight");
             OnPropertyChanged("PxHeight");
-
-            m_Map = new Map(width, height);
         }
 
         //---------------------------------------------------------------------------
@@ -106,7 +103,7 @@ namespace TilesetViewer
 
         private void UpdateHighlight(int x, int y, int width, int height)
         {
-            HighlightBorder.Margin = new Thickness(x * ScaleX, y * ScaleY, (MapWidth - width - x) * ScaleX, (MapHeight - height - y) * ScaleY);
+            HighlightBorder.Margin = new Thickness(x * PxTileWidth, y * PxTileHeight, (MapWidth - width - x) * PxTileWidth, (MapHeight - height - y) * PxTileHeight);
         }
 
         //---------------------------------------------------------------------------
@@ -131,6 +128,13 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
+        public void SetBlocker(int sourceX, int sourceY, bool isBlocker)
+        {
+            BlockerContainer.SetBlocker(sourceX, sourceY, isBlocker);
+        }
+
+        //---------------------------------------------------------------------------
+
         private void OnMouseDown(object sender, MouseEventArgs e)
         {
             m_Clicked = e.GetPosition(this);
@@ -139,21 +143,7 @@ namespace TilesetViewer
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 UndoManager.Get().StartUndo(LayerManager.Get().Mode);
-                //switch (EditManager.Get().Mode)
-                //{
-                //    case EEditMode.Tiles:
-                //        SetTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                //        break;
-                //    case EEditMode.Eraser:
-                //        EraseTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                //        break;
-                //    case EEditMode.Fill:
-                //        EraseTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                //        break;
-                //    case EEditMode.Blocker:
-                //        break;
-                //}
-                MapManager.Get().ExecuteAction((int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
+                MapManager.Get().ExecuteAction((int)m_Clicked.X / PxTileWidth, (int)m_Clicked.Y / PxTileHeight);
             }
         }
 
@@ -170,25 +160,11 @@ namespace TilesetViewer
         {
             m_Dragged = new Point(m_Dragged.X + (e.GetPosition(this).X - m_Clicked.X), m_Dragged.Y + (e.GetPosition(this).Y - m_Clicked.Y));
             m_Clicked = e.GetPosition(this);
-            UpdateHighlight((int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
+            UpdateHighlight((int)m_Clicked.X / PxTileWidth, (int)m_Clicked.Y / PxTileHeight);
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                //    switch (EditManager.Get().Mode)
-                //    {
-                //        case EEditMode.Tiles:
-                //            SetTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                //            break;
-                //        case EEditMode.Eraser:
-                //            EraseTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                //            break;
-                //        case EEditMode.Fill:
-                //            FillTiles(LayerManager.Get().Mode, (int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
-                //            break;
-                //        case EEditMode.Blocker:
-                //            break;
-                //    }
-                MapManager.Get().ExecuteAction((int)m_Clicked.X / ScaleX, (int)m_Clicked.Y / ScaleY);
+                MapManager.Get().ExecuteAction((int)m_Clicked.X / PxTileWidth, (int)m_Clicked.Y / PxTileHeight);
             }
         }
 

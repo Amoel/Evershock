@@ -29,6 +29,14 @@ namespace TilesetViewer
 
         private void OnCreateLevelClicked(object sender, EventArgs e)
         {
+            string name = NameInput.Text;
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                MessageBox.Show("Input for Name is not correct.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                NameInput.Focus();
+                return;
+            }
+
             int width = 0;
             if (!int.TryParse(WidthInput.Text, out width) || width < 3)
             {
@@ -44,8 +52,24 @@ namespace TilesetViewer
                 HeightInput.Focus();
                 return;
             }
-            
-            MapManager.Get().Create(width, height);
+
+            int tileWidth = 0;
+            if (!int.TryParse(TileWidthInput.Text, out tileWidth) || tileWidth == 0)
+            {
+                MessageBox.Show("Input for TileWidth is not correct.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                TileWidthInput.Focus();
+                return;
+            }
+
+            int tileHeight = 0;
+            if (!int.TryParse(TileHeightInput.Text, out tileHeight) || tileHeight == 0)
+            {
+                MessageBox.Show("Input for TileHeight is not correct.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                TileHeightInput.Focus();
+                return;
+            }
+
+            MapManager.Get().Create(width, height, tileWidth, tileHeight);
             MapManager.Get().UpdateImage();
             //LevelManager.Get().Create(width, height);
             Close();

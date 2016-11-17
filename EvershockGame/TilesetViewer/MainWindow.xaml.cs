@@ -36,6 +36,13 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
+        public void UpdateTitle(string text)
+        {
+            Title = string.Format("TilesetViewer{0}", string.IsNullOrWhiteSpace(text) ? "" : string.Format(" - {}", text));
+        }
+
+        //---------------------------------------------------------------------------
+
         private void OnLoadTilesetClicked(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -92,7 +99,7 @@ namespace TilesetViewer
                 BitmapImage bitmap = new BitmapImage(new Uri(path));
                 if (bitmap != null)
                 {
-                    TilesetManager.Get().CreateTileset(path, 16, 16);
+                    TilesetManager.Get().CreateTileset(path);
                 }
             }
             catch (Exception e)

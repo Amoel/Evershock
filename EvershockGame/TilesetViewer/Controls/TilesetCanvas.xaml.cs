@@ -16,9 +16,6 @@ using System.Windows.Shapes;
 
 namespace TilesetViewer
 {
-    /// <summary>
-    /// Interaction logic for TilesetCanvas.xaml
-    /// </summary>
     public partial class TilesetCanvas : UserControl, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -64,11 +61,15 @@ namespace TilesetViewer
 
         private void SetSelection(Point start, Point end)
         {
-            int beginX = (int)Math.Max(0, (start.X / 16));
-            int beginY = (int)Math.Max(0, (start.Y / 16));
-            int endX = (int)Math.Max(0, (end.X / 16));
-            int endY = (int)Math.Max(0, (end.Y / 16));
-            SetSelection(Math.Min(beginX, endX), Math.Min(beginY, endY), Math.Max(1, Math.Abs(endX - beginX) + 1), Math.Max(1, Math.Abs(endY - beginY) + 1));
+            Tileset tileset = TilesetManager.Get().Tileset;
+            if (tileset != null && tileset.PxTileWidth > 0 && tileset.PxTileHeight > 0)
+            {
+                int beginX = (int)Math.Max(0, (start.X / tileset.PxTileWidth));
+                int beginY = (int)Math.Max(0, (start.Y / tileset.PxTileHeight));
+                int endX = (int)Math.Max(0, (end.X / tileset.PxTileWidth));
+                int endY = (int)Math.Max(0, (end.Y / tileset.PxTileHeight));
+                SetSelection(Math.Min(beginX, endX), Math.Min(beginY, endY), Math.Max(1, Math.Abs(endX - beginX) + 1), Math.Max(1, Math.Abs(endY - beginY) + 1));
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -84,21 +85,29 @@ namespace TilesetViewer
                 Selection.Update(x, y, width, height, Bounds);
             }
 
-            Canvas.SetLeft(SelectionRect, Selection.X * 16);
-            Canvas.SetTop(SelectionRect, Selection.Y * 16);
-            SelectionRect.Width = Selection.Width * 16;
-            SelectionRect.Height = Selection.Height * 16;
-
+            Tileset tileset = TilesetManager.Get().Tileset;
+            if (tileset != null && tileset.PxTileWidth > 0 && tileset.PxTileHeight > 0)
+            {
+                Canvas.SetLeft(SelectionRect, Selection.X * tileset.PxTileWidth);
+                Canvas.SetTop(SelectionRect, Selection.Y * tileset.PxTileHeight);
+                SelectionRect.Width = Selection.Width * tileset.PxTileWidth;
+                SelectionRect.Height = Selection.Height * tileset.PxTileHeight;
+            }
             OnPropertyChanged("Selection");
+            TilesetManager.Get().UpdateSelection();
         }
 
         //---------------------------------------------------------------------------
 
         private void SetHighlight(Point point)
         {
-            int beginX = (int)(point.X / 16);
-            int beginY = (int)(point.Y / 16);
-            SetHighlight(beginX, beginY);
+            Tileset tileset = TilesetManager.Get().Tileset;
+            if (tileset != null && tileset.PxTileWidth > 0 && tileset.PxTileHeight > 0)
+            {
+                int beginX = (int)(point.X / tileset.PxTileWidth);
+                int beginY = (int)(point.Y / tileset.PxTileHeight);
+                SetHighlight(beginX, beginY);
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -114,9 +123,14 @@ namespace TilesetViewer
                 Highlight.Update(x, y, 1, 1, Bounds);
             }
 
-            Canvas.SetLeft(HighlightRect, Highlight.X * 16);
-            Canvas.SetTop(HighlightRect, Highlight.Y * 16);
-
+            Tileset tileset = TilesetManager.Get().Tileset;
+            if (tileset != null && tileset.PxTileWidth > 0 && tileset.PxTileHeight > 0)
+            {
+                Canvas.SetLeft(HighlightRect, Highlight.X * tileset.PxTileWidth);
+                Canvas.SetTop(HighlightRect, Highlight.Y * tileset.PxTileHeight);
+                HighlightRect.Width = tileset.PxTileWidth;
+                HighlightRect.Height = tileset.PxTileHeight;
+            }
             OnPropertyChanged("Highlight");
         }
 
@@ -187,7 +201,7 @@ namespace TilesetViewer
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                TilesetManager.Get().CreateTileset(files[0], 16, 16);
+                TilesetManager.Get().CreateTileset(files[0]);
             }
         }
 

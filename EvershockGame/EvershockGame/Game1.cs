@@ -55,6 +55,10 @@ namespace EvershockGame
 
             player.AddComponent<AttributesComponent>();
 
+            IEntity test = EntityFactory.Create<Entity>(player.GUID, "Test");
+            test.AddComponent<TransformComponent>().Init(new Vector3(40, 0, 0));
+            test.AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("Barrel1"), new Vector2(0, 12));
+
             IEntity player2 = EntityFactory.Create<Entity>("Player2");
             player2.AddComponent<TransformComponent>().Init(new Vector3(-200, 0, 0));
 

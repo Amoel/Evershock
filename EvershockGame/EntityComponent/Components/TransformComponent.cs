@@ -12,6 +12,8 @@ namespace EntityComponent.Components
 
     public class TransformComponent : Component
     {
+        public Vector3 AbsoluteLocation { get { return FindAbsoluteLocation(); } }
+
         public Vector3 Location { get; set; }
         public Vector2 Scale { get; set; }
         public float Rotation { get; set; }
@@ -92,6 +94,18 @@ namespace EntityComponent.Components
             float oldRotation = Rotation;
             Rotation += delta;
             OnRotationChanged(oldRotation, Rotation);
+        }
+
+        //---------------------------------------------------------------------------
+
+        private Vector3 FindAbsoluteLocation()
+        {
+            TransformComponent parentTransform = GetComponentInParent<TransformComponent>();
+            if (parentTransform != null)
+            {
+                return Location + parentTransform.AbsoluteLocation;
+            }
+            return Location;
         }
 
         //---------------------------------------------------------------------------
