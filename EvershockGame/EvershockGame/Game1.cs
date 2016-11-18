@@ -55,9 +55,11 @@ namespace EvershockGame
 
             player.AddComponent<AttributesComponent>();
 
-            IEntity test = EntityFactory.Create<Entity>(player.GUID, "Test");
-            test.AddComponent<TransformComponent>().Init(new Vector3(40, 0, 0));
-            test.AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("Barrel1"), new Vector2(0, 12));
+            IEntity playerIndicator = EntityFactory.Create<Entity>(player.GUID, "PlayerIndicator");
+            playerIndicator.AddComponent<TransformComponent>().Init(new Vector3(0, -40, 0));
+            MovementAnimationComponent piAnimation = playerIndicator.AddComponent<MovementAnimationComponent>();
+            piAnimation.AddSetting(0, new AnimationSetting(4, 1, 0, 4, false));
+            piAnimation.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimation"));
 
             IEntity player2 = EntityFactory.Create<Entity>("Player2");
             player2.AddComponent<TransformComponent>().Init(new Vector3(-200, 0, 0));
@@ -145,6 +147,7 @@ namespace EvershockGame
             AssetManager.Get().Store<Texture2D>("WalkingAnimation", "Graphics/Tilesets/Debug/WalkingAnimation");
 
             AssetManager.Get().Store<Texture2D>("CircleLight", "Graphics/Lights/CircleLight");
+            AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimation", "Graphics/Debug/ArrowSheet");
             AssetManager.Get().Store<Effect>("LightingEffect", "Effects/DeferredLighting");
         }
         
@@ -163,7 +166,22 @@ namespace EvershockGame
             {
                 CollisionManager.Get().IsDebugViewActive = false;
             }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                Exit();
+            }
 #endif
+
+            if ((Keyboard.GetState().IsKeyDown(Keys.LeftControl) || Keyboard.GetState().IsKeyDown(Keys.RightControl)))
+            {
+
+            }
+            else
+            {
+
+            }
+
             ComponentManager.Get().TickComponents(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
             PhysicsManager.Get().Step(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
             base.Update(gameTime);
