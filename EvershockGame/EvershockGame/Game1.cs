@@ -54,6 +54,12 @@ namespace EvershockGame
 
             player.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
 
+            IEntity playerIndicator = EntityFactory.Create<Entity>(player.GUID, "PlayerIndicator");
+            playerIndicator.AddComponent<TransformComponent>().Init(new Vector3(0, -40, 0));
+            MovementAnimationComponent piAnimation = playerIndicator.AddComponent<MovementAnimationComponent>();
+            piAnimation.AddSetting(0, new AnimationSetting(4, 1, 0, 4, false));
+            piAnimation.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimation"));
+
             IEntity player2 = EntityFactory.Create<Entity>("Player2");
             player2.AddComponent<TransformComponent>().Init(new Vector3(800, 180, 0));
 
@@ -122,6 +128,7 @@ namespace EvershockGame
             AssetManager.Get().Store<Texture2D>("ChestClosed1", "Graphics/Tiles/ChestClosed1");
             AssetManager.Get().Store<Texture2D>("ChestOpened1", "Graphics/Tiles/ChestOpened1");
             AssetManager.Get().Store<Texture2D>("Barrel1", "Graphics/Tiles/Barrel1");
+            AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimation", "Graphics/Debug/ArrowSheet");
 
             AssetManager.Get().Store<Texture2D>("tileset2", "Graphics/Tilesets/tileset2");
 

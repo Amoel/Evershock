@@ -56,7 +56,7 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------   
 
-        public void ExecuteAction(int sourceX, int sourceY)
+        public void ExecuteAction(int sourceX, int sourceY, bool isLeftMousePressed)
         {
             SelectionRect selection = TilesetManager.Get().GetSelection();
             switch (EditManager.Get().Mode)
