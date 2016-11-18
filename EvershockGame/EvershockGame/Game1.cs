@@ -55,7 +55,7 @@ namespace EvershockGame
             player.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
 
             IEntity playerIndicator = EntityFactory.Create<Entity>(player.GUID, "PlayerIndicator");
-            playerIndicator.AddComponent<TransformComponent>().Init(new Vector3(0, -40, 0));
+            playerIndicator.AddComponent<TransformComponent>().Init(new Vector3(0, -45, 0));
             MovementAnimationComponent piAnimation = playerIndicator.AddComponent<MovementAnimationComponent>();
             piAnimation.AddSetting(0, new AnimationSetting(4, 1, 0, 4, false));
             piAnimation.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimation"));
@@ -153,6 +153,11 @@ namespace EvershockGame
             else if (Keyboard.GetState().IsKeyDown(Keys.F12))
             {
                 CollisionManager.Get().IsDebugViewActive = false;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                Exit();
             }
 #endif
             ComponentManager.Get().TickComponents(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);

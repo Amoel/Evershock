@@ -143,7 +143,7 @@ namespace TilesetViewer
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 UndoManager.Get().StartUndo(LayerManager.Get().Mode);
-                MapManager.Get().ExecuteAction((int)m_Clicked.X / PxTileWidth, (int)m_Clicked.Y / PxTileHeight);
+                MapManager.Get().ExecuteAction((int)m_Clicked.X / PxTileWidth, (int)m_Clicked.Y / PxTileHeight, true);
             }
         }
 
@@ -164,7 +164,7 @@ namespace TilesetViewer
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                MapManager.Get().ExecuteAction((int)m_Clicked.X / PxTileWidth, (int)m_Clicked.Y / PxTileHeight);
+                MapManager.Get().ExecuteAction((int)m_Clicked.X / PxTileWidth, (int)m_Clicked.Y / PxTileHeight, true);
             }
         }
 
