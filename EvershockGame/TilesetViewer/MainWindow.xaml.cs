@@ -75,7 +75,7 @@ namespace TilesetViewer
             Map map = ResourceManager.Get().Load();
             if (map != null)
             {
-                LevelManager.Get().SetMap(map);
+                MapManager.Get().SetMap(map);
             }
         }
 
@@ -83,7 +83,7 @@ namespace TilesetViewer
 
         private void OnSaveLevelClicked(object sender, EventArgs e)
         {
-            Map map = LevelManager.Get().GetMap();
+            Map map = MapManager.Get().GetMap();
             if (map != null)
             {
                 ResourceManager.Get().Save(map);

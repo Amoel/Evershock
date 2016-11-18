@@ -3,6 +3,7 @@ using EntityComponent.Components;
 using EntityComponent.Factory;
 using EntityComponent.Manager;
 using EvershockGame.Code;
+using EvershockGame.Code.Managers;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -34,8 +35,8 @@ namespace EvershockGame
 
 
             IEntity player = EntityFactory.Create<Entity>("Player");
-            player.AddComponent<TransformComponent>().Init(new Vector3(-300, 0, 0));
-
+            player.AddComponent<TransformComponent>().Init(new Vector3(100, 410, 0));
+            player.AddComponent<AttributesComponent>().Init(0, 5.0f);
             player.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
 
             MovementAnimationComponent animation = player.AddComponent<MovementAnimationComponent>();
@@ -49,18 +50,12 @@ namespace EvershockGame
             input.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_UP);
             input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_DOWN);
             
-            player.AddComponent<CircleColliderComponent>().Init(18, BodyType.Dynamic);
+            player.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
 
-            player.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(2, 2));
-
-            player.AddComponent<AttributesComponent>();
-
-            IEntity test = EntityFactory.Create<Entity>(player.GUID, "Test");
-            test.AddComponent<TransformComponent>().Init(new Vector3(40, 0, 0));
-            test.AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("Barrel1"), new Vector2(0, 12));
+            player.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
 
             IEntity player2 = EntityFactory.Create<Entity>("Player2");
-            player2.AddComponent<TransformComponent>().Init(new Vector3(-200, 0, 0));
+            player2.AddComponent<TransformComponent>().Init(new Vector3(800, 180, 0));
 
             MovementAnimationComponent animation2 = player2.AddComponent<MovementAnimationComponent>();
             animation2.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"));
@@ -73,10 +68,11 @@ namespace EvershockGame
             input2.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_W);
             input2.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_S);
 
+            player2.AddComponent<AttributesComponent>().Init(0, 5.0f);
             player2.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
-            player2.AddComponent<CircleColliderComponent>().Init(18, BodyType.Dynamic);
+            player2.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
 
-            player2.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(2, 2));
+            player2.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
 
 
             IEntity camera = EntityFactory.Create<Entity>("Camera");
@@ -91,29 +87,15 @@ namespace EvershockGame
             cam2.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
             cam2.AddTarget(player2);
 
-            AddBarrel(100, 0);
-            AddBarrel(120, 0);
-            AddBarrel(110, 10);
-
             IEntity rock3 = EntityFactory.Create<Entity>("Rock3");
             rock3.AddComponent<TransformComponent>().Init(new Vector3(200, 0, 0));
             rock3.AddComponent<CircleColliderComponent>().Init(30, Vector2.Zero, BodyType.Dynamic, 10.0f);
             rock3.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"));
 
-            IEntity wall = EntityFactory.Create<Entity>("Wall");
-            wall.AddComponent<TransformComponent>().Init(new Vector3(0, 300, 0));
-            wall.AddComponent<WallColliderComponent>().Init(new Vector2(0, 0), new Vector2(100, -100));
+            IEntity map = EntityFactory.Create<Entity>("Map");
+            map.AddComponent<MapComponent>().Init(AssetManager.Get().Find<Level.Map>("TestMap"));
 
-            //IEntity map = EntityFactory.Create<Entity>("Map");
-            //map.AddComponent<MapComponent>().Init(AssetManager.Get().Find<Level.Map>("TestMap"));
-        }
-
-        private void AddBarrel(int x, int y)
-        {
-            IEntity barrel = EntityFactory.Create<Entity>("Barrel");
-            barrel.AddComponent<TransformComponent>().Init(new Vector3(x, y, 0));
-            barrel.AddComponent<CircleColliderComponent>().Init(12, Vector2.Zero, BodyType.Dynamic, 10.0f);
-            barrel.AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("Barrel1"), new Vector2(0, 12));
+            MapManager.Get().CreateCollisionFromMap(map, AssetManager.Get().Find<Level.Map>("TestMap"));
         }
         
         protected override void LoadContent()
@@ -121,7 +103,7 @@ namespace EvershockGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             AssetManager.Get().Content = Content;
-            //AssetManager.Get().LoadMaps();
+            AssetManager.Get().LoadMaps();
 
 #if DEBUG
             // Load debug content
@@ -135,11 +117,13 @@ namespace EvershockGame
 
             AssetManager.Get().Store<Texture2D>("Background1", "Graphics/Camera/BackgroundTexture1");
             AssetManager.Get().Store<Texture2D>("Background2", "Graphics/Camera/BackgroundTexture1");
-            AssetManager.Get().Store<Texture2D>("GroundTile1", "Levels/Debug/TestPNG");
+            AssetManager.Get().Store<Texture2D>("GroundTile1", "Graphics/Camera/BackgroundTexture1");
 
             AssetManager.Get().Store<Texture2D>("ChestClosed1", "Graphics/Tiles/ChestClosed1");
             AssetManager.Get().Store<Texture2D>("ChestOpened1", "Graphics/Tiles/ChestOpened1");
             AssetManager.Get().Store<Texture2D>("Barrel1", "Graphics/Tiles/Barrel1");
+
+            AssetManager.Get().Store<Texture2D>("tileset2", "Graphics/Tilesets/tileset2");
 
             AssetManager.Get().Store<Texture2D>("Kakariko_Village_Tiles", "Graphics/Tilesets/Debug/Kakariko_Village_Tiles");
             AssetManager.Get().Store<Texture2D>("WalkingAnimation", "Graphics/Tilesets/Debug/WalkingAnimation");

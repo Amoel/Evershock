@@ -22,12 +22,29 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
-        public void Create(int width, int height, int tileWidth, int tileHeight)
+        public void Create(int width, int height, int tileWidth, int tileHeight, Map map = null)
         {
             PxTileWidth = tileWidth;
             PxTileHeight = tileHeight;
-            m_Map = new Map(width, height);
+            m_Map = (map ?? new Map(width, height));
             m_Control?.Reset(width, height);
+
+            TilesetManager.Get().UpdateTileDimension(tileWidth, tileHeight);
+
+            if (map != null)
+            {
+                foreach (Cell cell in m_Map.Cells)
+                {
+                    foreach (KeyValuePair<ELayerMode, Layer> kvp in cell.Layers)
+                    {
+                        if (kvp.Value.TargetX >= 0 && kvp.Value.TargetY >= 0)
+                        {
+                            m_Control?.SetTile(kvp.Key, cell.X, cell.Y, kvp.Value.TargetX, kvp.Value.TargetY);
+                        }
+                    }
+                    m_Control?.SetBlocker(cell.X, cell.Y, cell.IsBlocked);
+                }
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -172,6 +189,27 @@ namespace TilesetViewer
                 }
             }
             return false;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public Map GetMap()
+        {
+            return m_Map;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SetMap(Map map)
+        {
+            Create(map.Width, map.Height, 32, 32, map);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SetTileset(string name)
+        {
+            if (m_Map != null) m_Map.Tileset = name;
         }
 
         //---------------------------------------------------------------------------

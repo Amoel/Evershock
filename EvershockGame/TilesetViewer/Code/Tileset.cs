@@ -15,8 +15,8 @@ namespace TilesetViewer
         public int PxTileWidth { get; set; }
         public int PxTileHeight { get; set; }
 
-        public int Width { get { return Source != null ? Source.PixelWidth / PxTileWidth : 0; } }
-        public int Height { get { return Source != null ? Source.PixelHeight / PxTileHeight : 0; } }
+        public int Width { get { return Source != null ? Source.PixelWidth / Math.Max(1, PxTileWidth) : 0; } }
+        public int Height { get { return Source != null ? Source.PixelHeight / Math.Max(1, PxTileHeight) : 0; } }
         public int PxWidth { get { return Source != null ? Source.PixelWidth : 0; } }
         public int PxHeight { get { return Source != null ? Source.PixelHeight : 0; } }
 

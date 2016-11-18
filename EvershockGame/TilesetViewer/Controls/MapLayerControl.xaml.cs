@@ -92,13 +92,16 @@ namespace TilesetViewer
 
         public void SetTile(int sourceX, int sourceY, int targetX, int targetY)
         {
-            BitmapSource source = TilesetManager.Get().Tileset.Source;
-            int sourceStride = source.PixelWidth * (source.Format.BitsPerPixel + 7) / 8;
-            int size = source.PixelHeight * sourceStride;
-            byte[] data = new byte[size];
+            BitmapSource source = TilesetManager.Get().Tileset?.Source;
+            if (source != null)
+            {
+                int sourceStride = source.PixelWidth * (source.Format.BitsPerPixel + 7) / 8;
+                int size = source.PixelHeight * sourceStride;
+                byte[] data = new byte[size];
 
-            TilesetManager.Get().Tileset.Source.CopyPixels(new Int32Rect(targetX * PxTileWidth, targetY * PxTileHeight, PxTileWidth, PxTileHeight), data, sourceStride, 0);
-            Image.WritePixels(new Int32Rect(sourceX * PxTileWidth, sourceY * PxTileHeight, PxTileWidth, PxTileHeight), data, sourceStride, 0);
+                TilesetManager.Get().Tileset.Source.CopyPixels(new Int32Rect(targetX * PxTileWidth, targetY * PxTileHeight, PxTileWidth, PxTileHeight), data, sourceStride, 0);
+                Image.WritePixels(new Int32Rect(sourceX * PxTileWidth, sourceY * PxTileHeight, PxTileWidth, PxTileHeight), data, sourceStride, 0);
+            }
         }
 
         //---------------------------------------------------------------------------

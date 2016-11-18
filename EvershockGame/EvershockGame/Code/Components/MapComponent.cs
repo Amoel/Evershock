@@ -33,6 +33,12 @@ namespace EvershockGame.Code
 
         //---------------------------------------------------------------------------
 
+        public void CreateCollisionFromMap(Map map)
+        {
+        }
+
+        //---------------------------------------------------------------------------
+
         public void Draw(SpriteBatch batch, CameraData data)
         {
             if (Map != null && m_Tileset != null)
@@ -45,8 +51,22 @@ namespace EvershockGame.Code
                     {
                         for (int y = 0; y < Map.Height; y++)
                         {
-                            Layer layer = Map[ELayerMode.First, x, y];
-                            batch.Draw(m_Tileset, new Rectangle((int)location.X + x * 16, (int)location.Y + y * 16, 16, 16), new Rectangle(layer.TargetX * 16, layer.TargetY * 16, 16, 16), Color.White);
+                            Cell cell = Map[x, y];
+                            foreach (KeyValuePair<ELayerMode, Layer> kvp in cell.Layers)
+                            {
+                                switch (kvp.Key)
+                                {
+                                    case ELayerMode.First:
+                                        batch.Draw(m_Tileset, new Rectangle((int)location.X + x * 32, (int)location.Y + y * 32, 32, 32), new Rectangle(kvp.Value.TargetX * 32, kvp.Value.TargetY * 32, 32, 32), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00001f);
+                                        break;
+                                    case ELayerMode.Second:
+                                        batch.Draw(m_Tileset, new Rectangle((int)location.X + x * 32, (int)location.Y + y * 32, 32, 32), new Rectangle(kvp.Value.TargetX * 32, kvp.Value.TargetY * 32, 32, 32), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00002f);
+                                        break;
+                                    case ELayerMode.Third:
+                                        batch.Draw(m_Tileset, new Rectangle((int)location.X + x * 32, (int)location.Y + y * 32, 32, 32), new Rectangle(kvp.Value.TargetX * 32, kvp.Value.TargetY * 32, 32, 32), Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.9f);
+                                        break;
+                                }
+                            }
                         }
                     }
                 }

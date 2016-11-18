@@ -42,7 +42,8 @@ namespace TilesetViewer
                     int pxTileHeight = MapManager.Get().PxTileHeight;
                     Tileset = new Tileset(Path.GetFileNameWithoutExtension(path), bitmap, pxTileWidth, pxTileHeight);
                     m_Canvas?.Update();
-                    LevelManager.Get().UpdateTiles();
+                    //LevelManager.Get().UpdateTiles();
+                    MapManager.Get().SetTileset(Path.GetFileNameWithoutExtension(path));
                 }
             }
             catch (Exception e)
