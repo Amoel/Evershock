@@ -8,6 +8,7 @@ using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Penumbra;
 
 namespace EvershockGame
 {
@@ -15,6 +16,8 @@ namespace EvershockGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        ActorPhysicsComponent playerPhysics;
 
         public Game1()
         {
@@ -37,7 +40,8 @@ namespace EvershockGame
             IEntity player = EntityFactory.Create<Entity>("Player");
             player.AddComponent<TransformComponent>().Init(new Vector3(100, 410, 0));
             player.AddComponent<AttributesComponent>().Init(0, 5.0f);
-            player.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
+            playerPhysics = player.AddComponent<ActorPhysicsComponent>();
+            playerPhysics.Init(0.9f, 0.1f, 0.0f);
 
             MovementAnimationComponent animation = player.AddComponent<MovementAnimationComponent>();
             animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"));
@@ -142,7 +146,8 @@ namespace EvershockGame
         protected override void UnloadContent()
         {
         }
-        
+
+        bool spawnBall = true;
         protected override void Update(GameTime gameTime)
         {
 #if DEBUG
@@ -154,7 +159,18 @@ namespace EvershockGame
             {
                 CollisionManager.Get().IsDebugViewActive = false;
             }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) && spawnBall)
+            {
+                playerPhysics.ApplyForce(new Vector3(0, 0, 1000));
+                spawnBall = false;
+            }
+            else if (Keyboard.GetState().IsKeyUp(Keys.Space))
+            {
+                spawnBall = true;
+            }
 #endif
+
             ComponentManager.Get().TickComponents(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
             PhysicsManager.Get().Step(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
             base.Update(gameTime);

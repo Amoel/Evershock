@@ -2,9 +2,11 @@
 using Managers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace TilesetViewer
 {
@@ -16,23 +18,29 @@ namespace TilesetViewer
         public int PxTileWidth { get; private set; }
         public int PxTileHeight { get; private set; }
 
+        public bool ContainsChanges { get; private set; }
+
         //---------------------------------------------------------------------------
 
         protected MapManager() { }
 
         //---------------------------------------------------------------------------
 
-        public void Create(int width, int height, int tileWidth, int tileHeight, Map map = null)
+        public void Create(string name, int width, int height, int tileWidth, int tileHeight, Map map = null)
         {
             PxTileWidth = tileWidth;
             PxTileHeight = tileHeight;
-            m_Map = (map ?? new Map(width, height));
+            m_Map = (map ?? new Map(name, width, height));
             m_Control?.Reset(width, height);
 
             TilesetManager.Get().UpdateTileDimension(tileWidth, tileHeight);
 
             if (map != null)
             {
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                Mouse.OverrideCursor = Cursors.Wait;
+                int count = 0;
                 foreach (Cell cell in m_Map.Cells)
                 {
                     foreach (KeyValuePair<ELayerMode, Layer> kvp in cell.Layers)
@@ -41,9 +49,14 @@ namespace TilesetViewer
                         {
                             m_Control?.SetTile(kvp.Key, cell.X, cell.Y, kvp.Value.TargetX, kvp.Value.TargetY);
                         }
+                        count++;
                     }
                     m_Control?.SetBlocker(cell.X, cell.Y, cell.IsBlocked);
                 }
+                Console.WriteLine(count);
+                Mouse.OverrideCursor = null;
+                watch.Stop();
+                Console.WriteLine(watch.ElapsedMilliseconds);
             }
         }
 
@@ -62,16 +75,16 @@ namespace TilesetViewer
             switch (EditManager.Get().Mode)
             {
                 case EEditMode.Tiles:
-                    SetTile(LayerManager.Get().Mode, sourceX, sourceY, selection.X, selection.Y, selection.Width, selection.Height);
+                    if (isLeftMousePressed) SetTile(LayerManager.Get().Mode, sourceX, sourceY, selection.X, selection.Y, selection.Width, selection.Height);
                     break;
                 case EEditMode.Eraser:
-                    ClearTile(LayerManager.Get().Mode, sourceX, sourceY);
+                    if (isLeftMousePressed) ClearTile(LayerManager.Get().Mode, sourceX, sourceY);
                     break;
                 case EEditMode.Fill:
-                    FillTile(LayerManager.Get().Mode, sourceX, sourceY, selection.X, selection.Y);
+                    if (isLeftMousePressed) FillTile(LayerManager.Get().Mode, sourceX, sourceY, selection.X, selection.Y);
                     break;
                 case EEditMode.Blocker:
-                    SetBlocker(sourceX, sourceY, true);
+                    if (isLeftMousePressed) SetBlocker(sourceX, sourceY, !(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)));
                     break;
             }
         }
@@ -88,6 +101,7 @@ namespace TilesetViewer
                     {
                         if (m_Map.SetTile(mode, sourceX + x, sourceY + y, targetX + x, targetY + y))
                         {
+                            ContainsChanges = true;
                             m_Control?.SetTile(mode, sourceX + x, sourceY + y, targetX + x, targetY + y);
                         }
                     }
@@ -103,6 +117,7 @@ namespace TilesetViewer
             {
                 if (m_Map.SetTile(mode, sourceX, sourceY, -1, -1))
                 {
+                    ContainsChanges = true;
                     m_Control?.EraseTiles(mode, sourceX, sourceY);
                 }
             }
@@ -126,6 +141,7 @@ namespace TilesetViewer
             {
                 if (m_Map.SetBlocker(sourceX, sourceY, isBlocker))
                 {
+                    ContainsChanges = true;
                     m_Control?.SetBlocker(sourceX, sourceY, isBlocker);
                 }
             }
@@ -152,6 +168,7 @@ namespace TilesetViewer
                     {
                         if (m_Map.SetTile(mode, w.X, w.Y, fill.X, fill.Y))
                         {
+                            ContainsChanges = true;
                             m_Control?.SetTile(mode, w.X, w.Y, fill.X, fill.Y);
                         }
                         if ((w.Y > 0) && IsMatch(mode, w.X, w.Y - 1, expected.X, expected.Y))
@@ -164,6 +181,7 @@ namespace TilesetViewer
                     {
                         if (m_Map.SetTile(mode, e.X, e.Y, fill.X, fill.Y))
                         {
+                            ContainsChanges = true;
                             m_Control?.SetTile(mode, e.X, e.Y, fill.X, fill.Y);
                         }
                         if ((e.Y > 0) && IsMatch(mode, e.X, e.Y - 1, expected.X, expected.Y))
@@ -202,7 +220,7 @@ namespace TilesetViewer
 
         public void SetMap(Map map)
         {
-            Create(map.Width, map.Height, 32, 32, map);
+            Create(map.Name, map.Width, map.Height, 32, 32, map);
         }
 
         //---------------------------------------------------------------------------

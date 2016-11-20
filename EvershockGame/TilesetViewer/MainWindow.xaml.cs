@@ -32,6 +32,8 @@ namespace TilesetViewer
         {
             InitializeComponent();
             DataContext = this;
+
+            Closing += OnClosing;
         }
 
         //---------------------------------------------------------------------------
@@ -113,6 +115,28 @@ namespace TilesetViewer
         private void OnUndo(object sender, EventArgs e)
         {
             UndoManager.Get().Undo();
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            Map map = MapManager.Get().GetMap();
+            if (map != null && MapManager.Get().ContainsChanges)
+            {
+                MessageBoxResult result = MessageBox.Show("Do you want to save all changes?", "Unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        ResourceManager.Get().Save(map);
+                        break;
+                    case MessageBoxResult.No:
+                        break;
+                    case MessageBoxResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                }
+            }
         }
 
         //---------------------------------------------------------------------------

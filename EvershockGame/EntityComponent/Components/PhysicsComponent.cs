@@ -49,10 +49,10 @@ namespace EntityComponent.Components
         {
             TransformComponent transform = GetComponent<TransformComponent>();
 
-            if (transform != null && m_Force != null)
+            if (transform != null)
             {
-                //ApplyGravity();
-
+                ApplyGravity(deltaTime);
+                
                 if (m_Force.Length() < 0.01f)
                 {
                     m_Force = Vector3.Zero;
@@ -64,8 +64,6 @@ namespace EntityComponent.Components
 
                 Vector2 newForce = CollisionManager.Get().CheckCollision(Entity, GetForce().To2D());
                 transform.MoveTo(new Vector3(newForce.X, newForce.Y, GetForce().Z));
-                
-
             }
         }
 
@@ -97,11 +95,27 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        private void ApplyGravity()
+        private void ApplyGravity(float deltaTime)
         {
             if (Weight > 0.0f)
             {
-                m_Gravity += PhysicsManager.Get().Gravity * Weight;
+                TransformComponent transform = GetComponent<TransformComponent>();
+                if (transform != null)
+                {
+                    Vector3 location = transform.AbsoluteLocation;
+                    if (Math.Abs(location.Z) <= 0.1f)
+                    {
+                        m_Gravity = Vector3.Zero;
+                    }
+                    else if (location.Z < 0.0f)
+                    {
+                        m_Gravity *= -0.8f;
+                    }
+                    else
+                    {
+                        m_Gravity += PhysicsManager.Get().Gravity * Weight * deltaTime;
+                    }
+                }
             }
         }
 

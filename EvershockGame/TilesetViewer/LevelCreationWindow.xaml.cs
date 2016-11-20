@@ -69,7 +69,7 @@ namespace TilesetViewer
                 return;
             }
 
-            MapManager.Get().Create(width, height, tileWidth, tileHeight);
+            MapManager.Get().Create(name, width, height, tileWidth, tileHeight);
             MapManager.Get().UpdateImage();
             //LevelManager.Get().Create(width, height);
             Close();

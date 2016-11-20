@@ -29,6 +29,8 @@ namespace TilesetViewer
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public WriteableBitmap HighlightImage { get; set; }
+
         public int MapWidth { get; set; }
         public int MapHeight { get; set; }
 
@@ -58,6 +60,8 @@ namespace TilesetViewer
             }
 
             MapManager.Get().Register(this);
+
+            TilesetManager.Get().TilesetSelectionChanged += OnTilesetSelectionChanged;
         }
 
         //---------------------------------------------------------------------------
@@ -77,6 +81,30 @@ namespace TilesetViewer
             MapHeight = height;
             OnPropertyChanged("MapHeight");
             OnPropertyChanged("PxHeight");
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void OnTilesetSelectionChanged(SelectionRect selection)
+        {
+            if (selection != null && selection.Width > 0 && selection.Height > 0)
+            {
+                HighlightImage = new WriteableBitmap(selection.Width * 32, selection.Height * 32, 96, 96, PixelFormats.Bgra32, null);
+
+                BitmapSource source = TilesetManager.Get().Tileset?.Source;
+                if (source != null)
+                {
+                    Int32Rect targetRect = new Int32Rect(selection.X * 32, selection.Y * 32, selection.Width * 32, selection.Height * 32);
+                    int bytesPerPixel = (source.Format.BitsPerPixel + 7) / 8;
+                    int stride = bytesPerPixel * targetRect.Width;
+                    byte[] data = new byte[stride * targetRect.Height];
+                    TilesetManager.Get().Tileset.Source.CopyPixels(targetRect, data, stride, 0);
+
+                    Int32Rect sourceRect = new Int32Rect(0, 0, selection.Width * 32, selection.Height * 32);
+                    HighlightImage.WritePixels(sourceRect, data, stride, 0);
+                }
+            }
+            OnPropertyChanged("HighlightImage");
         }
 
         //---------------------------------------------------------------------------
@@ -139,12 +167,13 @@ namespace TilesetViewer
         {
             m_Clicked = e.GetPosition(this);
             m_Dragged = new Point(0, 0);
+            
+            UndoManager.Get().StartUndo(LayerManager.Get().Mode);
 
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                UndoManager.Get().StartUndo(LayerManager.Get().Mode);
-                MapManager.Get().ExecuteAction((int)m_Clicked.X / PxTileWidth, (int)m_Clicked.Y / PxTileHeight);
-            }
+            MapManager.Get().ExecuteAction(
+                (int)m_Clicked.X / PxTileWidth,
+                (int)m_Clicked.Y / PxTileHeight,
+                e.LeftButton == MouseButtonState.Pressed);
         }
 
         //---------------------------------------------------------------------------
@@ -161,11 +190,11 @@ namespace TilesetViewer
             m_Dragged = new Point(m_Dragged.X + (e.GetPosition(this).X - m_Clicked.X), m_Dragged.Y + (e.GetPosition(this).Y - m_Clicked.Y));
             m_Clicked = e.GetPosition(this);
             UpdateHighlight((int)m_Clicked.X / PxTileWidth, (int)m_Clicked.Y / PxTileHeight);
-
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                MapManager.Get().ExecuteAction((int)m_Clicked.X / PxTileWidth, (int)m_Clicked.Y / PxTileHeight);
-            }
+            
+            MapManager.Get().ExecuteAction(
+                (int)m_Clicked.X / PxTileWidth, 
+                (int)m_Clicked.Y / PxTileHeight,
+                e.LeftButton == MouseButtonState.Pressed);
         }
 
         //---------------------------------------------------------------------------

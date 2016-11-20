@@ -60,7 +60,7 @@ namespace TilesetViewer
 
         private void ResetImage()
         {
-            Image = new WriteableBitmap(PxWidth, PxHeight, 96, 96, PixelFormats.Bgra32, null);
+            Image = new WriteableBitmap(PxWidth, PxHeight, 96, 96, PixelFormats.Bgra32, null);                
             OnPropertyChanged("Image");
         }
 
@@ -95,12 +95,15 @@ namespace TilesetViewer
             BitmapSource source = TilesetManager.Get().Tileset?.Source;
             if (source != null)
             {
-                int sourceStride = source.PixelWidth * (source.Format.BitsPerPixel + 7) / 8;
-                int size = source.PixelHeight * sourceStride;
-                byte[] data = new byte[size];
+                Int32Rect targetRect = new Int32Rect(targetX * 32, targetY * 32, 32, 32);
+                int bytesPerPixel = (source.Format.BitsPerPixel + 7) / 8;
+                int stride = bytesPerPixel * targetRect.Width;
+                byte[] data = new byte[stride * targetRect.Height];
+                TilesetManager.Get().Tileset.Source.CopyPixels(targetRect, data, stride, 0);
 
-                TilesetManager.Get().Tileset.Source.CopyPixels(new Int32Rect(targetX * PxTileWidth, targetY * PxTileHeight, PxTileWidth, PxTileHeight), data, sourceStride, 0);
-                Image.WritePixels(new Int32Rect(sourceX * PxTileWidth, sourceY * PxTileHeight, PxTileWidth, PxTileHeight), data, sourceStride, 0);
+                Int32Rect sourceRect = new Int32Rect(sourceX * 32, sourceY * 32, 32, 32);
+                Image.WritePixels(sourceRect, data, stride, 0);
+
             }
         }
 

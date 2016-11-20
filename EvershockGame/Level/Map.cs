@@ -21,6 +21,7 @@ namespace Level
     [Serializable]
     public class Map
     {
+        public string Name { get; set; }
         public string Tileset { get; set; }
         public Cell[,] Cells { get; set; }
 
@@ -35,8 +36,9 @@ namespace Level
 
         //---------------------------------------------------------------------------
 
-        public Map(int width, int height)
+        public Map(string name, int width, int height)
         {
+            Name = name;
             Cells = new Cell[width, height];
             for (int y = 0; y < height; y++)
             {
