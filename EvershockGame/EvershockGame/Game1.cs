@@ -34,13 +34,19 @@ namespace EvershockGame
             int height = GraphicsDevice.PresentationParameters.BackBufferHeight;
 
 
+            /*--------------------------------------------------------------------------
+                        Player 1
+            --------------------------------------------------------------------------*/
+
             IEntity player = EntityFactory.Create<Entity>("Player");
             player.AddComponent<TransformComponent>().Init(new Vector3(100, 410, 0));
             player.AddComponent<AttributesComponent>().Init(0, 5.0f);
             player.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
+            player.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
+            player.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
 
             MovementAnimationComponent animation = player.AddComponent<MovementAnimationComponent>();
-            animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"));
+            animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"),new Vector2 (0.5f,0.5f));
             animation.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true));
             animation.AddSetting((int)Tag.MoveRight, new AnimationSetting(8, 2, 0, 7));
 
@@ -49,22 +55,22 @@ namespace EvershockGame
             input.MapAction(EGameAction.MOVE_RIGHT, EInput.KEYBOARD_RIGHT);
             input.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_UP);
             input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_DOWN);
-            
-            player.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
-
-            player.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
 
             IEntity playerIndicator = EntityFactory.Create<Entity>(player.GUID, "PlayerIndicator");
-            playerIndicator.AddComponent<TransformComponent>().Init(new Vector3(0, -45, 0));
-            MovementAnimationComponent piAnimation = playerIndicator.AddComponent<MovementAnimationComponent>();
-            piAnimation.AddSetting(0, new AnimationSetting(4, 1, 0, 4, false));
-            piAnimation.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimation"));
+            playerIndicator.AddComponent<TransformComponent>().Init(new Vector3(0, -65, 0));
+            AnimationComponent piAnimation = playerIndicator.AddComponent<AnimationComponent>();
+            piAnimation.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimation"), new Vector2(0.4f, 0.4f));
+            piAnimation.AddSetting(0, new AnimationSetting(8, 1, 0, 7, false));;
+
+            /*--------------------------------------------------------------------------
+                        Player 2
+            --------------------------------------------------------------------------*/
 
             IEntity player2 = EntityFactory.Create<Entity>("Player2");
             player2.AddComponent<TransformComponent>().Init(new Vector3(800, 180, 0));
 
             MovementAnimationComponent animation2 = player2.AddComponent<MovementAnimationComponent>();
-            animation2.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"));
+            animation2.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"), new Vector2(0.5f, 0.5f));
             animation2.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true));
             animation2.AddSetting((int)Tag.MoveRight, new AnimationSetting(8, 2, 0, 7));
 
@@ -80,27 +86,39 @@ namespace EvershockGame
 
             player2.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
 
+            /*--------------------------------------------------------------------------
+                        Camera
+            --------------------------------------------------------------------------*/
 
             IEntity camera = EntityFactory.Create<Entity>("Camera");
 
+            camera.AddComponent<TransformComponent>();
             CameraComponent cam = camera.AddComponent<CameraComponent>();
             cam.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
             cam.AddTarget(player);
 
             IEntity camera2 = EntityFactory.Create<Entity>("Camera");
 
+            camera2.AddComponent<TransformComponent>();
             CameraComponent cam2 = camera2.AddComponent<CameraComponent>();
             cam2.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
             cam2.AddTarget(player2);
 
+            /*--------------------------------------------------------------------------
+                        Other
+            --------------------------------------------------------------------------*/
+
             IEntity rock3 = EntityFactory.Create<Entity>("Rock3");
             rock3.AddComponent<TransformComponent>().Init(new Vector3(200, 0, 0));
+            rock3.AddComponent<PhysicsComponent>();
             rock3.AddComponent<CircleColliderComponent>().Init(30, Vector2.Zero, BodyType.Dynamic, 10.0f);
             rock3.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"));
 
             IEntity map = EntityFactory.Create<Entity>("Map");
+            map.AddComponent<TransformComponent>();
+            map.AddComponent<PhysicsComponent>();
             map.AddComponent<MapComponent>().Init(AssetManager.Get().Find<Level.Map>("TestMap"));
-
+            
             MapManager.Get().CreateCollisionFromMap(map, AssetManager.Get().Find<Level.Map>("TestMap"));
         }
         
@@ -163,6 +181,11 @@ namespace EvershockGame
             ComponentManager.Get().TickComponents(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
             PhysicsManager.Get().Step(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
             base.Update(gameTime);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl)))
+            {
+                
+            }
         }
         
         protected override void Draw(GameTime gameTime)

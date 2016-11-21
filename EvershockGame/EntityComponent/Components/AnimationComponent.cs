@@ -42,8 +42,38 @@ namespace EntityComponent.Components
 
             Color = Color.White;
             Opacity = 1.0f;
-            Scale = new Vector2(0.5f, 0.5f);
+            Scale = new Vector2(1.0f, 1.0f);
             Offset = new Vector2(0, 25);
+        }
+
+        public void Init(Texture2D spritesheet, Vector2 scale, float opacity = 1.0f)
+        {
+            Spritesheet = spritesheet;
+
+            Color = Color.White;
+            Opacity = opacity;
+            Scale = scale;
+            Offset = new Vector2(0, 25);
+        }
+
+        public void Init(Texture2D spritesheet, Vector2 scale, Vector2 offset, float opacity = 1.0f)
+        {
+            Spritesheet = spritesheet;
+
+            Color = Color.White;
+            Opacity = opacity;
+            Scale = scale;
+            Offset = offset;
+        }
+
+        public void Init(Texture2D spritesheet, Vector2 scale, Vector2 offset, Color color, float opacity = 1.0f)
+        {
+            Spritesheet = spritesheet;
+
+            Color = color;
+            Opacity = opacity;
+            Scale = scale;
+            Offset = offset;
         }
 
         //---------------------------------------------------------------------------
