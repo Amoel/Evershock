@@ -16,29 +16,36 @@ namespace EvershockGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        IEntity player;
+        IEntity player2;
+        IEntity playerIndicator;
+        AnimationComponent piAnimation;
+
+        //---------------------------------------------------------------------------
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
-        
+
+        //---------------------------------------------------------------------------
+
         protected override void Initialize()
         {
             base.Initialize();
 
-            graphics.PreferredBackBufferWidth = 940;
-            graphics.PreferredBackBufferHeight = 560;
-            graphics.ApplyChanges();
+            GameWindowSettings.SetWindowSettings(graphics,Window);
 
             int width = GraphicsDevice.PresentationParameters.BackBufferWidth;
             int height = GraphicsDevice.PresentationParameters.BackBufferHeight;
 
 
             /*--------------------------------------------------------------------------
-                        Player 1
+                       Player 1
             --------------------------------------------------------------------------*/
 
-            IEntity player = EntityFactory.Create<Entity>("Player");
+            player = EntityFactory.Create<Entity>("Player");
             player.AddComponent<TransformComponent>().Init(new Vector3(100, 410, 0));
             player.AddComponent<AttributesComponent>().Init(0, 5.0f);
             player.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
@@ -56,9 +63,9 @@ namespace EvershockGame
             input.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_UP);
             input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_DOWN);
 
-            IEntity playerIndicator = EntityFactory.Create<Entity>(player.GUID, "PlayerIndicator");
+            playerIndicator = EntityFactory.Create<Entity>(player.GUID, "PlayerIndicator");
             playerIndicator.AddComponent<TransformComponent>().Init(new Vector3(0, -65, 0));
-            AnimationComponent piAnimation = playerIndicator.AddComponent<AnimationComponent>();
+            piAnimation = playerIndicator.AddComponent<AnimationComponent>();
             piAnimation.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimation"), new Vector2(0.4f, 0.4f));
             piAnimation.AddSetting(0, new AnimationSetting(8, 1, 0, 7, false));;
 
@@ -66,7 +73,7 @@ namespace EvershockGame
                         Player 2
             --------------------------------------------------------------------------*/
 
-            IEntity player2 = EntityFactory.Create<Entity>("Player2");
+            player2 = EntityFactory.Create<Entity>("Player2");
             player2.AddComponent<TransformComponent>().Init(new Vector3(800, 180, 0));
 
             MovementAnimationComponent animation2 = player2.AddComponent<MovementAnimationComponent>();
@@ -156,14 +163,23 @@ namespace EvershockGame
             AssetManager.Get().Store<Texture2D>("CircleLight", "Graphics/Lights/CircleLight");
             AssetManager.Get().Store<Effect>("LightingEffect", "Effects/DeferredLighting");
         }
-        
+
+        //---------------------------------------------------------------------------
+
         protected override void UnloadContent()
         {
         }
-        
+
+        //---------------------------------------------------------------------------
+
         protected override void Update(GameTime gameTime)
         {
 #if DEBUG
+            if (Keyboard.GetState().IsKeyDown(Keys.F))
+            {
+                GameWindowSettings.ToggleFullscreen(graphics, Window);
+            }
+
             if (Keyboard.GetState().IsKeyDown(Keys.F11))
             {
                 CollisionManager.Get().IsDebugViewActive = true;
@@ -183,9 +199,10 @@ namespace EvershockGame
             base.Update(gameTime);
 
             if (Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl)))
-            {
-                
-            }
+                piAnimation.Stop();
+
+            if (!Keyboard.GetState().IsKeyDown(Keys.LeftControl) || !(Keyboard.GetState().IsKeyDown(Keys.RightControl)))
+                piAnimation.Play();
         }
         
         protected override void Draw(GameTime gameTime)

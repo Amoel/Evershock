@@ -47,6 +47,7 @@
     <Compile Include="Code\Components\MapComponent.cs" />
     <Compile Include="Code\Components\MovementAnimationComponent.cs" />
     <Compile Include="Code\GameTags.cs" />
+    <Compile Include="Code\GameWindowSettings.cs" />
     <Compile Include="Code\Managers\MapManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
