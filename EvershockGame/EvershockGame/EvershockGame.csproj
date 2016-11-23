@@ -74,7 +74,10 @@
     <Content Include="Content\Graphics\Camera\BackgroundTexture2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\Debug\ArrowSheet.png">
+    <Content Include="Content\Graphics\Debug\ArrowSheetP1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Debug\ArrowSheetP2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Debug\CircleTextureDebug.png">

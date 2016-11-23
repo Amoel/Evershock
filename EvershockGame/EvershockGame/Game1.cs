@@ -18,8 +18,10 @@ namespace EvershockGame
 
         IEntity player;
         IEntity player2;
-        IEntity playerIndicator;
-        AnimationComponent piAnimation;
+        IEntity playerIndicatorP1;
+        IEntity playerIndicatorP2;
+        AnimationComponent piAnimationP1;
+        AnimationComponent piAnimationP2;
 
         //---------------------------------------------------------------------------
 
@@ -64,11 +66,12 @@ namespace EvershockGame
             input.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_UP);
             input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_DOWN);
 
-            playerIndicator = EntityFactory.Create<Entity>(player.GUID, "PlayerIndicator");
-            playerIndicator.AddComponent<TransformComponent>().Init(new Vector3(0, -65, 0));
-            piAnimation = playerIndicator.AddComponent<AnimationComponent>();
-            piAnimation.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimation"), new Vector2(0.4f, 0.4f));
-            piAnimation.AddSetting(0, new AnimationSetting(8, 1, 0, 7, false));;
+            playerIndicatorP1 = EntityFactory.Create<Entity>(player.GUID, "PlayerIndicatorP1");
+            playerIndicatorP1.AddComponent<TransformComponent>().Init(new Vector3(0, -65, 0));
+            piAnimationP1 = playerIndicatorP1.AddComponent<AnimationComponent>();
+            piAnimationP1.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimationP1"), new Vector2(0.4f, 0.4f));
+            piAnimationP1.AddSetting(0, new AnimationSetting(8, 1, 0, 7, false));
+            playerIndicatorP1.Disable();
 
             /*--------------------------------------------------------------------------
                         Player 2
@@ -76,6 +79,11 @@ namespace EvershockGame
 
             player2 = EntityFactory.Create<Entity>("Player2");
             player2.AddComponent<TransformComponent>().Init(new Vector3(800, 180, 0));
+
+            player2.AddComponent<AttributesComponent>().Init(0, 5.0f);
+            player2.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
+            player2.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
+            player2.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
 
             MovementAnimationComponent animation2 = player2.AddComponent<MovementAnimationComponent>();
             animation2.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"), new Vector2(0.5f, 0.5f));
@@ -88,11 +96,12 @@ namespace EvershockGame
             input2.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_W);
             input2.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_S);
 
-            player2.AddComponent<AttributesComponent>().Init(0, 5.0f);
-            player2.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
-            player2.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
-
-            player2.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
+            playerIndicatorP2 = EntityFactory.Create<Entity>(player2.GUID, "PlayerIndicatorP2");
+            playerIndicatorP2.AddComponent<TransformComponent>().Init(new Vector3(0, -65, 0));
+            piAnimationP2 = playerIndicatorP2.AddComponent<AnimationComponent>();
+            piAnimationP2.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimationP2"), new Vector2(0.4f, 0.4f));
+            piAnimationP2.AddSetting(0, new AnimationSetting(8, 1, 0, 7, false));
+            playerIndicatorP2.Disable();
 
             /*--------------------------------------------------------------------------
                         Camera
@@ -154,7 +163,8 @@ namespace EvershockGame
             AssetManager.Get().Store<Texture2D>("ChestClosed1", "Graphics/Tiles/ChestClosed1");
             AssetManager.Get().Store<Texture2D>("ChestOpened1", "Graphics/Tiles/ChestOpened1");
             AssetManager.Get().Store<Texture2D>("Barrel1", "Graphics/Tiles/Barrel1");
-            AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimation", "Graphics/Debug/ArrowSheet");
+            AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimationP1", "Graphics/Debug/ArrowSheetP1");
+            AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimationP2", "Graphics/Debug/ArrowSheetP2");
 
             AssetManager.Get().Store<Texture2D>("tileset2", "Graphics/Tilesets/tileset2");
 
@@ -199,11 +209,17 @@ namespace EvershockGame
             PhysicsManager.Get().Step(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
             base.Update(gameTime);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl)))
-                piAnimation.Stop();
+            if ((Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl))) && !playerIndicatorP1.IsEnabled)
+            {
+                playerIndicatorP1.Enable();
+                playerIndicatorP2.Enable();
+            }
 
-            if (!Keyboard.GetState().IsKeyDown(Keys.LeftControl) || !(Keyboard.GetState().IsKeyDown(Keys.RightControl)))
-                piAnimation.Play();
+            if (Keyboard.GetState().IsKeyUp(Keys.LeftControl) && (Keyboard.GetState().IsKeyUp(Keys.RightControl)) && playerIndicatorP1.IsEnabled)
+            {
+                playerIndicatorP1.Disable();
+                playerIndicatorP2.Disable();
+            }
         }
         
         protected override void Draw(GameTime gameTime)
