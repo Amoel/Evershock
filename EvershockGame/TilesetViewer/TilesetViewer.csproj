@@ -87,6 +87,7 @@
     <Compile Include="Code\Managers\InputManager.cs" />
     <Compile Include="Code\Managers\LayerManager.cs" />
     <Compile Include="Code\Managers\ZoomManager.cs" />
+    <Compile Include="Code\MapMetaData.cs" />
     <Compile Include="Code\SelectionPoint.cs" />
     <Compile Include="Controls\LevelCanvas.xaml.cs">
       <DependentUpon>LevelCanvas.xaml</DependentUpon>
@@ -112,6 +113,9 @@
     </Compile>
     <Compile Include="Code\Managers\TilesetManager.cs" />
     <Compile Include="Code\Managers\UndoManager.cs" />
+    <Compile Include="ResizeControl.xaml.cs">
+      <DependentUpon>ResizeControl.xaml</DependentUpon>
+    </Compile>
     <Page Include="ButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -152,6 +156,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MapPreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MapPreviewContainer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResizeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ToggleButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -164,6 +180,12 @@
   <ItemGroup>
     <Compile Include="Controls\MapBlockerControl.xaml.cs">
       <DependentUpon>MapBlockerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MapPreview.xaml.cs">
+      <DependentUpon>MapPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MapPreviewContainer.xaml.cs">
+      <DependentUpon>MapPreviewContainer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

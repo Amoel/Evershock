@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +44,12 @@ namespace TilesetViewer
             DataContext = this;
 
             TilesetManager.Get().RegisterCanvas(this);
+
+            string path = Properties.Settings.Default.LastTilesetPath;
+            if (File.Exists(path))
+            {
+                TilesetManager.Get().CreateTileset(path);
+            }
         }
 
         //---------------------------------------------------------------------------

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -85,6 +86,25 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
+        public void Resize(int left, int right, int top, int bottom)
+        {
+            foreach (MapLayerControl layer in m_Layers.Values)
+            {
+                layer.Resize(left, right, top, bottom);
+            }
+            BlockerContainer.Resize(left, right, top, bottom);
+
+            MapWidth += (left + right);
+            OnPropertyChanged("MapWidth");
+            OnPropertyChanged("PxWidth");
+
+            MapHeight += (top + bottom);
+            OnPropertyChanged("MapHeight");
+            OnPropertyChanged("PxHeight");
+        }
+
+        //---------------------------------------------------------------------------
+
         private void OnTilesetSelectionChanged(SelectionRect selection)
         {
             if (selection != null && selection.Width > 0 && selection.Height > 0)
@@ -146,11 +166,11 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
-        public void EraseTiles(ELayerMode mode, int sourceX, int sourceY)
+        public void EraseTile(ELayerMode mode, int sourceX, int sourceY)
         {
             if (m_Layers.ContainsKey(mode))
             {
-                m_Layers[mode].EraseTiles(sourceX, sourceY);
+                m_Layers[mode].EraseTile(sourceX, sourceY);
             }
         }
 
@@ -202,6 +222,42 @@ namespace TilesetViewer
         private void OnMouseLeave(object sender, EventArgs e)
         {
             UpdateHighlight(0, 0, 0, 0);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SaveToPng(string fileName)
+        {
+            var encoder = new PngBitmapEncoder();
+            SaveUsingEncoder(LayerContainer, fileName, encoder);
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
+        {
+            Rect bounds = VisualTreeHelper.GetDescendantBounds(visual);
+            double xFactor = 80 / bounds.Size.Width;
+            double yFactor = 60 / bounds.Size.Height;
+
+            Size size = new Size((xFactor < yFactor ? 80 : bounds.Size.Width * yFactor), (xFactor < yFactor ? bounds.Size.Height : 60));
+            RenderTargetBitmap bitmap = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96, 96, PixelFormats.Pbgra32);
+            
+            DrawingVisual dv = new DrawingVisual();
+            using (DrawingContext ctx = dv.RenderOpen())
+            {
+                VisualBrush vb = new VisualBrush(visual);
+                ctx.DrawRectangle(vb, null, new Rect(new Point(), size));// bounds.Size));
+            }
+            bitmap.Render(dv);
+
+            BitmapFrame frame = BitmapFrame.Create(bitmap);
+            encoder.Frames.Add(frame);
+
+            using (var stream = File.Create(fileName))
+            {
+                encoder.Save(stream);
+            }
         }
 
         //---------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 {
+  "Name" : "TestMap",
   "Tileset": "tileset2",
   "Cells": [
     [

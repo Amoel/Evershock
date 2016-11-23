@@ -347,6 +347,7 @@ namespace TilesetViewer
         private void OnZoomInClicked(object sender, EventArgs e)
         {
             ZoomManager.Get().Zoom(0.1f);
+            MapManager.Get().SaveMapMetaData();
         }
 
         //---------------------------------------------------------------------------
@@ -354,45 +355,6 @@ namespace TilesetViewer
         private void OnZoomOutClicked(object sender, EventArgs e)
         {
             ZoomManager.Get().Zoom(-0.1f);
-        }
-
-        //---------------------------------------------------------------------------
-
-        public void SaveAsImage(string fileName)
-        {
-            SaveToPng(TilesCanvas, fileName);
-        }
-
-        //---------------------------------------------------------------------------
-
-        private void SaveToPng(FrameworkElement visual, string fileName)
-        {
-            var encoder = new PngBitmapEncoder();
-            SaveUsingEncoder(visual, fileName, encoder);
-        }
-
-        //---------------------------------------------------------------------------
-
-        private void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
-        {
-            //RenderTargetBitmap bitmap = new RenderTargetBitmap(m_Tiles.GetLength(0) * m_TileWidth, m_Tiles.GetLength(1) * m_TileHeight, 96, 96, PixelFormats.Pbgra32);
-
-            //Rect bounds = VisualTreeHelper.GetDescendantBounds(visual);
-            //DrawingVisual dv = new DrawingVisual();
-            //using (DrawingContext ctx = dv.RenderOpen())
-            //{
-            //    VisualBrush vb = new VisualBrush(visual);
-            //    ctx.DrawRectangle(vb, null, new Rect(new Point(), bounds.Size));
-            //}
-            //bitmap.Render(dv);
-
-            //BitmapFrame frame = BitmapFrame.Create(bitmap);
-            //encoder.Frames.Add(frame);
-
-            //using (var stream = File.Create(fileName))
-            //{
-            //    encoder.Save(stream);
-            //}
         }
 
         //---------------------------------------------------------------------------

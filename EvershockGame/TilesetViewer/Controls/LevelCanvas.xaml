@@ -9,16 +9,7 @@
 
     <UserControl.Resources>
         <local:MapSizeConverter x:Key="MapSizeConverter"/>
-        <!--<RoutedUICommand x:Key="UndoCommand" Text="Text"/>-->
     </UserControl.Resources>
-
-    <!--<UserControl.CommandBindings>
-        <CommandBinding Command="{StaticResource UndoCommand}" Executed="OnUndoClicked"/>
-    </UserControl.CommandBindings>
-
-    <UserControl.InputBindings>
-        <KeyBinding Key="Z" Command="{StaticResource UndoCommand}"/>
-    </UserControl.InputBindings>-->
 
     <Grid Background="#FF151515">
         <Grid.RowDefinitions>
@@ -122,13 +113,13 @@
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
                 </Separator>
-                <Button x:Name="ZoomIn" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Click="OnRedoClicked">
+                <Button x:Name="ZoomIn" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Click="OnZoomInClicked">
                     <Button.ToolTip>
                         <TextBlock Text="Zoom in"/>
                     </Button.ToolTip>
                     <Image Source="/Resource/ZoomInIcon.png" Width="25" Height="25"/>
                 </Button>
-                <Button x:Name="ZoomOut" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Click="OnRedoClicked">
+                <Button x:Name="ZoomOut" Margin="2,2,2,4" Padding="3" BorderThickness="0" Background="Transparent" Click="OnZoomOutClicked">
                     <Button.ToolTip>
                         <TextBlock Text="Zoom out"/>
                     </Button.ToolTip>
@@ -267,5 +258,8 @@
                 </Style>
             </Grid.Style>
         </Grid>
+        <!--<Grid Grid.Row="1">
+            <local:MapPreviewContainer VerticalAlignment="Top"/>
+        </Grid>-->
     </Grid>
 </UserControl>
