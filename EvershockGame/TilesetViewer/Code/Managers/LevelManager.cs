@@ -62,7 +62,7 @@ namespace TilesetViewer
             dialog.Filter = "Image file (*.png)|*.png";
             if (dialog.ShowDialog() == true)
             {
-                m_Canvas.SaveAsImage(dialog.FileName);
+                //m_Canvas.SaveAsImage(dialog.FileName);
             }
         }
 

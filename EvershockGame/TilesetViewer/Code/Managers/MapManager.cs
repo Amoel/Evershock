@@ -1,8 +1,10 @@
 ﻿using Level;
 using Managers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +16,9 @@ namespace TilesetViewer
     {
         private MapControl m_Control;
         private Map m_Map;
+
+        public int MapWidth { get; private set; }
+        public int MapHeight { get; private set; }
 
         public int PxTileWidth { get; private set; }
         public int PxTileHeight { get; private set; }
@@ -28,19 +33,18 @@ namespace TilesetViewer
 
         public void Create(string name, int width, int height, int tileWidth, int tileHeight, Map map = null)
         {
+            MapWidth = width;
+            MapHeight = height;
             PxTileWidth = tileWidth;
             PxTileHeight = tileHeight;
             m_Map = (map ?? new Map(name, width, height));
-            m_Control?.Reset(width, height);
+            m_Control?.Reset(MapWidth, MapHeight);
 
             TilesetManager.Get().UpdateTileDimension(tileWidth, tileHeight);
 
             if (map != null)
             {
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
                 Mouse.OverrideCursor = Cursors.Wait;
-                int count = 0;
                 foreach (Cell cell in m_Map.Cells)
                 {
                     foreach (KeyValuePair<ELayerMode, Layer> kvp in cell.Layers)
@@ -49,15 +53,24 @@ namespace TilesetViewer
                         {
                             m_Control?.SetTile(kvp.Key, cell.X, cell.Y, kvp.Value.TargetX, kvp.Value.TargetY);
                         }
-                        count++;
                     }
                     m_Control?.SetBlocker(cell.X, cell.Y, cell.IsBlocked);
                 }
-                Console.WriteLine(count);
                 Mouse.OverrideCursor = null;
-                watch.Stop();
-                Console.WriteLine(watch.ElapsedMilliseconds);
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Resize(int left, int right, int top, int bottom)
+        {
+            MapWidth = MapWidth + left + right;
+            MapHeight = MapHeight + top + bottom;
+            m_Map.Resize(left, right, top, bottom);
+            
+            Mouse.OverrideCursor = Cursors.Wait;
+            m_Control?.Resize(left, right, top, bottom);
+            Mouse.OverrideCursor = null;
         }
 
         //---------------------------------------------------------------------------
@@ -118,7 +131,7 @@ namespace TilesetViewer
                 if (m_Map.SetTile(mode, sourceX, sourceY, -1, -1))
                 {
                     ContainsChanges = true;
-                    m_Control?.EraseTiles(mode, sourceX, sourceY);
+                    m_Control?.EraseTile(mode, sourceX, sourceY);
                 }
             }
         }
@@ -235,6 +248,37 @@ namespace TilesetViewer
         public void UpdateImage()
         {
             //m_Control?.UpdateImage();
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SaveMapMetaData()
+        {
+            string rootDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TilesetViewer/Maps");
+            if (!Directory.Exists(rootDirectory))
+            {
+                Directory.CreateDirectory(rootDirectory);
+            }
+
+            string thumbnailPath = Path.Combine(rootDirectory, string.Format("{0}Thumbnail.png", m_Map.Name));
+            m_Control?.SaveToPng(thumbnailPath);
+            
+            MapMetaData data = new MapMetaData(thumbnailPath, m_Map.Name, "");
+            string dataPath = Path.Combine(rootDirectory, string.Format("{0}.data", m_Map.Name));
+            try
+            {
+                using (FileStream stream = new FileStream(@dataPath, FileMode.Create))
+                {
+                    using (StreamWriter writer = new StreamWriter(stream))
+                    {
+                        writer.Write(JsonConvert.SerializeObject(data, Formatting.Indented));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
         }
     }
 }

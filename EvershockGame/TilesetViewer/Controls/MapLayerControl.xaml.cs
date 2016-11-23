@@ -75,6 +75,31 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
+        public void Resize(int left, int right, int top, int bottom)
+        {
+
+            Int32Rect targetRect = new Int32Rect(
+                Math.Max(0, -left * PxTileWidth), 
+                Math.Max(0, -top * PxTileHeight), 
+                Image.PixelWidth - Math.Max(0, -(left + right) * PxTileWidth), 
+                Image.PixelHeight - Math.Max(0, -(top + bottom) * PxTileHeight));
+
+            int bytesPerPixel = (Image.Format.BitsPerPixel + 7) / 8;
+            int stride = bytesPerPixel * targetRect.Width;
+            byte[] data = new byte[stride * targetRect.Height];
+            Image.CopyPixels(targetRect, data, stride, 0);
+
+            MapWidth += (left + right);
+            MapHeight += (top + bottom);
+            WriteableBitmap temp = new WriteableBitmap(PxWidth, PxHeight, 96, 96, PixelFormats.Bgra32, null);
+            Int32Rect sourceRect = new Int32Rect(Math.Max(0, left * PxTileWidth), Math.Max(0, top * PxTileHeight), targetRect.Width, targetRect.Height);
+            temp.WritePixels(sourceRect, data, stride, 0);
+            Image = temp;
+            OnPropertyChanged("Image");
+        }
+
+        //---------------------------------------------------------------------------
+
         public void Reset(int width, int height)
         {
             MapWidth = width;
@@ -109,7 +134,7 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
-        public void EraseTiles(int sourceX, int sourceY)
+        public void EraseTile(int sourceX, int sourceY)
         {
             int stride = Image.PixelWidth * (Image.Format.BitsPerPixel + 7) / 8;
             byte[] data = new byte[Image.PixelHeight * stride];

@@ -101,6 +101,31 @@ namespace Level
 
         //---------------------------------------------------------------------------
 
+        public void Resize(int left, int right, int top, int bottom)
+        {
+            Cell[,] newCells = new Cell[Width + left + right, Height + top + bottom];
+            for (int y = 0; y < newCells.GetLength(1); y++)
+            {
+                for (int x = 0; x < newCells.GetLength(0); x++)
+                {
+                    if (x >= left && x < newCells.GetLength(0) - right && y >= top && y < newCells.GetLength(1) - bottom)
+                    {
+                        Cell cell = Cells[x - left, y - top];
+                        cell.X = x;
+                        cell.Y = y;
+                        newCells[x, y] = cell;
+                    }
+                    else
+                    {
+                        newCells[x, y] = new Cell(x, y, false);
+                    }
+                }
+            }
+            Cells = newCells;
+        }
+
+        //---------------------------------------------------------------------------
+
         public static void Save(Map map, string path)
         {
             try
@@ -161,6 +186,7 @@ namespace Level
             Layers = new Dictionary<ELayerMode, Layer>();
             foreach (ELayerMode mode in Enum.GetValues(typeof(ELayerMode)))
             {
+                if (mode == ELayerMode.None) continue;
                 Layers.Add(mode, new Layer(-1, -1));
             }
             IsBlocked = isBlocked;

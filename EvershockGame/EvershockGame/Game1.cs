@@ -34,6 +34,7 @@ namespace EvershockGame
         protected override void Initialize()
         {
             base.Initialize();
+            Window.AllowUserResizing = true;
 
             GameWindowSettings.SetWindowSettings(graphics,Window);
 
