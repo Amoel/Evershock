@@ -15,12 +15,16 @@ namespace EntityComponent
 
         public Guid Entity { get; private set; }
 
+        public bool IsEnabled { get; private set; }
+
         //---------------------------------------------------------------------------
 
         public Component(Guid entity)
         {
             GUID = Guid.NewGuid();
             Entity = entity;
+
+            IsEnabled = true;
         }
 
         //---------------------------------------------------------------------------
@@ -63,5 +67,19 @@ namespace EntityComponent
         //---------------------------------------------------------------------------
 
         public virtual void OnCleanup() { }
+
+        //---------------------------------------------------------------------------
+
+        public void Enable()
+        {
+            IsEnabled = true;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Disable()
+        {
+            IsEnabled = false;
+        }
     }
 }

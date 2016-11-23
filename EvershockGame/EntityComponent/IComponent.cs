@@ -11,11 +11,16 @@ namespace EntityComponent
         Guid GUID { get; }
         string Name { get; }
 
+        bool IsEnabled { get; }
+
         //---------------------------------------------------------------------------
         
         T GetComponent<T>() where T : IComponent;
         List<IComponent> GetComponents();
 
         void OnCleanup();
+
+        void Enable();
+        void Disable();
     }
 }

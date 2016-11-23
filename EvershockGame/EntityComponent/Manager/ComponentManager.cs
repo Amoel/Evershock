@@ -170,6 +170,7 @@ namespace EntityComponent.Manager
 
             foreach (SmartContainer<ITickableComponent> container in m_TickableComponents.Values)
             {
+                if (!((IComponent)container.Data).IsEnabled) continue;
                 container.Data.Tick(deltaTime);
             }
         }
@@ -180,6 +181,7 @@ namespace EntityComponent.Manager
         {
             foreach (SmartContainer<IDrawableComponent> container in m_DrawableComponents.Values)
             {
+                if (!((IComponent)container.Data).IsEnabled) continue;
                 container.Data.Draw(batch, data);
             }
         }
@@ -190,6 +192,7 @@ namespace EntityComponent.Manager
         {
             foreach (SmartContainer<ILightingComponent> container in m_LightingComponents.Values)
             {
+                if (!((IComponent)container.Data).IsEnabled) continue;
                 container.Data.Draw(batch, data);
             }
         }

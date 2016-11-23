@@ -15,6 +15,8 @@ namespace EntityComponent
         List<Guid> Children { get; }
         List<Guid> Components { get; }
 
+        bool IsEnabled { get; }
+
         //---------------------------------------------------------------------------
 
         void SetParent(Guid guid);
@@ -63,5 +65,10 @@ namespace EntityComponent
         //---------------------------------------------------------------------------
 
         IEntity Duplicate();
+
+        //---------------------------------------------------------------------------
+
+        void Enable();
+        void Disable();
     }
 }

@@ -17,6 +17,8 @@ namespace EntityComponent
         public List<Guid> Children { get; private set; }
         public List<Guid> Components { get; private set; }
 
+        public bool IsEnabled { get; private set; }
+
         //---------------------------------------------------------------------------
 
         public Entity(string name)
@@ -26,6 +28,8 @@ namespace EntityComponent
 
             Children = new List<Guid>();
             Components = new List<Guid>();
+
+            IsEnabled = true;
 
             SetParent(null);
         }
@@ -283,6 +287,24 @@ namespace EntityComponent
         //---------------------------------------------------------------------------
 
         public virtual IEntity Duplicate() { return null; }
+
+        public void Enable()
+        {
+            IsEnabled = true;
+            foreach (IComponent component in GetComponents())
+            {
+                component.Enable();
+            }
+        }
+
+        public void Disable()
+        {
+            IsEnabled = false;
+            foreach (IComponent component in GetComponents())
+            {
+                component.Disable();
+            }
+        }
 
         //---------------------------------------------------------------------------
 
