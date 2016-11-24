@@ -46,6 +46,7 @@
     <Compile Include="Code\Components\AttributesComponent.cs" />
     <Compile Include="Code\Components\MapComponent.cs" />
     <Compile Include="Code\Components\MovementAnimationComponent.cs" />
+    <Compile Include="Code\Entities\Chest.cs" />
     <Compile Include="Code\GameTags.cs" />
     <Compile Include="Code\GameWindowSettings.cs" />
     <Compile Include="Code\Managers\MapManager.cs" />
@@ -203,7 +204,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Code\Entities\" />
     <Folder Include="Content\Fonts\" />
     <Folder Include="Content\Sounds\" />
   </ItemGroup>

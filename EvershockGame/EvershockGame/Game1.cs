@@ -8,6 +8,7 @@ using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace EvershockGame
 {
@@ -125,11 +126,8 @@ namespace EvershockGame
                         Other
             --------------------------------------------------------------------------*/
 
-            IEntity rock3 = EntityFactory.Create<Entity>("Rock3");
-            rock3.AddComponent<TransformComponent>().Init(new Vector3(200, 0, 0));
-            rock3.AddComponent<PhysicsComponent>();
-            rock3.AddComponent<CircleColliderComponent>().Init(30, Vector2.Zero, BodyType.Dynamic, 10.0f);
-            rock3.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"));
+            Chest testChest = EntityFactory.Create<Chest>("hallo");
+            testChest.Init(new Vector2(300, 200));
 
             IEntity map = EntityFactory.Create<Entity>("Map");
             map.AddComponent<TransformComponent>();
