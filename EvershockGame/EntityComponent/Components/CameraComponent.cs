@@ -3,9 +3,20 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EntityComponent.Components
 {
+    public enum ECameraMode
+    {
+        None,
+        FusedLeft,
+        FusedRight,
+        Split
+    };
+
+    //---------------------------------------------------------------------------
+
     [Serializable]
     [RequireComponent(typeof(TransformComponent))]
     public class CameraComponent : Component, ITickableComponent
@@ -19,15 +30,20 @@ namespace EntityComponent.Components
         private Dictionary<Guid, CameraTarget> m_Targets;
 
         private Effect m_LightingEffect;
+        private ECameraMode m_CameraMode;
+        private CameraComponent m_Other;
 
         public bool IsInitialized { get { return m_ComponentsTarget != null; } }
         public bool IsLightingEnabled { get; set; }
+
+        public Vector3 Center { get; private set; }
 
         //---------------------------------------------------------------------------
 
         public CameraComponent(Guid entity) : base(entity)
         {
             m_Targets = new Dictionary<Guid, CameraTarget>();
+            m_CameraMode = ECameraMode.Split;
             CameraManager.Get().RegisterCamera(this);
 
             IsLightingEnabled = true;
@@ -66,28 +82,64 @@ namespace EntityComponent.Components
             TransformComponent transform = GetComponent<TransformComponent>();
             if (transform != null)
             {
-                List<Vector3> locations = new List<Vector3>();
-                Vector3 center = Vector3.Zero;
-
-                foreach (CameraTarget target in m_Targets.Values)
+                CalculateCenter(transform.Location);
+                
+                Vector3 distance = Vector3.Zero;
+                
+                switch (m_CameraMode)
                 {
-                    TransformComponent targetTransform = ComponentManager.Get().Find<TransformComponent>(target.Target);
-                    if (targetTransform != null)
-                    {
-                        if (target.Distance <= 0.0f || Vector2.Distance(targetTransform.Location.To2D(), transform.Location.To2D()) < target.Distance)
+                    case ECameraMode.Split:
+                        distance = Center - transform.Location;
+                        transform.MoveBy(distance / 20.0f);
+                        break;
+                    case ECameraMode.FusedLeft:
+                    case ECameraMode.FusedRight:
+                        if (m_Other != null)
                         {
-                            locations.Add(targetTransform.Location);
-                            center += targetTransform.Location;
-                            
+                            Vector3 fusedCenter = Vector3.Zero;
+                            if (m_CameraMode == ECameraMode.FusedLeft)
+                            {
+                                fusedCenter = (Center + m_Other.Center) / 2.0f - new Vector3(m_MainTarget.Width / 2, 0, 0);
+                            }
+                            else
+                            {
+                                fusedCenter = (Center + m_Other.Center) / 2.0f + new Vector3(m_MainTarget.Width / 2, 0, 0);
+                            }
+                            distance = fusedCenter - transform.Location;
+                            if (distance.Length() < 1.0f)
+                            {
+                                transform.MoveTo(fusedCenter);
+                            }
+                            else
+                            {
+                                transform.MoveBy(distance / 10.0f);
+                            }
                         }
+                        break;
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void CalculateCenter(Vector3 location)
+        {
+            List<Vector3> locations = new List<Vector3>();
+            Center = Vector3.Zero;
+            foreach (CameraTarget target in m_Targets.Values)
+            {
+                TransformComponent targetTransform = ComponentManager.Get().Find<TransformComponent>(target.Target);
+                if (targetTransform != null)
+                {
+                    if (target.Distance <= 0.0f || Vector2.Distance(targetTransform.Location.To2D(), location.To2D()) < target.Distance)
+                    {
+                        locations.Add(targetTransform.Location);
+                        Center += targetTransform.Location;
+
                     }
                 }
-                center /= (float)locations.Count;
-
-                Vector3 distance = center - transform.Location;
-
-                transform.MoveBy(distance / 20.0f);
             }
+            Center /= (float)locations.Count;
         }
 
         //---------------------------------------------------------------------------
@@ -160,6 +212,7 @@ namespace EntityComponent.Components
                 if (transform != null && !m_Targets.ContainsKey(transform.GUID))
                 {
                     m_Targets.Add(transform.GUID, new CameraTarget(transform.GUID, priority, distance));
+                    CalculateCenter(transform.Location);
                 }
             }
         }
@@ -174,8 +227,24 @@ namespace EntityComponent.Components
                 if (transform != null && m_Targets.ContainsKey(transform.GUID))
                 {
                     m_Targets.Remove(transform.GUID);
+                    CalculateCenter(transform.Location);
                 }
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Fuse(CameraComponent other, ECameraMode mode)
+        {
+            m_Other = other;
+            m_CameraMode = mode;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Split()
+        {
+            m_CameraMode = ECameraMode.Split;
         }
     }
 

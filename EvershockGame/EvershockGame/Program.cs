@@ -23,6 +23,7 @@ namespace EvershockGame
                     {
                         case "ShowDebugView": CollisionManager.Get().IsDebugViewActive = true; break;
                         case "HideAsserts": AssertManager.Get().HideAsserts = true; break;
+                        case "ShowUIDebugView": UIManager.Get().IsUIDebugViewActive = true; break;
                     }
                 }
             }

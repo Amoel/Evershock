@@ -1,5 +1,7 @@
 ﻿using EntityComponent;
 using EntityComponent.Components;
+using EntityComponent.Components.UI;
+using EntityComponent.Entities;
 using EntityComponent.Factory;
 using EntityComponent.Manager;
 using EvershockGame.Code;
@@ -40,6 +42,8 @@ namespace EvershockGame
 
             int width = GraphicsDevice.PresentationParameters.BackBufferWidth;
             int height = GraphicsDevice.PresentationParameters.BackBufferHeight;
+
+            UIManager.Get().Init(GraphicsDevice, width, height);
 
 
             /*--------------------------------------------------------------------------
@@ -111,6 +115,8 @@ namespace EvershockGame
             CameraComponent cam2 = camera2.AddComponent<CameraComponent>();
             cam2.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
             cam2.AddTarget(player2);
+            
+            CameraManager.Get().FuseCameras(cam, cam2, 500);
 
             /*--------------------------------------------------------------------------
                         Other
@@ -128,6 +134,24 @@ namespace EvershockGame
             map.AddComponent<MapComponent>().Init(AssetManager.Get().Find<Level.Map>("TestMap"));
             
             MapManager.Get().CreateCollisionFromMap(map, AssetManager.Get().Find<Level.Map>("TestMap"));
+
+            /*--------------------------------------------------------------------------
+                        UI
+            --------------------------------------------------------------------------*/
+
+            ImageControl leftHP = EntityFactory.Create<ImageControl>("HP");
+            leftHP.VerticalAlignment = EVerticalAlignment.Top;
+            leftHP.HorizontalAlignment = EHorizontalAlignment.Left;
+            leftHP.Size = new Point(225, 50);
+
+            AreaControl area = EntityFactory.Create<AreaControl>("Test");
+            area.Size = new Point(300, 300);
+
+            ImageControl rightHP = EntityFactory.Create<ImageControl>(area.GUID, "HP");
+            rightHP.VerticalAlignment = EVerticalAlignment.Center;
+            rightHP.HorizontalAlignment = EHorizontalAlignment.Right;
+            rightHP.Margin = new Rectangle();
+            rightHP.Size = new Point(225, 50);
         }
         
         protected override void LoadContent()
@@ -150,6 +174,8 @@ namespace EvershockGame
             AssetManager.Get().Store<Texture2D>("Background1", "Graphics/Camera/BackgroundTexture1");
             AssetManager.Get().Store<Texture2D>("Background2", "Graphics/Camera/BackgroundTexture1");
             AssetManager.Get().Store<Texture2D>("GroundTile1", "Graphics/Camera/BackgroundTexture1");
+
+            AssetManager.Get().Store<Texture2D>("Healthbar", "Graphics/Debug/Healthbar");
 
             AssetManager.Get().Store<Texture2D>("ChestClosed1", "Graphics/Tiles/ChestClosed1");
             AssetManager.Get().Store<Texture2D>("ChestOpened1", "Graphics/Tiles/ChestOpened1");
@@ -181,6 +207,14 @@ namespace EvershockGame
                 GameWindowSettings.ToggleFullscreen(graphics, Window);
             }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.F9))
+            {
+                UIManager.Get().IsUIDebugViewActive = true;
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.F10))
+            {
+                UIManager.Get().IsUIDebugViewActive = false;
+            }
             if (Keyboard.GetState().IsKeyDown(Keys.F11))
             {
                 CollisionManager.Get().IsDebugViewActive = true;
@@ -195,8 +229,8 @@ namespace EvershockGame
                 Exit();
             }
 #endif
-            ComponentManager.Get().TickComponents(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
-            PhysicsManager.Get().Step(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
+            GameManager.Get().Tick(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
+
             base.Update(gameTime);
 
             if (Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl)))
@@ -208,7 +242,7 @@ namespace EvershockGame
         
         protected override void Draw(GameTime gameTime)
         {
-            CameraManager.Get().Render(GraphicsDevice, spriteBatch);
+            GameManager.Get().Render(GraphicsDevice, spriteBatch);
             base.Draw(gameTime);
         }
     }

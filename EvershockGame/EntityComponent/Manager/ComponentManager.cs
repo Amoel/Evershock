@@ -23,6 +23,8 @@ namespace EntityComponent.Manager
         private Dictionary<Guid, SmartContainer<IDrawableComponent>> m_DrawableComponents;
         [JsonIgnore]
         private Dictionary<Guid, SmartContainer<ILightingComponent>> m_LightingComponents;
+        [JsonIgnore]
+        private Dictionary<Guid, SmartContainer<IDrawableUIComponent>> m_DrawableUIComponents;
 
         [JsonIgnore]
         private Queue<IComponent> m_RegisterQueue;
@@ -41,6 +43,7 @@ namespace EntityComponent.Manager
             m_TickableComponents = new Dictionary<Guid, SmartContainer<ITickableComponent>>();
             m_DrawableComponents = new Dictionary<Guid, SmartContainer<IDrawableComponent>>();
             m_LightingComponents = new Dictionary<Guid, SmartContainer<ILightingComponent>>();
+            m_DrawableUIComponents = new Dictionary<Guid, SmartContainer<IDrawableUIComponent>>();
 
             m_RegisterQueue = new Queue<IComponent>();
             m_UnregisterQueue = new Queue<Guid>();
@@ -69,6 +72,11 @@ namespace EntityComponent.Manager
             {
                 m_LightingComponents = new Dictionary<Guid, SmartContainer<ILightingComponent>>();
             }
+
+            if (m_DrawableUIComponents == null)
+            {
+                m_DrawableUIComponents = new Dictionary<Guid, SmartContainer<IDrawableUIComponent>>();
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -95,6 +103,10 @@ namespace EntityComponent.Manager
                 if (component is ILightingComponent && !m_LightingComponents.ContainsKey(component.GUID))
                 {
                     m_LightingComponents.Add(component.GUID, new SmartContainer<ILightingComponent>(component as ILightingComponent));
+                }
+                if (component is IDrawableUIComponent && !m_DrawableUIComponents.ContainsKey(component.GUID))
+                {
+                    m_DrawableUIComponents.Add(component.GUID, new SmartContainer<IDrawableUIComponent>(component as IDrawableUIComponent));
                 }
                 if (!m_Components.ContainsKey(component.GUID))
                 {
@@ -126,6 +138,7 @@ namespace EntityComponent.Manager
                 if (component is ITickableComponent && m_TickableComponents.ContainsKey(component.GUID)) m_TickableComponents.Remove(component.GUID);
                 if (component is IDrawableComponent && m_DrawableComponents.ContainsKey(component.GUID)) m_DrawableComponents.Remove(component.GUID);
                 if (component is ILightingComponent && m_LightingComponents.ContainsKey(component.GUID)) m_LightingComponents.Remove(component.GUID);
+                if (component is IDrawableUIComponent && m_DrawableUIComponents.ContainsKey(component.GUID)) m_DrawableUIComponents.Remove(component.GUID);
                 if (m_Components.ContainsKey(component.GUID)) m_Components.Remove(component.GUID);
             }
         }
@@ -199,23 +212,13 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
-        //public void RenderCameras(GraphicsDevice device, SpriteBatch batch)
-        //{
-        //    foreach (SmartContainer<ICameraComponent> container in m_CameraComponents.Values)
-        //    {
-        //        container.Data.Render(device, batch);
-        //    }
-
-        //    device.SetRenderTarget(null);
-        //    device.Clear(Color.CornflowerBlue);
-        //    batch.Begin();
-        //    int index = 0;
-        //    foreach (SmartContainer<ICameraComponent> container in m_CameraComponents.Values)
-        //    {
-        //        batch.Draw(container.Data.GetTexture(), new Vector2(index * device.PresentationParameters.BackBufferWidth / 2, 0));
-        //        index++;
-        //    }
-        //    batch.End();
-        //}
+        public void DrawUIComponents(SpriteBatch batch)
+        {
+            foreach (SmartContainer<IDrawableUIComponent> container in m_DrawableUIComponents.Values)
+            {
+                if (!((IComponent)container.Data).IsEnabled) continue;
+                container.Data.Draw(batch);
+            }
+        }
     }
 }

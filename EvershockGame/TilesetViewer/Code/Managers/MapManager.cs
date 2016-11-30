@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace TilesetViewer
@@ -279,6 +280,17 @@ namespace TilesetViewer
             {
 
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public MessageBoxResult CheckForChanges()
+        {
+            if (m_Map != null && ContainsChanges)
+            {
+                return MessageBox.Show("Do you want to save all changes?", "Unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            }
+            return MessageBoxResult.None;
         }
     }
 }
