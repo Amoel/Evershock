@@ -12,10 +12,10 @@ namespace EntityComponent.Factory
     {
         public static T Create<T>(string name) where T : class, IEntity
         {
-            if (AssertManager.Get().Show(typeof(UIEntity).IsAssignableFrom(typeof(T)), "Wrong Create<T> called for UI entity. Please use CreateUI<T>."))
-            {
-                return CreateUI<T>(name, null);
-            }
+            //if (AssertManager.Get().Show(typeof(T).IsAssignableFrom(typeof(UIEntity)), "Wrong Create<T> called for UI entity. Please use CreateUI<T>."))
+            //{
+            //    return CreateUI<T>(name, null);
+            //}
             return Create<T>(Guid.Empty, name);
         }
 
@@ -23,10 +23,10 @@ namespace EntityComponent.Factory
 
         public static T Create<T>(Guid parent, string name) where T : class, IEntity
         {
-            if (AssertManager.Get().Show(typeof(UIEntity).IsAssignableFrom(typeof(T)), "Wrong Create<T> called for UI entity. Please use CreateUI<T>."))
-            {
-                return CreateUI<T>(parent, name, null);
-            }
+            //if (AssertManager.Get().Show(typeof(T).IsAssignableFrom(typeof(UIEntity)), "Wrong Create<T> called for UI entity. Please use CreateUI<T>."))
+            //{
+            //    return CreateUI<T>(parent, name, null);
+            //}
             T entity = (T)Activator.CreateInstance(typeof(T), name);
             if (entity != null)
             {
@@ -40,10 +40,10 @@ namespace EntityComponent.Factory
 
         public static T CreateUI<T>(string name, Frame frame = null) where T : class, IEntity
         {
-            if (AssertManager.Get().Show(!typeof(UIEntity).IsAssignableFrom(typeof(T)), "Wrong Create<T> called for entity. Please use Create<T>."))
-            {
-                return Create<T>(name);
-            }
+            //if (AssertManager.Get().Show(!typeof(T).IsAssignableFrom(typeof(UIEntity)), "Wrong Create<T> called for entity. Please use Create<T>."))
+            //{
+            //    return Create<T>(name);
+            //}
             return CreateUI<T>(Guid.Empty, name, frame);
         }
 
@@ -51,10 +51,10 @@ namespace EntityComponent.Factory
 
         public static T CreateUI<T>(Guid parent, string name, Frame frame = null) where T : class, IEntity
         {
-            if (AssertManager.Get().Show(!typeof(UIEntity).IsAssignableFrom(typeof(T)), "Wrong Create<T> called for entity. Please use Create<T>."))
-            {
-                return Create<T>(parent, name);
-            }
+            //if (AssertManager.Get().Show(!typeof(T).IsAssignableFrom(typeof(UIEntity)), "Wrong Create<T> called for entity. Please use Create<T>."))
+            //{
+            //    return Create<T>(parent, name);
+            //}
             T entity = (T)Activator.CreateInstance(typeof(T), name, frame);
             if (entity != null)
             {

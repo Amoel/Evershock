@@ -142,12 +142,12 @@ namespace EvershockGame
                         UI
             --------------------------------------------------------------------------*/
 
-            ImageControl leftHP = EntityFactory.Create<ImageControl>("HP");
+            ImageControl leftHP = EntityFactory.CreateUI<ImageControl>("HP");
             leftHP.VerticalAlignment = EVerticalAlignment.Top;
             leftHP.HorizontalAlignment = EHorizontalAlignment.Left;
             leftHP.Size = new Point(225, 50);
 
-            ImageControl rightHP = EntityFactory.Create<ImageControl>("HP");
+            ImageControl rightHP = EntityFactory.CreateUI<ImageControl>("HP");
             rightHP.VerticalAlignment = EVerticalAlignment.Top;
             rightHP.HorizontalAlignment = EHorizontalAlignment.Right;
             rightHP.Size = new Point(225, 50);
