@@ -1,4 +1,5 @@
 ﻿using EntityComponent.Components;
+using EntityComponent.Factory;
 using Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -38,34 +39,34 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
-        public void RegisterCamera(CameraComponent camera)
+        public void RegisterCamera(Camera camera)
         {
-            if (camera != null && !m_Cameras.Contains(camera.GUID))
+            if (camera != null && !m_Cameras.Contains(camera.Properties.GUID))
             {
-                m_Cameras.Add(camera.GUID);
+                m_Cameras.Add(camera.Properties.GUID);
             }
         }
 
         //---------------------------------------------------------------------------
 
-        public void UnregisterCamera(CameraComponent camera)
+        public void UnregisterCamera(Camera camera)
         {
-            if (camera != null && m_Cameras.Contains(camera.GUID))
+            if (camera != null && m_Cameras.Contains(camera.Properties.GUID))
             {
-                m_Cameras.Remove(camera.GUID);
+                m_Cameras.Remove(camera.Properties.GUID);
             }
         }
 
         //---------------------------------------------------------------------------
 
-        public void ResizeCameras(GraphicsDevice device, int width, int height)
+        public void ResizeCameras(int width, int height)
         {
             foreach (Guid guid in m_Cameras)
             {
                 CameraComponent camera = ComponentManager.Get().Find<CameraComponent>(guid);
                 if (camera != null && camera.IsInitialized)
                 {
-                    camera.ResizeCamera(device, width, height);
+                    camera.ResizeCamera(width, height);
                 }
             }
         }
@@ -81,22 +82,50 @@ namespace EntityComponent.Manager
 
                 if (first != null && second != null)
                 {
-                    if (Vector3.Distance(first.Center, second.Center) < data.Distance)
+                    Camera camera1 = EntityManager.Get().Find<Camera>(first.Entity);
+                    Camera camera2 = EntityManager.Get().Find<Camera>(second.Entity);
+                    if (camera1 != null && camera2 != null)
                     {
-                        TransformComponent firstTransform = first.GetComponent<TransformComponent>();
-                        TransformComponent secondTransform = second.GetComponent<TransformComponent>();
-
-                        if (firstTransform != null && secondTransform != null)
+                        switch (data.Mode)
                         {
-                            bool firstIsLeft = (firstTransform.AbsoluteLocation.X < secondTransform.AbsoluteLocation.X);
-                            first.Fuse(second, firstIsLeft ? ECameraMode.FusedLeft : ECameraMode.FusedRight);
-                            second.Fuse(first, firstIsLeft ? ECameraMode.FusedRight : ECameraMode.FusedLeft);
+                            case ECameraMode.Split:
+                                if (Vector3.Distance(first.GetCenter(ECameraTargetGroup.One), second.GetCenter(ECameraTargetGroup.One)) < data.Distance)
+                                {
+                                    data.UpdateMode(ECameraMode.Fused);
+                                    first.SetCameraMode(ECameraMode.Fused, second);
+                                    second.SetCameraMode(ECameraMode.Fused, first);
+                                }
+                                break;
+                            case ECameraMode.Fused:
+                                if (Vector3.Distance(first.GetCenter(ECameraTargetGroup.One), second.GetCenter(ECameraTargetGroup.One)) > data.Distance)
+                                {
+                                    data.UpdateMode(ECameraMode.Split);
+                                    first.SetCameraMode(ECameraMode.Split);
+                                    second.SetCameraMode(ECameraMode.Split);
+                                }
+                                else
+                                {
+                                    Vector3 firstLocation = camera1.Transform.Location;
+                                    Vector3 secondLocation = camera2.Transform.Location;
+                                    if (Math.Abs(firstLocation.X - secondLocation.X) <= (first.Width + second.Width) / 2 && Math.Abs(firstLocation.Y - secondLocation.Y) <= 0.0f)
+                                    {
+                                        MergeCameras(camera1, camera2);
+                                        data.UpdateMode(ECameraMode.Merged);
+                                        first.SetCameraMode(ECameraMode.Merged);
+                                        second.SetCameraMode(ECameraMode.Merged);
+                                    }
+                                }
+                                break;
+                            case ECameraMode.Merged:
+                                if (Vector3.Distance(first.GetCenter(ECameraTargetGroup.One), second.GetCenter(ECameraTargetGroup.One)) > data.Distance)
+                                {
+                                    SplitCameras(camera1, camera2);
+                                    data.UpdateMode(ECameraMode.Split);
+                                    first.SetCameraMode(ECameraMode.Split);
+                                    second.SetCameraMode(ECameraMode.Split);
+                                }
+                                break;
                         }
-                    }
-                    else
-                    {
-                        first.Split();
-                        second.Split();
                     }
                 }
             }
@@ -104,62 +133,98 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
-        public void Render(GraphicsDevice device, SpriteBatch batch)
+        public void Render(SpriteBatch batch)
         {
             if (m_Targets == null) m_Targets = new List<RenderTarget2D>();
             else m_Targets.Clear();
-
-            //List<RenderTarget2D> targets = new List<RenderTarget2D>();
+            
             foreach (Guid guid in m_Cameras)
             {
                 CameraComponent camera = ComponentManager.Get().Find<CameraComponent>(guid);
-                if (camera != null && camera.IsInitialized)
+                if (camera != null && camera.IsInitialized && EntityManager.Get().Find<Camera>(camera.Entity).IsEnabled)
                 {
-                    m_Targets.Add(camera.Render(device, batch));
+                    m_Targets.Add(camera.Render(batch));
                 }
             }
-
-            //device.SetRenderTarget(null);
-            //device.Clear(Color.CornflowerBlue);
-            //batch.Begin();
-            //for (int i = 0; i < targets.Count; i++)
-            //{
-            //    batch.Draw(targets[i], new Rectangle(i * device.PresentationParameters.BackBufferWidth / targets.Count, 0, device.PresentationParameters.BackBufferWidth / targets.Count, device.PresentationParameters.BackBufferHeight), Color.White);
-            //}
-            //batch.End();
         }
 
         //---------------------------------------------------------------------------
 
         public void Draw(GraphicsDevice device, SpriteBatch batch)
         {
-            for (int i = 0; i < m_Targets.Count; i++)
+            foreach (Guid guid in m_Cameras)
             {
-                batch.Draw(m_Targets[i], new Rectangle(i * device.PresentationParameters.BackBufferWidth / m_Targets.Count, 0, device.PresentationParameters.BackBufferWidth / m_Targets.Count, device.PresentationParameters.BackBufferHeight), Color.White);
+                CameraComponent camera = ComponentManager.Get().Find<CameraComponent>(guid);
+                if (camera != null && camera.IsInitialized && EntityManager.Get().Find<Camera>(camera.Entity).IsEnabled)
+                {
+                    camera.Draw(batch);
+                }
             }
         }
 
         //---------------------------------------------------------------------------
 
-        public void FuseCameras(CameraComponent first, CameraComponent second, float distance)
+        public void FuseCameras(Camera first, Camera second, float distance)
         {
-            m_FusedCameras.Add(new CameraFuseData(first.GUID, second.GUID, distance));
+            m_FusedCameras.Add(new CameraFuseData(first.Properties.GUID, second.Properties.GUID, distance));
         }
 
         //---------------------------------------------------------------------------
 
-        public void SplitCameras(CameraComponent first, CameraComponent second)
+        private void MergeCameras(Camera left, Camera right)
         {
-            m_FusedCameras.RemoveAll(x => x.First == first.GUID && x.Second == second.GUID);
+            left.Properties.ResizeCamera(left.Properties.Width + right.Properties.Width, left.Properties.Height);
+            left.Properties.Viewport = new Rectangle(0, 0, left.Properties.Viewport.Width + right.Properties.Viewport.Width, left.Properties.Viewport.Height);
+            foreach (CameraTarget target in right.Properties.GetTargets())
+            {
+                left.Properties.AddTarget(new CameraTarget(target.Target, ECameraTargetGroup.Two, target.Distance));
+            }
+            left.Transform.MoveTo(left.Properties.GetCenter());
+            right.Disable();
+            left.Properties.SetCameraMode(ECameraMode.Merged, right.Properties);
+            right.Properties.SetCameraMode(ECameraMode.Merged, left.Properties);
         }
 
         //---------------------------------------------------------------------------
 
-        struct CameraFuseData
+        private void SplitCameras(Camera left, Camera right)
+        {
+            left.Properties.ResizeCamera(left.Properties.Width - right.Properties.Width, left.Properties.Height);
+
+            if (left.Properties.GetCenter(ECameraTargetGroup.One).X < left.Properties.GetCenter(ECameraTargetGroup.Two).X)
+            {
+                left.Properties.Viewport = new Rectangle(0, 0, Width / 2, Height);
+                right.Properties.Viewport = new Rectangle(Width / 2, 0, Width / 2, Height);
+
+                left.Transform.MoveTo(left.Properties.GetCenter() - new Vector3(left.Properties.Width / 2, 0, 0));
+                right.Transform.MoveTo(left.Properties.GetCenter() + new Vector3(right.Properties.Width / 2, 0, 0));
+            }
+            else
+            {
+                right.Properties.Viewport = new Rectangle(0, 0, Width / 2, Height);
+                left.Properties.Viewport = new Rectangle(Width / 2, 0, Width / 2, Height);
+
+                left.Transform.MoveTo(left.Properties.GetCenter() + new Vector3(left.Properties.Width / 2, 0, 0));
+                right.Transform.MoveTo(left.Properties.GetCenter() - new Vector3(right.Properties.Width / 2, 0, 0));
+            }
+            
+            foreach (CameraTarget target in right.Properties.GetTargets())
+            {
+                left.Properties.RemoveTarget(target.Target);
+            }
+            right.Enable();
+            left.Properties.SetCameraMode(ECameraMode.Fused, right.Properties);
+            right.Properties.SetCameraMode(ECameraMode.Fused, left.Properties);
+        }
+
+        //---------------------------------------------------------------------------
+
+        class CameraFuseData
         {
             public Guid First { get; private set; }
             public Guid Second { get; private set; }
             public float Distance { get; private set; }
+            public ECameraMode Mode { get; private set; }
 
             //---------------------------------------------------------------------------
 
@@ -168,6 +233,14 @@ namespace EntityComponent.Manager
                 First = first;
                 Second = second;
                 Distance = distance;
+                Mode = ECameraMode.Split;
+            }
+
+            //---------------------------------------------------------------------------
+
+            public void UpdateMode(ECameraMode mode)
+            {
+                Mode = mode;
             }
         }
     }

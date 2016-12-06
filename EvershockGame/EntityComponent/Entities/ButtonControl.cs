@@ -1,4 +1,5 @@
 ﻿using EntityComponent.Components.UI;
+using EntityComponent.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace EntityComponent.Entities
 
         //---------------------------------------------------------------------------
 
-        public ButtonControl(string name) : base(name)
+        public ButtonControl(string name, Frame frame) : base(name, frame)
         {
             AddComponent<ButtonComponent>();
         }

@@ -80,6 +80,17 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
+        public T Find<T>(Guid guid) where T : IEntity
+        {
+            if (m_Entities.ContainsKey(guid))
+            {
+                return (T)m_Entities[guid];
+            }
+            return default(T);
+        }
+
+        //---------------------------------------------------------------------------
+
         public void UpdateParent(Guid child, Guid parent)
         {
             m_Hierarchy[child] = parent;

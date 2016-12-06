@@ -81,5 +81,27 @@ namespace EntityComponent
         {
             IsEnabled = false;
         }
+
+        //---------------------------------------------------------------------------
+
+        public void EnableEntity()
+        {
+            IEntity entity = EntityManager.Get().Find(Entity);
+            if (entity != null)
+            {
+                entity.Enable();
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void DisableEntity()
+        {
+            IEntity entity = EntityManager.Get().Find(Entity);
+            if (entity != null)
+            {
+                entity.Disable();
+            }
+        }
     }
 }

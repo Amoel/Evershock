@@ -51,6 +51,14 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
+        public void PreTick(float deltaTime) { }
+
+        //---------------------------------------------------------------------------
+
+        public void PostTick(float deltaTime) { }
+
+        //---------------------------------------------------------------------------
+
         public void Tick(float deltaTime)
         {
             m_Time += deltaTime;

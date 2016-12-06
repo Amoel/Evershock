@@ -148,6 +148,14 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
+        public void PreTick(float deltaTime) { }
+
+        //---------------------------------------------------------------------------
+
+        public void PostTick(float deltaTime) { }
+
+        //---------------------------------------------------------------------------
+
         public void Tick(float deltaTime)
         {
             if (m_State == EAnimationState.Playing) m_Settings[m_ActiveSetting].Tick(deltaTime);

@@ -47,7 +47,7 @@ namespace EvershockGame
             int height = GraphicsDevice.PresentationParameters.BackBufferHeight;
 
             UIManager.Get().Init(GraphicsDevice, width, height);
-
+            CameraManager.Get().Init(width, height);
 
             /*--------------------------------------------------------------------------
                        Player 1
@@ -111,22 +111,18 @@ namespace EvershockGame
             /*--------------------------------------------------------------------------
                         Camera
             --------------------------------------------------------------------------*/
-
-            IEntity camera = EntityFactory.Create<Entity>("Camera");
-
-            camera.AddComponent<TransformComponent>();
-            CameraComponent cam = camera.AddComponent<CameraComponent>();
-            cam.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
-            cam.AddTarget(player);
-
-            IEntity camera2 = EntityFactory.Create<Entity>("Camera");
-
-            camera2.AddComponent<TransformComponent>();
-            CameraComponent cam2 = camera2.AddComponent<CameraComponent>();
-            cam2.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
-            cam2.AddTarget(player2);
             
-            CameraManager.Get().FuseCameras(cam, cam2, 500);
+            Camera cam1 = EntityFactory.Create<Camera>("Cam1");
+            cam1.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
+            cam1.Properties.Viewport = new Rectangle(0, 0, width / 2, height);
+            cam1.Properties.AddTarget(player);
+
+            Camera cam2 = EntityFactory.Create<Camera>("Cam2");
+            cam2.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
+            cam2.Properties.Viewport = new Rectangle(width / 2, 0, width / 2, height);
+            cam2.Properties.AddTarget(player2);
+            
+            CameraManager.Get().FuseCameras(cam1, cam2, 600);
 
             /*--------------------------------------------------------------------------
                         Other
@@ -151,13 +147,9 @@ namespace EvershockGame
             leftHP.HorizontalAlignment = EHorizontalAlignment.Left;
             leftHP.Size = new Point(225, 50);
 
-            AreaControl area = EntityFactory.Create<AreaControl>("Test");
-            area.Size = new Point(300, 300);
-
-            ImageControl rightHP = EntityFactory.Create<ImageControl>(area.GUID, "HP");
-            rightHP.VerticalAlignment = EVerticalAlignment.Center;
+            ImageControl rightHP = EntityFactory.Create<ImageControl>("HP");
+            rightHP.VerticalAlignment = EVerticalAlignment.Top;
             rightHP.HorizontalAlignment = EHorizontalAlignment.Right;
-            rightHP.Margin = new Rectangle();
             rightHP.Size = new Point(225, 50);
         }
         

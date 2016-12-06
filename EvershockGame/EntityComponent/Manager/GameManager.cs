@@ -26,7 +26,7 @@ namespace EntityComponent.Manager
 
         public void Render(GraphicsDevice device, SpriteBatch batch)
         {
-            CameraManager.Get().Render(device, batch);
+            CameraManager.Get().Render(batch);
             UIManager.Get().Render(device, batch);
 
             device.SetRenderTarget(null);

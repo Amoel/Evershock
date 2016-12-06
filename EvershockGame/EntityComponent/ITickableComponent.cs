@@ -8,6 +8,8 @@ namespace EntityComponent
 {
     public interface ITickableComponent
     {
+        void PreTick(float deltaTime);
         void Tick(float deltaTime);
+        void PostTick(float deltaTime);
     }
 }

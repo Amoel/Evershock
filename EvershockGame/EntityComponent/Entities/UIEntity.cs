@@ -1,4 +1,5 @@
 ﻿using EntityComponent.Components.UI;
+using EntityComponent.Manager;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EntityComponent.Entities
 {
-    public abstract class UIEntity : Entity
+    public class UIEntity : Entity
     {
         public Point Size
         {
@@ -34,11 +35,35 @@ namespace EntityComponent.Entities
             set { GetComponent<UITransformComponent>().Margin = value; }
         }
 
+        public UIEntity Previous { get; set; }
+        public UIEntity Next { get; set; }
+
         //---------------------------------------------------------------------------
 
-        public UIEntity(string name) : base(name)
+        public UIEntity(string name, Frame frame) : base(name)
         {
             AddComponent<UITransformComponent>();
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Focus()
+        {
+            UIManager.Get().Focus(this);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void FocusNext()
+        {
+            UIManager.Get().Focus(Previous);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void FocusPrevious()
+        {
+            UIManager.Get().Focus(Next);
         }
     }
 }

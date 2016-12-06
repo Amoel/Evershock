@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EntityComponent.Manager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace EntityComponent.Entities
 {
     public class AreaControl : UIEntity
     {
-        public AreaControl(string name) : base(name) { }
+        public AreaControl(string name, Frame frame) : base(name, frame) { }
     }
 }

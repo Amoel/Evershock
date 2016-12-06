@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using EntityComponent.Entities;
+using Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -12,6 +13,7 @@ namespace EntityComponent.Manager
     public class UIManager : BaseManager<UIManager>
     {
         private RenderTarget2D m_Target;
+        private List<Frame> m_Frames;
 
         public Rectangle ScreenBounds { get; private set; }
 
@@ -26,8 +28,22 @@ namespace EntityComponent.Manager
         public void Init(GraphicsDevice device, int width, int height)
         {
             m_Target = new RenderTarget2D(device, width, height);
+            m_Frames = new List<Frame>();
             ScreenBounds = new Rectangle(0, 0, width, height);
-            Console.WriteLine(width + "/" + height);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void AddFrame()
+        {
+
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Focus(UIEntity entity)
+        {
+
         }
 
         //---------------------------------------------------------------------------
@@ -47,5 +63,12 @@ namespace EntityComponent.Manager
         {
             batch.Draw(m_Target, m_Target.Bounds, Color.White);
         }
+    }
+
+    //---------------------------------------------------------------------------
+
+    public class Frame
+    {
+
     }
 }

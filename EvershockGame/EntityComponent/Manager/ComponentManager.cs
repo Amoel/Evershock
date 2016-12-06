@@ -184,7 +184,19 @@ namespace EntityComponent.Manager
             foreach (SmartContainer<ITickableComponent> container in m_TickableComponents.Values)
             {
                 if (!((IComponent)container.Data).IsEnabled) continue;
+                container.Data.PreTick(deltaTime);
+            }
+
+            foreach (SmartContainer<ITickableComponent> container in m_TickableComponents.Values)
+            {
+                if (!((IComponent)container.Data).IsEnabled) continue;
                 container.Data.Tick(deltaTime);
+            }
+
+            foreach (SmartContainer<ITickableComponent> container in m_TickableComponents.Values)
+            {
+                if (!((IComponent)container.Data).IsEnabled) continue;
+                container.Data.PostTick(deltaTime);
             }
         }
 

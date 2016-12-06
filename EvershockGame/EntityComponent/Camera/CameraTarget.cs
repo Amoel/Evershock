@@ -5,12 +5,19 @@ using System.Text;
 
 namespace EntityComponent
 {
-    public enum ECameraPriority
+    public enum ECameraTargetGroup
     {
-        VeryHigh,
-        High,
-        Medium,
-        Low
+        None,
+        One,
+        Two,
+        Three,
+        Four,
+        Five,
+        Six,
+        Seven,
+        Eight,
+        Nine,
+        Ten
     }
 
     //---------------------------------------------------------------------------
@@ -18,15 +25,15 @@ namespace EntityComponent
     public class CameraTarget
     {
         public Guid Target { get; private set; }
-        public ECameraPriority Priority { get; private set; }
+        public ECameraTargetGroup Group { get; private set; }
         public float Distance { get; private set; }
 
         //---------------------------------------------------------------------------
 
-        public CameraTarget(Guid target, ECameraPriority priority, float distance)
+        public CameraTarget(Guid target, ECameraTargetGroup group, float distance)
         {
             Target = target;
-            Priority = priority;
+            Group = group;
             Distance = distance;
         }
     }

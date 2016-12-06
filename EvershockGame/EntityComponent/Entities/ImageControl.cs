@@ -1,4 +1,5 @@
 ﻿using EntityComponent.Components.UI;
+using EntityComponent.Manager;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace EntityComponent.Entities
 
         //---------------------------------------------------------------------------
 
-        public ImageControl(string name) : base(name)
+        public ImageControl(string name, Frame frame) : base(name, frame)
         {
             AddComponent<ImageComponent>();
         }

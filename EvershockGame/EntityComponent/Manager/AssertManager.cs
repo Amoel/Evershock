@@ -28,12 +28,13 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
-        public void Show(bool condition, string message)
+        public bool Show(bool condition, string message)
         {
             if (!HideAsserts)
             {
                 Debug.Assert(condition, message);
             }
+            return condition;
         }
     }
 }

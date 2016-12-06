@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera\Camera.cs" />
     <Compile Include="Camera\CameraTarget.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Components\AnimationComponent.cs" />

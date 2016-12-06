@@ -22,5 +22,7 @@ namespace EntityComponent
 
         void Enable();
         void Disable();
+        void EnableEntity();
+        void DisableEntity();
     }
 }

@@ -21,21 +21,16 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
+        public void PreTick(float deltaTime) { }
+
+        //---------------------------------------------------------------------------
+
+        public void PostTick(float deltaTime) { }
+
+        //---------------------------------------------------------------------------
+
         public void Tick(float deltaTime)
         {
-            //TransformComponent transform = GetComponent<TransformComponent>();
-            //if (transform != null)
-            //{
-            //    float xMovement = (GetValue(EGameAction.MOVE_RIGHT) - GetValue(EGameAction.MOVE_LEFT)) * deltaTime * 150;
-            //    float yMovement = (GetValue(EGameAction.MOVE_DOWN) - GetValue(EGameAction.MOVE_UP)) * deltaTime * 150;
-
-            //    Vector3 movement = new Vector3(xMovement, yMovement, 0);
-            //    if (movement.Length() > 0.0f)
-            //    {
-            //        transform.MoveBy(movement);
-            //    }
-            //}
-
             GameActionCollection actions = new GameActionCollection();
             foreach (EGameAction action in m_Mappings.Keys)
             {
@@ -51,37 +46,6 @@ namespace EntityComponent.Components
                     (component as IInputReceiver).ReceiveInput(actions, deltaTime);
                 }
             }
-
-            //PhysicsComponent physics = GetComponent<PhysicsComponent>();
-            //if (physics != null)
-            //{
-            //    float xMovement = (GetValue(EGameAction.MOVE_RIGHT) - GetValue(EGameAction.MOVE_LEFT)) * deltaTime * 200;
-            //    float yMovement = (GetValue(EGameAction.MOVE_DOWN) - GetValue(EGameAction.MOVE_UP)) * deltaTime * 200;
-
-            //    Vector3 movement = new Vector3(xMovement, yMovement, 0);
-            //    if (movement.Length() > 0.0f)
-            //    {
-            //        physics.ApplyForce(movement);
-            //    }
-            //}
-
-            //Health manipulation
-
-            //AttributesComponent attribute = GetComponent<AttributesComponent>();
-            //if (attribute != null)
-            //{
-            //    float keyValue = GetValue(EGameAction.ADD_HEALTH);
-            //    if (keyValue > 0)
-            //    {
-            //        attribute.ReplenishHealth(1);
-            //    }
-
-            //    keyValue = GetValue(EGameAction.REDUCE_HEALTH);
-            //    if (keyValue > 0)
-            //    {
-            //        attribute.TakeDamage(1);
-            //    }
-            //}
         }
 
         //---------------------------------------------------------------------------
