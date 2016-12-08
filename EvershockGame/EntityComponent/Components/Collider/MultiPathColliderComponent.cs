@@ -33,6 +33,13 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
+        public void Reset()
+        {
+            Body.FixtureList.Clear();
+        }
+
+        //---------------------------------------------------------------------------
+
         public void AddPath(Vector2 start, Vector2 end)
         {
             FixtureFactory.AttachEdge(start, end, Body, Entity);

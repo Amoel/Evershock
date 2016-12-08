@@ -6,16 +6,32 @@ using System;
 
 namespace EvershockGame.Code
 {
-    [RequireComponent(typeof(AttributesComponent))]
+    [RequireComponent(typeof(AttributesComponent), typeof(MovementAnimationComponent))]
     public class ActorPhysicsComponent : PhysicsComponent
     {
         public ActorPhysicsComponent(Guid entity) : base(entity) { }
 
+        //---------------------------------------------------------------------------
+
+        public override void Tick(float deltaTime)
+        {
+            base.Tick(deltaTime);
+
+            MovementAnimationComponent animation = GetComponent<MovementAnimationComponent>();
+
+            if (animation != null)
+            {
+                animation.Update(GetForce().X, GetForce().Y);
+                Console.WriteLine(GetForce().X);
+            }
+        }
+
+        //---------------------------------------------------------------------------
 
         public override void ReceiveInput(GameActionCollection actions, float deltaTime)
         {
             AttributesComponent attributes = GetComponent<AttributesComponent>();
-
+            
             if (attributes != null)
             {
                 float xMovement = (actions[EGameAction.MOVE_RIGHT] - actions[EGameAction.MOVE_LEFT]) * deltaTime * attributes.BaseMovementSpeed * 100;
@@ -24,16 +40,6 @@ namespace EvershockGame.Code
                 Vector3 movement = new Vector3(xMovement, yMovement, 0);
                 if (movement.Length() > 0.01f) ApplyForce(new Vector3(xMovement, yMovement, 0));
             }
-#if DEBUG
-            else
-            {
-                throw new NullReferenceException("ActorPhysicsComponent does not have an AttributesComponent");
-            }
-#endif
-
-
-
-
         }
     }
 }

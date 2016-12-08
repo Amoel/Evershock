@@ -4,7 +4,9 @@ using EntityComponent.Components.UI;
 using EntityComponent.Entities;
 using EntityComponent.Factory;
 using EntityComponent.Manager;
+using EntityComponent.Pathfinding;
 using EvershockGame.Code;
+using EvershockGame.Code.Components;
 using EvershockGame.Code.Managers;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
@@ -49,21 +51,25 @@ namespace EvershockGame
             UIManager.Get().Init(GraphicsDevice, width, height);
             CameraManager.Get().Init(width, height);
 
+            StageManager.Get().Create(30, 30);
+            StageManager.Get().Load(AssetManager.Get().Find<Level.Map>("TestMap"), 0, 0);
+
             /*--------------------------------------------------------------------------
                        Player 1
             --------------------------------------------------------------------------*/
 
             player = EntityFactory.Create<Entity>("Player");
-            player.AddComponent<TransformComponent>().Init(new Vector3(100, 410, 0));
+            player.AddComponent<TransformComponent>().Init(new Vector3(300, 300, 0));
             player.AddComponent<AttributesComponent>().Init(0, 5.0f);
-            player.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
-            player.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
-            player.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
-
+            
             MovementAnimationComponent animation = player.AddComponent<MovementAnimationComponent>();
             animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"),new Vector2 (0.5f,0.5f));
             animation.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true));
             animation.AddSetting((int)Tag.MoveRight, new AnimationSetting(8, 2, 0, 7));
+
+            player.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
+            player.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
+            player.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
 
             InputComponent input = player.AddComponent<InputComponent>();
             input.MapAction(EGameAction.MOVE_LEFT, EInput.KEYBOARD_LEFT);
@@ -83,17 +89,17 @@ namespace EvershockGame
             --------------------------------------------------------------------------*/
 
             player2 = EntityFactory.Create<Entity>("Player2");
-            player2.AddComponent<TransformComponent>().Init(new Vector3(800, 180, 0));
-
+            player2.AddComponent<TransformComponent>().Init(new Vector3(100, 100, 0));
             player2.AddComponent<AttributesComponent>().Init(0, 5.0f);
-            player2.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
-            player2.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
-            player2.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
-
+            
             MovementAnimationComponent animation2 = player2.AddComponent<MovementAnimationComponent>();
             animation2.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"), new Vector2(0.5f, 0.5f));
             animation2.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true));
             animation2.AddSetting((int)Tag.MoveRight, new AnimationSetting(8, 2, 0, 7));
+
+            player2.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
+            player2.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
+            player2.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(4, 4));
 
             InputComponent input2 = player2.AddComponent<InputComponent>();
             input2.MapAction(EGameAction.MOVE_LEFT, EInput.KEYBOARD_A);
@@ -107,6 +113,9 @@ namespace EvershockGame
             piAnimationP2.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimationP2"), new Vector2(0.4f, 0.4f));
             piAnimationP2.AddSetting(0, new AnimationSetting(8, 1, 0, 7, false));
             playerIndicatorP2.Disable();
+
+            AIComponent ai = player2.AddComponent<AIComponent>();
+            ai.AddTarget(player, EBehaviour.Follow);
 
             /*--------------------------------------------------------------------------
                         Camera
@@ -122,7 +131,7 @@ namespace EvershockGame
             cam2.Properties.Viewport = new Rectangle(width / 2, 0, width / 2, height);
             cam2.Properties.AddTarget(player2);
             
-            CameraManager.Get().FuseCameras(cam1, cam2, 600);
+            CameraManager.Get().FuseCameras(cam1, cam2, 400);
 
             /*--------------------------------------------------------------------------
                         Other
@@ -131,12 +140,12 @@ namespace EvershockGame
             Chest testChest = EntityFactory.Create<Chest>("hallo");
             testChest.Init(new Vector2(300, 200));
 
-            IEntity map = EntityFactory.Create<Entity>("Map");
-            map.AddComponent<TransformComponent>();
-            map.AddComponent<PhysicsComponent>();
-            map.AddComponent<MapComponent>().Init(AssetManager.Get().Find<Level.Map>("TestMap"));
+            //IEntity map = EntityFactory.Create<Entity>("Map");
+            //map.AddComponent<TransformComponent>();
+            //map.AddComponent<PhysicsComponent>();
+            //map.AddComponent<MapComponent>().Init(AssetManager.Get().Find<Level.Map>("TestMap"));
             
-            MapManager.Get().CreateCollisionFromMap(map, AssetManager.Get().Find<Level.Map>("TestMap"));
+            //MapManager.Get().CreateCollisionFromMap(map, AssetManager.Get().Find<Level.Map>("TestMap"));
 
             /*--------------------------------------------------------------------------
                         UI

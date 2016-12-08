@@ -34,7 +34,7 @@ namespace EntityComponent.Manager
             {
                 Debug.Assert(condition, message);
             }
-            return condition;
+            return !condition;
         }
     }
 }

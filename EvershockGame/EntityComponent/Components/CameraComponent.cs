@@ -1,4 +1,5 @@
 ﻿using EntityComponent.Manager;
+using Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -202,75 +203,114 @@ namespace EntityComponent.Components
 
         public RenderTarget2D Render(SpriteBatch batch)
         {
-            Device.SetRenderTarget(m_ComponentsTarget);
-            Device.Clear(Color.Black);
-
-            if (m_ComponentsTarget != null)
+            TransformComponent transform = GetComponent<TransformComponent>();
+            if (transform != null)
             {
-                TransformComponent transform = GetComponent<TransformComponent>();
-                if (m_BackgroundTexture != null)
+                CameraData data = new CameraData(transform.Location.To2D(), m_ComponentsTarget.Width, m_ComponentsTarget.Height);
+
+                Device.SetRenderTarget(m_ComponentsTarget);
+                Device.Clear(Color.Black);
+
+                if (m_ComponentsTarget != null)
                 {
-                    Vector2 location = transform.Location.To2D();
-                    batch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
-                    batch.Draw(
-                        m_BackgroundTexture, 
-                        Vector2.Zero, 
-                        new Rectangle((int)(location.X % m_BackgroundTexture.Width), (int)(location.Y % m_BackgroundTexture.Height), m_ComponentsTarget.Width, m_ComponentsTarget.Height), 
-                        Color.White, 
-                        0, 
-                        Vector2.Zero, 
-                        1f, 
-                        SpriteEffects.None, 
-                        0);
-                    batch.End();
-                }
-                batch.Begin(SpriteSortMode.FrontToBack);
-                ComponentManager.Get().DrawComponents(batch, new CameraData(transform.Location.To2D(), m_ComponentsTarget.Width, m_ComponentsTarget.Height));
-                batch.End();
-
-                if (m_LightingTarget != null && m_LightingEffect != null)
-                {
-                    Device.SetRenderTarget(m_LightingTarget);
-                    Device.Clear(Color.Black);
-
-                    batch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
-                    ComponentManager.Get().DrawLights(batch, new CameraData(transform.Location.To2D(), m_LightingTarget.Width, m_LightingTarget.Height));
-                    batch.End();
-
-                    if (m_MainTarget != null)
+                    if (m_BackgroundTexture != null)
                     {
-                        m_LightingEffect.Parameters["lightMask"].SetValue(m_LightingTarget);
-                        for (int i = 0; i < m_PostEffects.Count; ++i)
-                        {
-                            Device.SetRenderTarget(m_EffectTargets[i % 2]);
-                            Device.Clear(Color.Transparent);
-                            batch.Begin(SpriteSortMode.Deferred, null, null, null, null, m_PostEffects[i], null);
-                            batch.Draw(i == 0 ? m_ComponentsTarget : m_EffectTargets[(i + 1) % 2], m_EffectTargets[(i + 1) % 2].Bounds, Color.White);
-                            batch.End();
-                        }
+                        Vector2 location = transform.Location.To2D();
+                        batch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
+                        batch.Draw(
+                            m_BackgroundTexture,
+                            Vector2.Zero,
+                            new Rectangle((int)(location.X % m_BackgroundTexture.Width), (int)(location.Y % m_BackgroundTexture.Height), m_ComponentsTarget.Width, m_ComponentsTarget.Height),
+                            Color.White,
+                            0,
+                            Vector2.Zero,
+                            1f,
+                            SpriteEffects.None,
+                            0);
+                        batch.End();
+                    }
+                    batch.Begin(SpriteSortMode.FrontToBack);
+                    DrawStage(batch, data);
+                    ComponentManager.Get().DrawComponents(batch, data);
+                    batch.End();
 
-                        Device.SetRenderTarget(m_MainTarget);
-                        batch.Begin();
-                        batch.Draw((m_PostEffects.Count > 0) ? m_EffectTargets[(m_PostEffects.Count - 1) % 2] : m_ComponentsTarget, Vector2.Zero, Color.White);
+                    if (m_LightingTarget != null && m_LightingEffect != null)
+                    {
+                        Device.SetRenderTarget(m_LightingTarget);
+                        Device.Clear(Color.Black);
+
+                        batch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
+                        ComponentManager.Get().DrawLights(batch, new CameraData(transform.Location.To2D(), m_LightingTarget.Width, m_LightingTarget.Height));
                         batch.End();
 
-                        //Device.SetRenderTarget(m_MainTarget);
-                        //Device.Clear(Color.Black);
+                        if (m_MainTarget != null)
+                        {
+                            m_LightingEffect.Parameters["lightMask"].SetValue(m_LightingTarget);
+                            for (int i = 0; i < m_PostEffects.Count; ++i)
+                            {
+                                Device.SetRenderTarget(m_EffectTargets[i % 2]);
+                                Device.Clear(Color.Transparent);
+                                batch.Begin(SpriteSortMode.Deferred, null, null, null, null, m_PostEffects[i], null);
+                                batch.Draw(i == 0 ? m_ComponentsTarget : m_EffectTargets[(i + 1) % 2], m_EffectTargets[(i + 1) % 2].Bounds, Color.White);
+                                batch.End();
+                            }
 
-                        //batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+                            Device.SetRenderTarget(m_MainTarget);
+                            batch.Begin();
+                            batch.Draw((m_PostEffects.Count > 0) ? m_EffectTargets[(m_PostEffects.Count - 1) % 2] : m_ComponentsTarget, Vector2.Zero, Color.White);
+                            batch.End();
 
-                        //m_LightingEffect.Parameters["lightMask"].SetValue(m_LightingTarget);
-                        //m_LightingEffect.CurrentTechnique.Passes[0].Apply();
-                        //batch.Draw(m_ComponentsTarget, new Vector2(0, 0), m_MainTarget.Bounds, Color.White);
-                        //batch.End();
+                            //Device.SetRenderTarget(m_MainTarget);
+                            //Device.Clear(Color.Black);
 
-                        return m_MainTarget;
+                            //batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+
+                            //m_LightingEffect.Parameters["lightMask"].SetValue(m_LightingTarget);
+                            //m_LightingEffect.CurrentTechnique.Passes[0].Apply();
+                            //batch.Draw(m_ComponentsTarget, new Vector2(0, 0), m_MainTarget.Bounds, Color.White);
+                            //batch.End();
+
+                            return m_MainTarget;
+                        }
+
+                        return m_LightingTarget;
                     }
-
-                    return m_LightingTarget;
                 }
             }
             return m_ComponentsTarget;
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void DrawStage(SpriteBatch batch, CameraData data)
+        {
+            Texture2D tileset = AssetManager.Get().Find<Texture2D>("tileset2");
+            if (tileset != null)
+            {
+                TransformComponent transform = GetComponent<TransformComponent>();
+                if (transform != null)
+                {
+                    Vector2 location = new Vector2(Width / 2 - data.Center.X, Height / 2 - data.Center.Y);
+
+                    for (int x = 0; x < Width / 32 + 2; x++)
+                    {
+                        for (int y = 0; y < Height / 32 + 2; y++)
+                        {
+                            int xPos = (x + (int)(data.Center.X - Width / 2) / 32);
+                            int yPos = (y + (int)(data.Center.Y - Height / 2) / 32);
+
+                            Rectangle layer1 = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.First);
+                            batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer1, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00001f);
+
+                            Rectangle layer2 = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.Second);
+                            batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer2, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00002f);
+
+                            Rectangle layer3 = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.Third);
+                            batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer3, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.9f);
+                        }
+                    }
+                }
+            }
         }
 
         //---------------------------------------------------------------------------
