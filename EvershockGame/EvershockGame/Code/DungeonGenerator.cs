@@ -158,7 +158,7 @@ namespace EvershockGame.Code
                 }
             }
 
-            //StageManager.Get().Create(map);
+            StageManager.Get().Create(map);
             //System.Drawing.Bitmap image =
             //    new System.Drawing.Bitmap(dungeonBounds.Width * 10, dungeonBounds.Height * 10);
             //foreach (Room room in rooms)
