@@ -2,6 +2,7 @@
 using EntityComponent.Components;
 using EntityComponent.Manager;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace EvershockGame.Code
@@ -22,7 +23,6 @@ namespace EvershockGame.Code
             if (animation != null)
             {
                 animation.Update(GetForce().X, GetForce().Y);
-                Console.WriteLine(GetForce().X);
             }
         }
 
@@ -40,6 +40,25 @@ namespace EvershockGame.Code
                 Vector3 movement = new Vector3(xMovement, yMovement, 0);
                 if (movement.Length() > 0.01f) ApplyForce(new Vector3(xMovement, yMovement, 0));
             }
+
+#if DEBUG
+            if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+            {
+                ColliderComponent collider = GetComponent<ColliderComponent>();
+                if (collider != null)
+                {
+                    collider.SetCollisionState(false);
+                }
+            }
+            else
+            {
+                ColliderComponent collider = GetComponent<ColliderComponent>();
+                if (collider != null)
+                {
+                    collider.SetCollisionState(true);
+                }
+            }
+#endif
         }
     }
 }

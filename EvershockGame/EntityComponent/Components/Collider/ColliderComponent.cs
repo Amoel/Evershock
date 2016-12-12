@@ -112,5 +112,13 @@ namespace EntityComponent.Components
                 default: return Color.White;
             }
         }
+#if DEBUG
+        //---------------------------------------------------------------------------
+
+        public void SetCollisionState(bool isEnabled)
+        {
+            Body.CollisionCategories = isEnabled ? Category.All : Category.None;
+        }
+#endif
     }
 }

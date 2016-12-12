@@ -47,6 +47,7 @@
     <Compile Include="Code\Components\AttributesComponent.cs" />
     <Compile Include="Code\Components\MapComponent.cs" />
     <Compile Include="Code\Components\MovementAnimationComponent.cs" />
+    <Compile Include="Code\DungeonGenerator.cs" />
     <Compile Include="Code\Entities\Chest.cs" />
     <Compile Include="Code\GameTags.cs" />
     <Compile Include="Code\GameWindowSettings.cs" />
@@ -64,6 +65,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +94,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Lights\CircleLight.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Tilesets\BasicTileset.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Tilesets\Debug\BG_Kit_1.png">
@@ -143,6 +148,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Tilesets\Debug\WalkingAnimation.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Tilesets\DungeonTileset.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Tilesets\tileset2.png">

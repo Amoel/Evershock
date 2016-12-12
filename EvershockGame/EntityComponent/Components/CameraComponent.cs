@@ -232,6 +232,7 @@ namespace EntityComponent.Components
                     batch.Begin(SpriteSortMode.FrontToBack);
                     DrawStage(batch, data);
                     ComponentManager.Get().DrawComponents(batch, data);
+                    StageManager.Get().Draw(batch, data);
                     batch.End();
 
                     if (m_LightingTarget != null && m_LightingEffect != null)
@@ -260,16 +261,6 @@ namespace EntityComponent.Components
                             batch.Draw((m_PostEffects.Count > 0) ? m_EffectTargets[(m_PostEffects.Count - 1) % 2] : m_ComponentsTarget, Vector2.Zero, Color.White);
                             batch.End();
 
-                            //Device.SetRenderTarget(m_MainTarget);
-                            //Device.Clear(Color.Black);
-
-                            //batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-
-                            //m_LightingEffect.Parameters["lightMask"].SetValue(m_LightingTarget);
-                            //m_LightingEffect.CurrentTechnique.Passes[0].Apply();
-                            //batch.Draw(m_ComponentsTarget, new Vector2(0, 0), m_MainTarget.Bounds, Color.White);
-                            //batch.End();
-
                             return m_MainTarget;
                         }
 
@@ -284,7 +275,7 @@ namespace EntityComponent.Components
 
         private void DrawStage(SpriteBatch batch, CameraData data)
         {
-            Texture2D tileset = AssetManager.Get().Find<Texture2D>("tileset2");
+            Texture2D tileset = AssetManager.Get().Find<Texture2D>("BasicTileset");
             if (tileset != null)
             {
                 TransformComponent transform = GetComponent<TransformComponent>();
@@ -300,13 +291,13 @@ namespace EntityComponent.Components
                             int yPos = (y + (int)(data.Center.Y - Height / 2) / 32);
 
                             Rectangle layer1 = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.First);
-                            batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer1, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00001f);
+                            if (layer1.Width > 0 && layer1.Height > 0) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer1, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00001f);
 
                             Rectangle layer2 = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.Second);
-                            batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer2, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00002f);
+                            if (layer2.Width > 0 && layer2.Height > 0) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer2, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00002f);
 
                             Rectangle layer3 = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.Third);
-                            batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer3, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.9f);
+                            if (layer3.Width > 0 && layer3.Height > 0) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer3, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.9f);
                         }
                     }
                 }
@@ -411,6 +402,13 @@ namespace EntityComponent.Components
             Center = center;
             Width = width;
             Height = height;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public Rectangle Bounds
+        {
+            get { return new Rectangle((int)(Center.X - Width / 2), (int)(Center.Y - Height / 2), (int)Width, (int)Height); }
         }
     }
 }

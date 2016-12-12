@@ -35,6 +35,13 @@ namespace EntityComponent.Stage
             X = x;
             Y = y;
             m_Cells = new ChunkCell[Width, Height];
+            for (int _y = 0; _y < Height; _y++)
+            {
+                for (int _x = 0; _x < Width; _x++)
+                {
+                    m_Cells[_x, _y] = new ChunkCell();
+                }
+            }
 
             //if (r == null) r = new Random();
             //for (int _y = 0; _y < Height; _y++)
@@ -173,7 +180,7 @@ namespace EntityComponent.Stage
 
         //---------------------------------------------------------------------------
 
-        struct ChunkCell
+        class ChunkCell
         {
             public bool IsBlocked { get; set; }
             public Rectangle Layer1 { get; set; }

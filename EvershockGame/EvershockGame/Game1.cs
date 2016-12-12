@@ -51,15 +51,18 @@ namespace EvershockGame
             UIManager.Get().Init(GraphicsDevice, width, height);
             CameraManager.Get().Init(width, height);
 
-            StageManager.Get().Create(30, 30);
-            StageManager.Get().Load(AssetManager.Get().Find<Level.Map>("TestMap"), 0, 0);
+            //StageManager.Get().Create(30, 30);
+            //StageManager.Get().Load(AssetManager.Get().Find<Level.Map>("TestMap"), 0, 0);
+
+            DungeonGenerator generator = new DungeonGenerator();
+            generator.Run(0);
 
             /*--------------------------------------------------------------------------
                        Player 1
             --------------------------------------------------------------------------*/
 
             player = EntityFactory.Create<Entity>("Player");
-            player.AddComponent<TransformComponent>().Init(new Vector3(300, 300, 0));
+            player.AddComponent<TransformComponent>().Init(new Vector3(520, 450, 0));
             player.AddComponent<AttributesComponent>().Init(0, 5.0f);
             
             MovementAnimationComponent animation = player.AddComponent<MovementAnimationComponent>();
@@ -89,7 +92,7 @@ namespace EvershockGame
             --------------------------------------------------------------------------*/
 
             player2 = EntityFactory.Create<Entity>("Player2");
-            player2.AddComponent<TransformComponent>().Init(new Vector3(100, 100, 0));
+            player2.AddComponent<TransformComponent>().Init(new Vector3(400, 450, 0));
             player2.AddComponent<AttributesComponent>().Init(0, 5.0f);
             
             MovementAnimationComponent animation2 = player2.AddComponent<MovementAnimationComponent>();
@@ -114,8 +117,8 @@ namespace EvershockGame
             piAnimationP2.AddSetting(0, new AnimationSetting(8, 1, 0, 7, false));
             playerIndicatorP2.Disable();
 
-            AIComponent ai = player2.AddComponent<AIComponent>();
-            ai.AddTarget(player, EBehaviour.Follow);
+            //AIComponent ai = player2.AddComponent<AIComponent>();
+            //ai.AddTarget(player, EBehaviour.Follow);
 
             /*--------------------------------------------------------------------------
                         Camera
@@ -191,7 +194,7 @@ namespace EvershockGame
             AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimationP1", "Graphics/Debug/ArrowSheetP1");
             AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimationP2", "Graphics/Debug/ArrowSheetP2");
 
-            AssetManager.Get().Store<Texture2D>("tileset2", "Graphics/Tilesets/tileset2");
+            AssetManager.Get().Store<Texture2D>("BasicTileset", "Graphics/Tilesets/DungeonTileset");
 
             AssetManager.Get().Store<Texture2D>("Kakariko_Village_Tiles", "Graphics/Tilesets/Debug/Kakariko_Village_Tiles");
             AssetManager.Get().Store<Texture2D>("WalkingAnimation", "Graphics/Tilesets/Debug/WalkingAnimation");

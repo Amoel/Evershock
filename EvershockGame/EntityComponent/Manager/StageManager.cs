@@ -1,7 +1,9 @@
-﻿using EntityComponent.Stage;
+﻿using EntityComponent.Components;
+using EntityComponent.Stage;
 using Level;
 using Managers;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,6 +61,88 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
+        public void Create(bool[,] map)
+        {
+            int horizontalChunks = (int)Math.Ceiling((float)map.GetLength(0) / Chunk.Width);
+            int verticalChunks = (int)Math.Ceiling((float)map.GetLength(1) / Chunk.Height);
+            m_Chunks = new Chunk[horizontalChunks, verticalChunks];
+
+            for (int y = 0; y < verticalChunks; y++)
+            {
+                for (int x = 0; x < horizontalChunks; x++)
+                {
+                    m_Chunks[x, y] = new Chunk(x, y);
+                }
+            }
+
+            Left = 0;
+            Right = horizontalChunks * Chunk.Width;
+            Top = 0;
+            Bottom = verticalChunks * Chunk.Height;
+
+            Width = Right - Left;
+            Height = Bottom - Top;
+
+            int mapWidth = map.GetLength(0);
+            int mapHeight = map.GetLength(1);
+
+            Random r = new Random();
+
+            for (int y = 0; y < mapHeight; y++)
+            {
+                for (int x = 0; x < mapWidth; x++)
+                {
+                    SetIsBlocked(x, y, !map[x, y]);
+                    if (!map[x, y])
+                    {
+                        int sumSide = CalcTileIndexSide(
+                            x > 0 && !map[x - 1, y],
+                            x < mapWidth - 1 && !map[x + 1, y]);
+                        SetTextureBounds(x, y, ELayerMode.First, new Rectangle(24 * (sumSide + (sumSide > 2 ? r.Next(0, 4) : 0)), 24, 24, 24));
+                        int sumTop = CalcTileIndexFull(
+                            y > 0 && !map[x, y - 1],
+                            x > 0 && !map[x - 1, y],
+                            y < mapHeight - 1 && !map[x, y + 1],
+                            x < mapWidth - 1 && !map[x + 1, y]);
+                        SetTextureBounds(x, y - 1, ELayerMode.Third, new Rectangle(24 * sumTop, 0, 24, 24));
+                    }
+                    else
+                    {
+                        SetTextureBounds(x, y, ELayerMode.First, new Rectangle(24 * r.Next(9), 48, 24, 24));
+                    }
+                }
+            }           
+
+            foreach (Chunk chunk in m_Chunks)
+            {
+                chunk.CreateCollision();
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private int CalcTileIndexFull(bool isAboveSame, bool isLeftSame, bool isBelowSame, bool isRightSame)
+        {
+            int sum = 0;
+            if (isAboveSame) sum += 1;
+            if (isLeftSame) sum += 2;
+            if (isBelowSame) sum += 4;
+            if (isRightSame) sum += 8;
+            return sum;
+        }
+
+        //---------------------------------------------------------------------------
+
+        private int CalcTileIndexSide(bool isLeftSame, bool isRightSame)
+        {
+            int sum = 0;
+            if (isLeftSame) sum += 1;
+            if (isRightSame) sum += 2;
+            return sum;
+        }
+
+        //---------------------------------------------------------------------------
+
         public bool IsBlocked(int x, int y)
         {
             if (x < Left || x >= Right || y < Top || y >= Bottom) return true;
@@ -108,6 +192,31 @@ namespace EntityComponent.Manager
             foreach (Chunk chunk in m_Chunks)
             {
                 chunk.CreateCollision();
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Draw(SpriteBatch batch, CameraData data)
+        {
+            if (m_Chunks != null && CollisionManager.Get().IsDebugViewActive)
+            {
+                Texture2D tex = CollisionManager.Get().PointTexture;
+                for (int y = 0; y < m_Chunks.GetLength(1); y++)
+                {
+                    for (int x = 0; x < m_Chunks.GetLength(0); x++)
+                    {
+                        Vector2 location = new Vector2(x * Chunk.Width * 32, y * Chunk.Height * 32).ToLocal(data);
+                        Rectangle bounds = new Rectangle((int)location.X, (int)location.Y, Chunk.Width * 32, Chunk.Height * 32);
+                        if (bounds.Intersects(data.Bounds))
+                        {
+                            batch.Draw(tex, new Rectangle(bounds.X, bounds.Y, bounds.Width, 1), tex.Bounds, Color.Black, 0.0f, Vector2.Zero, SpriteEffects.None, 1.0f);
+                            batch.Draw(tex, new Rectangle(bounds.X, bounds.Y, 1, bounds.Height), tex.Bounds, Color.Black, 0.0f, Vector2.Zero, SpriteEffects.None, 1.0f);
+                            batch.Draw(tex, new Rectangle(bounds.X + bounds.Width, bounds.Y, 1, bounds.Height), tex.Bounds, Color.Black, 0.0f, Vector2.Zero, SpriteEffects.None, 1.0f);
+                            batch.Draw(tex, new Rectangle(bounds.X, bounds.Y + bounds.Height, bounds.Width, 1), tex.Bounds, Color.Black, 0.0f, Vector2.Zero, SpriteEffects.None, 1.0f);
+                        }
+                    }
+                }
             }
         }
 

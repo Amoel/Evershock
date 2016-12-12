@@ -17,7 +17,7 @@ namespace EvershockGame.Code.Components
     {
         private Pathfinder m_Pathfinder;
 
-        //private float m_Timer;
+        private float m_Timer;
         private Guid m_Target;
         private EBehaviour m_Behaviour;
 
@@ -39,11 +39,29 @@ namespace EvershockGame.Code.Components
 
         public void Tick(float deltaTime)
         {
-            //m_Timer += deltaTime;
-            //if (m_Timer >= 0.2f)
-            //{
-            //    m_Timer -= 0.2f;
+            m_Timer += deltaTime;
+            if (m_Timer >= 0.2f)
+            {
+                m_Timer -= 0.2f;
+                TickPathfinding();
+            }
                 
+            if (m_Path != null && m_Path.Count > 1)
+            {
+                TransformComponent transform = GetComponent<TransformComponent>();
+                PhysicsComponent physics = GetComponent<PhysicsComponent>();
+                if (transform != null && physics != null)
+                {
+                    Vector3 step = Vector3.Normalize(m_Path[1] - transform.Location) * 2;
+                    physics.ApplyForce(step);
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void TickPathfinding()
+        {
             IEntity target = EntityManager.Get().Find(m_Target);
             if (target != null)
             {
@@ -53,16 +71,8 @@ namespace EvershockGame.Code.Components
                 if (transform != null && targetTransform != null)
                 {
                     m_Path = m_Pathfinder.ExecuteSearch(transform.Location, targetTransform.Location, m_Behaviour);
-
-                    PhysicsComponent physics = GetComponent<PhysicsComponent>();
-                    if (physics != null && m_Path.Count > 1)
-                    {
-                        Vector3 step = Vector3.Normalize(m_Path[1] - transform.Location) * 2;
-                        physics.ApplyForce(step);
-                    }
                 }
             }
-            //}
         }
 
         //---------------------------------------------------------------------------
