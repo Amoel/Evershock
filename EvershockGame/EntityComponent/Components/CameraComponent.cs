@@ -24,6 +24,7 @@ namespace EntityComponent.Components
     {
         private RenderTarget2D m_ComponentsTarget;
         private RenderTarget2D m_LightingTarget;
+        private RenderTarget2D m_ShadowTarget;
         private RenderTarget2D m_MainTarget;
 
         private Texture2D m_BackgroundTexture;
@@ -33,7 +34,8 @@ namespace EntityComponent.Components
 
         private Effect m_LightingEffect;
         private List<Effect> m_PostEffects;
-        private RenderTarget2D[] m_EffectTargets;
+
+        private EffectWrapper m_EffectWrapper;
 
         private ECameraMode m_CameraMode;
         private CameraComponent m_Other;
@@ -41,6 +43,7 @@ namespace EntityComponent.Components
         public Rectangle Viewport { get; set; }
         public bool IsInitialized { get { return m_ComponentsTarget != null; } }
         public bool IsLightingEnabled { get; set; }
+        public bool IsAmbientOcclusionEnabled { get; set; }
 
         public int Width { get { return m_MainTarget != null ? m_MainTarget.Width : 0; } }
         public int Height { get { return m_MainTarget != null ? m_MainTarget.Height : 0; } }
@@ -53,7 +56,6 @@ namespace EntityComponent.Components
         {
             m_Targets = new Dictionary<Guid, CameraTarget>();
             m_PostEffects = new List<Effect>();
-            m_EffectTargets = new RenderTarget2D[2];
             m_CameraMode = ECameraMode.Split;
             IsLightingEnabled = true;
         }
@@ -63,12 +65,12 @@ namespace EntityComponent.Components
         public void Init(GraphicsDevice device, int width, int height, Texture2D backgroundTexture = null, Effect lightingEffect = null)
         {
             Device = device;
+            m_EffectWrapper = new EffectWrapper(device, width, height);
+
             m_ComponentsTarget = new RenderTarget2D(device, width, height);
             m_LightingTarget = new RenderTarget2D(device, width, height);
+            m_ShadowTarget = new RenderTarget2D(device, width, height);
             m_MainTarget = new RenderTarget2D(device, width, height);
-
-            m_EffectTargets[0] = new RenderTarget2D(device, width, height);
-            m_EffectTargets[1] = new RenderTarget2D(device, width, height);
 
             m_BackgroundTexture = backgroundTexture;
             m_LightingEffect = lightingEffect;
@@ -88,14 +90,13 @@ namespace EntityComponent.Components
             m_LightingTarget.Dispose();
             m_LightingTarget = new RenderTarget2D(Device, width, height);
 
+            m_ShadowTarget.Dispose();
+            m_ShadowTarget = new RenderTarget2D(Device, width, height);
+
             m_MainTarget.Dispose();
             m_MainTarget = new RenderTarget2D(Device, width, height);
-
-            m_EffectTargets[0].Dispose();
-            m_EffectTargets[0] = new RenderTarget2D(Device, width, height);
-
-            m_EffectTargets[1].Dispose();
-            m_EffectTargets[1] = new RenderTarget2D(Device, width, height);
+            
+            m_EffectWrapper.Resize(width, height);
         }
 
         //---------------------------------------------------------------------------
@@ -246,20 +247,21 @@ namespace EntityComponent.Components
 
                         if (m_MainTarget != null)
                         {
-                            m_LightingEffect.Parameters["lightMask"].SetValue(m_LightingTarget);
-                            for (int i = 0; i < m_PostEffects.Count; ++i)
+                            if (IsAmbientOcclusionEnabled)
                             {
-                                Device.SetRenderTarget(m_EffectTargets[i % 2]);
-                                Device.Clear(Color.Transparent);
-                                batch.Begin(SpriteSortMode.Deferred, null, null, null, null, m_PostEffects[i], null);
-                                batch.Draw(i == 0 ? m_ComponentsTarget : m_EffectTargets[(i + 1) % 2], m_EffectTargets[(i + 1) % 2].Bounds, Color.White);
-                                batch.End();
+                                DrawShadows(batch, data);
+                                List<Effect> shadowEffects = new List<Effect>()
+                                {
+                                    AssetManager.Get().Find<Effect>("Blur")
+                                };
+                                m_EffectWrapper.ApplyEffects(batch, m_ShadowTarget, m_ShadowTarget, shadowEffects);
                             }
 
-                            Device.SetRenderTarget(m_MainTarget);
-                            batch.Begin();
-                            batch.Draw((m_PostEffects.Count > 0) ? m_EffectTargets[(m_PostEffects.Count - 1) % 2] : m_ComponentsTarget, Vector2.Zero, Color.White);
-                            batch.End();
+                            m_LightingEffect.Parameters["isAmbientOcclusionEnabled"].SetValue(IsAmbientOcclusionEnabled);
+                            m_LightingEffect.Parameters["lightMask"].SetValue(m_LightingTarget);
+                            m_LightingEffect.Parameters["shadowMask"].SetValue(m_ShadowTarget);
+
+                            m_EffectWrapper.ApplyEffects(batch, m_ComponentsTarget, m_MainTarget, m_PostEffects);
 
                             return m_MainTarget;
                         }
@@ -269,6 +271,40 @@ namespace EntityComponent.Components
                 }
             }
             return m_ComponentsTarget;
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void DrawShadows(SpriteBatch batch, CameraData data)
+        {
+            Device.SetRenderTarget(m_ShadowTarget);
+            Device.Clear(Color.Transparent);
+            batch.Begin();
+
+            Texture2D tileset = AssetManager.Get().Find<Texture2D>("BasicTileset");
+            if (tileset != null)
+            {
+                TransformComponent transform = GetComponent<TransformComponent>();
+                if (transform != null)
+                {
+                    Vector2 location = new Vector2(Width / 2 - data.Center.X, Height / 2 - data.Center.Y);
+
+                    for (int x = -1; x <= Width / 32 + 2; x++)
+                    {
+                        for (int y = -1; y <= Height / 32 + 2; y++)
+                        {
+                            int xPos = (x + (int)(data.Center.X - Width / 2) / 32);
+                            int yPos = (y + (int)(data.Center.Y - Height / 2) / 32);
+                            
+                            Rectangle layer = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.First);
+                            Rectangle layerTop = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.Third);
+                            if (layer.Width > 0 && layer.Height > 0 && (layerTop.Width == 0 || layerTop.Height == 0)) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer, Color.Black);
+                        }
+                    }
+                }
+            }
+
+            batch.End();
         }
 
         //---------------------------------------------------------------------------
@@ -289,7 +325,7 @@ namespace EntityComponent.Components
                         {
                             int xPos = (x + (int)(data.Center.X - Width / 2) / 32);
                             int yPos = (y + (int)(data.Center.Y - Height / 2) / 32);
-
+                            
                             Rectangle layer1 = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.First);
                             if (layer1.Width > 0 && layer1.Height > 0) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer1, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00001f);
 
@@ -384,6 +420,56 @@ namespace EntityComponent.Components
         {
             m_Other = other;
             m_CameraMode = mode;
+        }
+
+        //---------------------------------------------------------------------------
+
+        class EffectWrapper
+        {
+            private GraphicsDevice m_Device;
+            private RenderTarget2D[] m_EffectTargets;
+
+            //---------------------------------------------------------------------------
+
+            public EffectWrapper(GraphicsDevice device, int width, int height)
+            {
+                m_Device = device;
+                m_EffectTargets = new RenderTarget2D[2];
+                Resize(width, height);
+            }
+
+            //---------------------------------------------------------------------------
+
+            public void ApplyEffects(SpriteBatch batch, RenderTarget2D source, RenderTarget2D target, List<Effect> effects)
+            {
+                int index = 0;
+
+                for (int i = 0; i < effects.Count(); i++)
+                {
+                    for (int j = 0; j < effects[i].Techniques.Count; j++)
+                    {
+                        bool isMax = (i == effects.Count() - 1 && j == effects[i].Techniques.Count() - 1);
+                        effects[i].CurrentTechnique = effects[i].Techniques[j];
+                        m_Device.SetRenderTarget(isMax ? target : m_EffectTargets[index % 2]);
+                        m_Device.Clear(Color.Transparent);
+                        batch.Begin(SpriteSortMode.Deferred, null, null, null, null, effects[i], null);
+                        batch.Draw(index == 0 ? source : m_EffectTargets[(index + 1) % 2], m_EffectTargets[(index + 1) % 2].Bounds, Color.White);
+                        batch.End();
+                        index++;
+                    }
+                }
+            }
+
+            //---------------------------------------------------------------------------
+
+            public void Resize(int width, int height)
+            {
+                for (int i = 0; i < m_EffectTargets.Count(); i++)
+                {
+                    if (m_EffectTargets[i] != null) m_EffectTargets[i].Dispose();
+                    m_EffectTargets[i] = new RenderTarget2D(m_Device, width, height);
+                }
+            }
         }
     }
 

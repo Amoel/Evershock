@@ -19,3 +19,21 @@
 /processorParam:DebugMode=Auto
 /build:Effects/DeferredLighting.fx
 
+#begin Effects/BloomCombine.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/BloomCombine.fx
+
+#begin Effects/BloomExtract.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/BloomExtract.fx
+
+#begin Effects/Blur.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/Blur.fx
+

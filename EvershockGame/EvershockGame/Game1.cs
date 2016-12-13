@@ -128,6 +128,7 @@ namespace EvershockGame
             cam1.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
             cam1.Properties.Viewport = new Rectangle(0, 0, width / 2, height);
             cam1.Properties.AddTarget(player);
+            cam1.Properties.IsAmbientOcclusionEnabled = true;
 
             Camera cam2 = EntityFactory.Create<Camera>("Cam2");
             cam2.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
@@ -200,7 +201,9 @@ namespace EvershockGame
             AssetManager.Get().Store<Texture2D>("WalkingAnimation", "Graphics/Tilesets/Debug/WalkingAnimation");
 
             AssetManager.Get().Store<Texture2D>("CircleLight", "Graphics/Lights/CircleLight");
+
             AssetManager.Get().Store<Effect>("LightingEffect", "Effects/DeferredLighting");
+            AssetManager.Get().Store<Effect>("Blur", "Effects/Blur");
         }
 
         //---------------------------------------------------------------------------
