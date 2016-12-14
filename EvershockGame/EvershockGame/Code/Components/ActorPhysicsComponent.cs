@@ -34,8 +34,8 @@ namespace EvershockGame.Code
             
             if (attributes != null)
             {
-                float xMovement = (actions[EGameAction.MOVE_RIGHT] - actions[EGameAction.MOVE_LEFT]) * deltaTime * attributes.BaseMovementSpeed * 100;
-                float yMovement = (actions[EGameAction.MOVE_DOWN] - actions[EGameAction.MOVE_UP]) * deltaTime * attributes.BaseMovementSpeed * 100;
+                float xMovement = (actions[EGameAction.MOVE_RIGHT] - actions[EGameAction.MOVE_LEFT]) * deltaTime * attributes.movementSpeed * 100;
+                float yMovement = (actions[EGameAction.MOVE_DOWN] - actions[EGameAction.MOVE_UP]) * deltaTime * attributes.movementSpeed * 100;
 
                 Vector3 movement = new Vector3(xMovement, yMovement, 0);
                 if (movement.Length() > 0.01f) ApplyForce(new Vector3(xMovement, yMovement, 0));

@@ -4,16 +4,11 @@ using EntityComponent.Components.UI;
 using EntityComponent.Entities;
 using EntityComponent.Factory;
 using EntityComponent.Manager;
-using EntityComponent.Pathfinding;
 using EvershockGame.Code;
-using EvershockGame.Code.Components;
-using EvershockGame.Code.Managers;
-using EvershockGame.Code.Stage;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace EvershockGame
 {
@@ -44,7 +39,7 @@ namespace EvershockGame
             base.Initialize();
             Window.AllowUserResizing = true;
 
-            GameWindowSettings.SetWindowSettings(graphics,Window);
+            GameWindowSettings.SetWindowSettings(graphics,Window,1920,1080);
 
             int width = GraphicsDevice.PresentationParameters.BackBufferWidth;
             int height = GraphicsDevice.PresentationParameters.BackBufferHeight;
@@ -58,8 +53,8 @@ namespace EvershockGame
             DungeonGenerator generator = new DungeonGenerator();
             generator.Run(0);
 
-            Stage stage = new Stage(0);
-            stage.SaveStageAsImage("C:/Users/Max/Desktop/StageMap.png");
+            //Stage stage = new Stage(0);
+            //stage.SaveStageAsImage("C:/Users/Max/Desktop/StageMap.png");
 
             /*--------------------------------------------------------------------------
                        Player 1
@@ -67,7 +62,7 @@ namespace EvershockGame
 
             player = EntityFactory.Create<Entity>("Player");
             player.AddComponent<TransformComponent>().Init(new Vector3(520, 450, 0));
-            player.AddComponent<AttributesComponent>().Init(0, 200.0f);
+            player.AddComponent<AttributesComponent>().Init(0, 130.0f);
             
             MovementAnimationComponent animation = player.AddComponent<MovementAnimationComponent>();
             animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"),new Vector2 (0.5f,0.5f));
@@ -97,7 +92,7 @@ namespace EvershockGame
 
             player2 = EntityFactory.Create<Entity>("Player2");
             player2.AddComponent<TransformComponent>().Init(new Vector3(400, 450, 0));
-            player2.AddComponent<AttributesComponent>().Init(0, 100.0f);
+            player2.AddComponent<AttributesComponent>().Init(0, 120.0f);
             
             MovementAnimationComponent animation2 = player2.AddComponent<MovementAnimationComponent>();
             animation2.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"), new Vector2(0.5f, 0.5f));
@@ -242,6 +237,11 @@ namespace EvershockGame
             else if (Keyboard.GetState().IsKeyDown(Keys.F12))
             {
                 CollisionManager.Get().IsDebugViewActive = false;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.G))
+            {
+                player.GetComponent<AttributesComponent>().TransmitMovementAddend(5);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
