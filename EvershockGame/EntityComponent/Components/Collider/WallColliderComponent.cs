@@ -26,7 +26,7 @@ namespace EntityComponent.Components
         {
             Start = start;
             End = end;
-            Body = BodyFactory.CreateEdge(PhysicsManager.Get().World, Start, End, Entity);
+            Body = BodyFactory.CreateEdge(PhysicsManager.Get().World, Start / Unit, End / Unit, Entity);
             foreach (Fixture fix in Body.FixtureList)
             {
                 fix.UserData = Entity;
@@ -37,7 +37,7 @@ namespace EntityComponent.Components
             TransformComponent transform = GetComponent<TransformComponent>();
             if (transform != null)
             {
-                Body.Position = transform.Location.To2D() + Offset;
+                Body.Position = (transform.Location.To2D() + Offset) / Unit;
             }
 
             Body.OnCollision += OnCollision;
@@ -54,7 +54,7 @@ namespace EntityComponent.Components
                 Texture2D tex = CollisionManager.Get().PointTexture;
                 if (transform != null && tex != null && Body != null)
                 {
-                    Vector2 position = Body.Position.ToLocal(data);
+                    Vector2 position = (Body.Position * Unit).ToLocal(data);
                     float length = Vector2.Distance(Start, End);
                     float angle = (float)Math.Atan2(End.Y - Start.Y, End.X - Start.X);
                     batch.Draw(tex, new Rectangle((int)(position.X), (int)(position.Y), (int)length, 2), tex.Bounds, GetDebugColor(), angle, Vector2.Zero, SpriteEffects.None, 1.0f);

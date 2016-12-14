@@ -20,6 +20,8 @@ namespace EntityComponent.Components
     [RequireComponent(typeof(PhysicsComponent))]
     public abstract class ColliderComponent : Component, ICollider, IDrawableComponent
     {
+        protected static readonly float Unit = 10.0f;
+
         public event CollisionEnterEventHandler Enter;
         public event CollisionLeaveEventHandler Leave;
 
@@ -38,10 +40,10 @@ namespace EntityComponent.Components
             if (Body == null) return force;
             if (Body.BodyType != BodyType.Static)
             {
-                Body.LinearVelocity = force * 50;
-                //Body.ApplyLinearImpulse(force * 10.0f, Body.WorldCenter);
+                Body.LinearVelocity = force / Unit;
+                //Body.ApplyLinearImpulse(force / Unit, Body.WorldCenter);
             }
-            return Body.Position - Offset;
+            return (Body.Position - Offset) * Unit;
         }
 
         //---------------------------------------------------------------------------

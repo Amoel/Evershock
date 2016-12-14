@@ -42,14 +42,6 @@ namespace EntityComponent.Manager
             int verticalChunks = (int)Math.Ceiling((float)height / Chunk.Height);
             m_Chunks = new Chunk[horizontalChunks, verticalChunks];
 
-            for (int y = 0; y < verticalChunks; y++)
-            {
-                for (int x = 0; x < horizontalChunks; x++)
-                {
-                    m_Chunks[x, y] = new Chunk(x, y);
-                }
-            }
-
             Left = 0;
             Right = horizontalChunks * Chunk.Width;
             Top = 0;
@@ -57,6 +49,14 @@ namespace EntityComponent.Manager
 
             Width = Right - Left;
             Height = Bottom - Top;
+
+            for (int y = 0; y < verticalChunks; y++)
+            {
+                for (int x = 0; x < horizontalChunks; x++)
+                {
+                    AddChunk(x, y);
+                }
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -67,14 +67,6 @@ namespace EntityComponent.Manager
             int verticalChunks = (int)Math.Ceiling((float)map.GetLength(1) / Chunk.Height);
             m_Chunks = new Chunk[horizontalChunks, verticalChunks];
 
-            for (int y = 0; y < verticalChunks; y++)
-            {
-                for (int x = 0; x < horizontalChunks; x++)
-                {
-                    m_Chunks[x, y] = new Chunk(x, y);
-                }
-            }
-
             Left = 0;
             Right = horizontalChunks * Chunk.Width;
             Top = 0;
@@ -82,6 +74,14 @@ namespace EntityComponent.Manager
 
             Width = Right - Left;
             Height = Bottom - Top;
+
+            for (int y = 0; y < verticalChunks; y++)
+            {
+                for (int x = 0; x < horizontalChunks; x++)
+                {
+                    AddChunk(x, y);
+                }
+            }
 
             int mapWidth = map.GetLength(0);
             int mapHeight = map.GetLength(1);
@@ -116,6 +116,33 @@ namespace EntityComponent.Manager
             foreach (Chunk chunk in m_Chunks)
             {
                 chunk.CreateCollision();
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void AddChunk(int x, int y)
+        {
+            m_Chunks[x, y] = new Chunk(x, y);
+            if (x > 0 && m_Chunks[x - 1, y] != null)
+            {
+                m_Chunks[x, y].LeftChunk = m_Chunks[x - 1, y];
+                m_Chunks[x - 1, y].RightChunk = m_Chunks[x, y];
+            }
+            if (x < m_Chunks.GetLength(0) - 1 && m_Chunks[x + 1, y] != null)
+            {
+                m_Chunks[x, y].RightChunk = m_Chunks[x + 1, y];
+                m_Chunks[x + 1, y].LeftChunk = m_Chunks[x, y];
+            }
+            if (y > 0 && m_Chunks[x, y - 1] != null)
+            {
+                m_Chunks[x, y].TopChunk = m_Chunks[x, y - 1];
+                m_Chunks[x, y - 1].BottomChunk = m_Chunks[x, y];
+            }
+            if (y < m_Chunks.GetLength(1) - 1 && m_Chunks[x, y + 1] != null)
+            {
+                m_Chunks[x, y].BottomChunk = m_Chunks[x, y + 1];
+                m_Chunks[x, y + 1].TopChunk = m_Chunks[x, y];
             }
         }
 
@@ -192,31 +219,6 @@ namespace EntityComponent.Manager
             foreach (Chunk chunk in m_Chunks)
             {
                 chunk.CreateCollision();
-            }
-        }
-
-        //---------------------------------------------------------------------------
-
-        public void Draw(SpriteBatch batch, CameraData data)
-        {
-            if (m_Chunks != null && CollisionManager.Get().IsDebugViewActive)
-            {
-                Texture2D tex = CollisionManager.Get().PointTexture;
-                for (int y = 0; y < m_Chunks.GetLength(1); y++)
-                {
-                    for (int x = 0; x < m_Chunks.GetLength(0); x++)
-                    {
-                        Vector2 location = new Vector2(x * Chunk.Width * 32, y * Chunk.Height * 32).ToLocal(data);
-                        Rectangle bounds = new Rectangle((int)location.X, (int)location.Y, Chunk.Width * 32, Chunk.Height * 32);
-                        if (bounds.Intersects(data.Bounds))
-                        {
-                            batch.Draw(tex, new Rectangle(bounds.X, bounds.Y, bounds.Width, 1), tex.Bounds, Color.Black, 0.0f, Vector2.Zero, SpriteEffects.None, 1.0f);
-                            batch.Draw(tex, new Rectangle(bounds.X, bounds.Y, 1, bounds.Height), tex.Bounds, Color.Black, 0.0f, Vector2.Zero, SpriteEffects.None, 1.0f);
-                            batch.Draw(tex, new Rectangle(bounds.X + bounds.Width, bounds.Y, 1, bounds.Height), tex.Bounds, Color.Black, 0.0f, Vector2.Zero, SpriteEffects.None, 1.0f);
-                            batch.Draw(tex, new Rectangle(bounds.X, bounds.Y + bounds.Height, bounds.Width, 1), tex.Bounds, Color.Black, 0.0f, Vector2.Zero, SpriteEffects.None, 1.0f);
-                        }
-                    }
-                }
             }
         }
 

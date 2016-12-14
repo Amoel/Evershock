@@ -51,7 +51,7 @@ namespace EntityComponent.Components
         {
             Width = width;
             Height = height;
-            Body = BodyFactory.CreateRectangle(PhysicsManager.Get().World, width, height, 0.0f, Entity);
+            Body = BodyFactory.CreateRectangle(PhysicsManager.Get().World, width / Unit, height / Unit, 0.0f, Entity);
             foreach (Fixture fix in Body.FixtureList)
             {
                 fix.UserData = Entity;
@@ -63,7 +63,7 @@ namespace EntityComponent.Components
             TransformComponent transform = GetComponent<TransformComponent>();
             if (transform != null)
             {
-                Body.Position = transform.Location.To2D() + Offset;
+                Body.Position = (transform.Location.To2D() + Offset) / Unit;
             }
 
             Body.OnCollision += OnCollision;
@@ -80,7 +80,7 @@ namespace EntityComponent.Components
                 Texture2D tex = CollisionManager.Get().RectTexture;
                 if (transform != null && tex != null && Body != null)
                 {
-                    Vector2 position = Body.Position.ToLocal(data);
+                    Vector2 position = (Body.Position * Unit).ToLocal(data);
                     batch.Draw(tex, new Rectangle((int)((int)position.X - Width / 2), (int)((int)position.Y - Height / 2), (int)Width, (int)Height), tex.Bounds, GetDebugColor(), 0, Vector2.Zero, SpriteEffects.None, 1.0f);
                 }
             }

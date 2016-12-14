@@ -71,6 +71,10 @@ namespace EntityComponent.Components
                 }
 
                 Vector2 newForce = CollisionManager.Get().CheckCollision(Entity, GetForce().To2D());
+                if (newForce.Length() > 0.0f)
+                {
+                    Console.WriteLine(newForce);
+                }
                 transform.MoveTo(new Vector3(newForce.X, newForce.Y, GetForce().Z));
             }
         }

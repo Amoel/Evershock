@@ -77,7 +77,7 @@ namespace EntityComponent.Manager
 
             if (collider == null)
             {
-                return force;
+                return Vector2.Zero;
             }
             
             return collider.Step(force);

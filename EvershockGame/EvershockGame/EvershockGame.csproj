@@ -52,6 +52,9 @@
     <Compile Include="Code\GameTags.cs" />
     <Compile Include="Code\GameWindowSettings.cs" />
     <Compile Include="Code\Managers\MapManager.cs" />
+    <Compile Include="Code\Stage\Corridor.cs" />
+    <Compile Include="Code\Stage\Room.cs" />
+    <Compile Include="Code\Stage\Stage.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
