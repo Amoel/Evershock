@@ -1,4 +1,5 @@
 ﻿using EntityComponent.Manager;
+using EvershockGame.Code.Stage;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -79,7 +80,7 @@ namespace EvershockGame.Code
 
         private void ConnectRooms(List<Room> rooms)
         {
-            rooms.RemoveAll(room => !room.IsMajorRoom);
+            rooms.RemoveAll(room => room.Bounds.Width * room.Bounds.Height < 130);
             Rectangle bounds = GetDungeonBounds(rooms);
             rooms.Add(new Room(bounds.X + 10, bounds.Y + 10, 9, 9));
 
@@ -256,61 +257,6 @@ namespace EvershockGame.Code
                 maxY = Math.Max(maxY, room.Bounds.Bottom);
             }
             return new Rectangle(minX - 10, minY - 10, (maxX - minX) + 20, (maxY - minY) + 20);
-        }
-
-        //---------------------------------------------------------------------------
-
-        class Room
-        {
-            public bool IsMajorRoom { get { return Bounds.Width * Bounds.Height >= 130; } }
-            public Rectangle Bounds { get; set; }
-
-            //---------------------------------------------------------------------------
-
-            public Room(Rectangle bounds)
-            {
-                Bounds = bounds;
-            }
-
-            //---------------------------------------------------------------------------
-
-            public Room(int x, int y, int width, int height)
-            {
-                Bounds = new Rectangle(x, y, width, height);
-            }
-
-            //---------------------------------------------------------------------------
-
-            public void Shift(int x, int y)
-            {
-                Bounds = new Rectangle(Bounds.X + x, Bounds.Y + y, Bounds.Width, Bounds.Height);
-            }
-
-            //---------------------------------------------------------------------------
-
-            public bool Intersects(Room other, int padding)
-            {
-                return new Rectangle(Bounds.X - padding, Bounds.Y - padding, Bounds.Width + padding * 2, Bounds.Height + padding * 2).Intersects(other.Bounds);
-            }
-        }
-
-        //---------------------------------------------------------------------------
-
-        class Corridor
-        {
-            public Point Start { get; set; }
-            public Point End { get; set; }
-
-            public Point Center { get { return new Point(End.X, Start.Y); } }
-            public Rectangle Bounds { get { return new Rectangle(Math.Min(Start.X, End.X), Math.Min(Start.Y, End.Y), Math.Abs(Start.X - End.X), Math.Abs(Start.Y - End.Y)); } }
-
-            //---------------------------------------------------------------------------
-
-            public Corridor(Point start, Point end)
-            {
-                Start = start;
-                End = end;
-            }
         }
     }
 }

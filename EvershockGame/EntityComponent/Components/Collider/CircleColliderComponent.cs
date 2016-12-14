@@ -46,7 +46,7 @@ namespace EntityComponent.Components
         public void Init(int radius, Vector2 offset, BodyType bodyType, float dampening)
         {
             Radius = radius;
-            Body = BodyFactory.CreateCircle(PhysicsManager.Get().World, radius, 0.0f, Entity);
+            Body = BodyFactory.CreateCircle(PhysicsManager.Get().World, Radius / Unit, 0.0f, Entity);
             foreach (Fixture fix in Body.FixtureList)
             {
                 fix.UserData = Entity;
@@ -59,7 +59,7 @@ namespace EntityComponent.Components
             TransformComponent transform = GetComponent<TransformComponent>();
             if (transform != null)
             {
-                Body.Position = transform.Location.To2D();
+                Body.Position = transform.Location.To2D() / Unit;
             }
 
             Body.OnCollision += OnCollision;
@@ -76,7 +76,7 @@ namespace EntityComponent.Components
                 Texture2D tex = CollisionManager.Get().CircleTexture;
                 if (transform != null && tex != null && Body != null)
                 {
-                    Vector2 position = Body.Position.ToLocal(data);
+                    Vector2 position = (Body.Position * Unit).ToLocal(data);
                     batch.Draw(tex, new Rectangle((int)(position.X - Radius), (int)(position.Y - Radius), (int)(Radius * 2), (int)(Radius * 2)), tex.Bounds, GetDebugColor(), 0, Vector2.Zero, SpriteEffects.None, 1.0f);
                 }
             }

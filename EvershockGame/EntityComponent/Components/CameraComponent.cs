@@ -233,7 +233,6 @@ namespace EntityComponent.Components
                     batch.Begin(SpriteSortMode.FrontToBack);
                     DrawStage(batch, data);
                     ComponentManager.Get().DrawComponents(batch, data);
-                    StageManager.Get().Draw(batch, data);
                     batch.End();
 
                     if (m_LightingTarget != null && m_LightingEffect != null)
@@ -298,7 +297,7 @@ namespace EntityComponent.Components
                             
                             Rectangle layer = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.First);
                             Rectangle layerTop = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.Third);
-                            if (layer.Width > 0 && layer.Height > 0 && (layerTop.Width == 0 || layerTop.Height == 0)) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer, Color.Black);
+                            if (layer.Width > 0 && layer.Height > 0 && (layerTop.Width == 0 || layerTop.Height == 0)) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer, Color.White);
                         }
                     }
                 }

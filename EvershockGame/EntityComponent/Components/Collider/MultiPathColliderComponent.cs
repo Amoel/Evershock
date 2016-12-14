@@ -42,7 +42,7 @@ namespace EntityComponent.Components
 
         public void AddPath(Vector2 start, Vector2 end)
         {
-            FixtureFactory.AttachEdge(start, end, Body, Entity);
+            FixtureFactory.AttachEdge(start / Unit, end / Unit, Body, Entity);
             m_Edges.Add(new Edge(start, end));
         }
 
@@ -58,7 +58,7 @@ namespace EntityComponent.Components
                 {
                     foreach (Edge edge in m_Edges)
                     {
-                        Vector2 location = edge.Start.ToLocal(data);
+                        Vector2 location = edge.Start.ToLocal(data) + Vector2.One;
                         float length = Vector2.Distance(edge.Start, edge.End);
                         float angle = (float)Math.Atan2(edge.End.Y - edge.Start.Y, edge.End.X - edge.Start.X);
                         batch.Draw(tex, new Rectangle((int)location.X, (int)location.Y, (int)length, 2), tex.Bounds, GetDebugColor(), angle, Vector2.Zero, SpriteEffects.None, 1.0f);
