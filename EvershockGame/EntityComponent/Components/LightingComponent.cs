@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EntityComponent.Manager;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -98,6 +99,7 @@ namespace EntityComponent.Components
                         Scale.X,
                         SpriteEffects.None,
                         0);
+                    LightingManager.Get().Draw(batch, transform.Location.To2D(), data);
                 }
             }
         }

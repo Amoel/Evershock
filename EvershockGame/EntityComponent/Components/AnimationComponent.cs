@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EntityComponent.Manager;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,8 @@ namespace EntityComponent.Components
             Offset = new Vector2(0, 25);
         }
 
+        //---------------------------------------------------------------------------
+
         public void Init(Texture2D spritesheet, Vector2 scale, float opacity = 1.0f)
         {
             Spritesheet = spritesheet;
@@ -56,6 +59,8 @@ namespace EntityComponent.Components
             Offset = new Vector2(0, 25);
         }
 
+        //---------------------------------------------------------------------------
+
         public void Init(Texture2D spritesheet, Vector2 scale, Vector2 offset, float opacity = 1.0f)
         {
             Spritesheet = spritesheet;
@@ -65,6 +70,8 @@ namespace EntityComponent.Components
             Scale = scale;
             Offset = offset;
         }
+
+        //---------------------------------------------------------------------------
 
         public void Init(Texture2D spritesheet, Vector2 scale, Vector2 offset, Color color, float opacity = 1.0f)
         {

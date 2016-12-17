@@ -31,7 +31,6 @@ namespace EntityComponent.Factory
             if (entity != null)
             {
                 entity.SetParent(parent);
-                EntityManager.Get().Register(entity);
             }
             return entity;
         }
@@ -59,7 +58,6 @@ namespace EntityComponent.Factory
             if (entity != null)
             {
                 entity.SetParent(parent);
-                EntityManager.Get().Register(entity);
             }
             return entity;
         }

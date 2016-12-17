@@ -13,13 +13,13 @@ namespace EntityComponent.Components
 {
     public class MultiPathColliderComponent : ColliderComponent
     {
-        private List<Edge> m_Edges;
+        public List<Edge> Edges { get; private set; }
 
         //---------------------------------------------------------------------------
 
         public MultiPathColliderComponent(Guid entity) : base(entity)
         {
-            m_Edges = new List<Edge>();
+            Edges = new List<Edge>();
         }
 
         //---------------------------------------------------------------------------
@@ -42,8 +42,10 @@ namespace EntityComponent.Components
 
         public void AddPath(Vector2 start, Vector2 end)
         {
-            FixtureFactory.AttachEdge(start / Unit, end / Unit, Body, Entity);
-            m_Edges.Add(new Edge(start, end));
+            Fixture fixture = FixtureFactory.AttachEdge(start / Unit, end / Unit, Body, Entity);
+            fixture.CollisionCategories = m_CategoryMapping[CollisionCategory];
+            //fixture.CollidesWith = m_CategoryMapping[CollidesWith];
+            Edges.Add(new Edge(start, end));
         }
 
         //---------------------------------------------------------------------------
@@ -56,7 +58,7 @@ namespace EntityComponent.Components
                 Texture2D tex = CollisionManager.Get().PointTexture;
                 if (transform != null && tex != null && Body != null)
                 {
-                    foreach (Edge edge in m_Edges)
+                    foreach (Edge edge in Edges)
                     {
                         Vector2 location = edge.Start.ToLocal(data) + Vector2.One;
                         float length = Vector2.Distance(edge.Start, edge.End);
@@ -66,21 +68,21 @@ namespace EntityComponent.Components
                 }
             }
         }
+    }
+    
+    //---------------------------------------------------------------------------
+
+    public struct Edge
+    {
+        public Vector2 Start { get; private set; }
+        public Vector2 End { get; private set; }
 
         //---------------------------------------------------------------------------
 
-        struct Edge
+        public Edge(Vector2 start, Vector2 end)
         {
-            public Vector2 Start { get; private set; }
-            public Vector2 End { get; private set; }
-
-            //---------------------------------------------------------------------------
-
-            public Edge(Vector2 start, Vector2 end)
-            {
-                Start = start;
-                End = end;
-            }
+            Start = start;
+            End = end;
         }
     }
 }

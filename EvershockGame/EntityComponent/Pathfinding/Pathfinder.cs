@@ -20,11 +20,14 @@ namespace EntityComponent.Pathfinding
     {
         private PathNode[,] m_Nodes;
 
+        public Rectangle Bounds { get; set; }
+
         //---------------------------------------------------------------------------
 
         public Pathfinder()
         {
             m_Nodes = new PathNode[StageManager.Get().Width, StageManager.Get().Height];
+            Bounds = new Rectangle(0, 0, StageManager.Get().Width, StageManager.Get().Height);
         }
 
         //---------------------------------------------------------------------------
@@ -55,6 +58,9 @@ namespace EntityComponent.Pathfinding
 
             if (StageManager.Get().IsBlocked(startPoint.X, startPoint.Y)) return new List<Point>();
             if (StageManager.Get().IsBlocked(endPoint.X, endPoint.Y)) return new List<Point>();
+
+            if (!Bounds.Contains(startPoint.X, startPoint.Y)) return new List<Point>();
+            if (!Bounds.Contains(endPoint.X, endPoint.Y)) return new List<Point>();
 
             SortedList<int, Point> open = new SortedList<int, Point>(new DuplicateKeyComparer<int>());
             List<Point> closed = new List<Point>();
@@ -117,15 +123,19 @@ namespace EntityComponent.Pathfinding
         {
             List<Tuple<Point, int>> nodes = new List<Tuple<Point, int>>();
 
-            if (!StageManager.Get().IsBlocked(center.X - 1, center.Y)) nodes.Add(new Tuple<Point, int>(new Point(center.X - 1, center.Y), 10));
-            if (!StageManager.Get().IsBlocked(center.X + 1, center.Y)) nodes.Add(new Tuple<Point, int>(new Point(center.X + 1, center.Y), 10));
-            if (!StageManager.Get().IsBlocked(center.X, center.Y - 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X, center.Y - 1), 10));
-            if (!StageManager.Get().IsBlocked(center.X, center.Y + 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X, center.Y + 1), 10));
+            if (center.X > Bounds.X && !StageManager.Get().IsBlocked(center.X - 1, center.Y))
+                nodes.Add(new Tuple<Point, int>(new Point(center.X - 1, center.Y), 10));
+            if (center.X < Bounds.X + Bounds.Width - 1 && !StageManager.Get().IsBlocked(center.X + 1, center.Y))
+                nodes.Add(new Tuple<Point, int>(new Point(center.X + 1, center.Y), 10));
+            if (center.Y > Bounds.Y && !StageManager.Get().IsBlocked(center.X, center.Y - 1))
+                nodes.Add(new Tuple<Point, int>(new Point(center.X, center.Y - 1), 10));
+            if (center.Y < Bounds.Y + Bounds.Height + 1 && !StageManager.Get().IsBlocked(center.X, center.Y + 1))
+                nodes.Add(new Tuple<Point, int>(new Point(center.X, center.Y + 1), 10));
 
-            if (!StageManager.Get().IsBlocked(center.X - 1, center.Y - 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X - 1, center.Y - 1), 14));
-            if (!StageManager.Get().IsBlocked(center.X - 1, center.Y + 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X - 1, center.Y + 1), 14));
-            if (!StageManager.Get().IsBlocked(center.X + 1, center.Y - 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X + 1, center.Y - 1), 14));
-            if (!StageManager.Get().IsBlocked(center.X + 1, center.Y + 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X + 1, center.Y + 1), 14));
+            //if (!StageManager.Get().IsBlocked(center.X - 1, center.Y - 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X - 1, center.Y - 1), 14));
+            //if (!StageManager.Get().IsBlocked(center.X - 1, center.Y + 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X - 1, center.Y + 1), 14));
+            //if (!StageManager.Get().IsBlocked(center.X + 1, center.Y - 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X + 1, center.Y - 1), 14));
+            //if (!StageManager.Get().IsBlocked(center.X + 1, center.Y + 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X + 1, center.Y + 1), 14));
 
             return nodes;
         }

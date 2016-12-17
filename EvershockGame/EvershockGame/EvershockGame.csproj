@@ -49,7 +49,7 @@
     <Compile Include="Code\Components\MovementAnimationComponent.cs" />
     <Compile Include="Code\DungeonGenerator.cs" />
     <Compile Include="Code\Entities\Chest.cs" />
-    <Compile Include="Code\Entities\Pickup.cs" />
+    <Compile Include="Code\Entities\Player.cs" />
     <Compile Include="Code\GameTags.cs" />
     <Compile Include="Code\GameWindowSettings.cs" />
     <Compile Include="Code\Managers\MapManager.cs" />
@@ -61,7 +61,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -84,6 +83,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Effects\DeferredLighting.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Effects\Mask.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Camera\BackgroundTexture1.png">

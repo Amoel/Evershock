@@ -26,6 +26,8 @@ namespace EntityComponent
             GUID = Guid.NewGuid();
             Name = name;
 
+            EntityManager.Get().Register(this);
+
             Children = new List<Guid>();
             Components = new List<Guid>();
 

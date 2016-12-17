@@ -80,6 +80,13 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
+        public void ClearActions()
+        {
+            m_Mappings.Clear();
+        }
+
+        //---------------------------------------------------------------------------
+
         class InputMapping
         {
             public InputMapping() { }

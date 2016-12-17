@@ -16,11 +16,29 @@ namespace EntityComponent.Components
 
     //---------------------------------------------------------------------------
 
+    public enum ECollisionCategory
+    {
+        None,
+        All,
+        Player,
+        Stage
+    }
+
+    //---------------------------------------------------------------------------
+
     [Serializable]
     [RequireComponent(typeof(PhysicsComponent))]
     public abstract class ColliderComponent : Component, ICollider, IDrawableComponent
     {
-        protected static readonly float Unit = 10.0f;
+        public static readonly float Unit = 10.0f;
+
+        protected static readonly Dictionary<ECollisionCategory, Category> m_CategoryMapping = new Dictionary<ECollisionCategory, Category>()
+        {
+            { ECollisionCategory.None, Category.None },
+            { ECollisionCategory.All, Category.All },
+            { ECollisionCategory.Player, Category.Cat1 },
+            { ECollisionCategory.Stage, Category.Cat2 }
+        };
 
         public event CollisionEnterEventHandler Enter;
         public event CollisionLeaveEventHandler Leave;
@@ -28,10 +46,12 @@ namespace EntityComponent.Components
         protected Body Body { get; set; }
 
         public Vector2 Offset { get; protected set; }
+        public ECollisionCategory CollisionCategory { get; private set; }
+        public ECollisionCategory CollidesWith { get; private set; }
 
         //---------------------------------------------------------------------------
 
-        public ColliderComponent(Guid entity) : base(entity) { }
+        public ColliderComponent(Guid entity) : base(entity) { CollisionCategory = ECollisionCategory.All; }
 
         //---------------------------------------------------------------------------
 
@@ -41,9 +61,32 @@ namespace EntityComponent.Components
             if (Body.BodyType != BodyType.Static)
             {
                 Body.LinearVelocity = force / Unit;
-                //Body.ApplyLinearImpulse(force / Unit, Body.WorldCenter);
             }
             return (Body.Position - Offset) * Unit;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SetCollisionCategory(ECollisionCategory category)
+        {
+            CollisionCategory = category;
+            Body.CollisionCategories = m_CategoryMapping[CollisionCategory];
+            foreach (Fixture fixture in Body.FixtureList)
+            {
+                fixture.CollisionCategories = m_CategoryMapping[CollisionCategory];
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SetCollidesWith(ECollisionCategory category)
+        {
+            CollidesWith = category;
+            Body.CollidesWith = m_CategoryMapping[CollidesWith];
+            foreach (Fixture fixture in Body.FixtureList)
+            {
+                fixture.CollidesWith = m_CategoryMapping[CollidesWith];
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -61,6 +104,7 @@ namespace EntityComponent.Components
             {
                 targetEntity = EntityManager.Get().Find((Guid)target.UserData);
             }
+
             OnEnter(sourceEntity, targetEntity);
             return true;
         }

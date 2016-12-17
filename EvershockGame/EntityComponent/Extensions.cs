@@ -58,6 +58,14 @@ namespace EntityComponent
 
         //---------------------------------------------------------------------------
 
+        public static Vector2 ToLocalUV(this Vector2 source, CameraData data)
+        {
+            Vector2 temp = source.ToLocal(data);
+            return new Vector2(temp.X / (data.Width / 2.0f) - 1.0f, temp.Y / (data.Height / 2.0f) - 1.0f);
+        }
+
+        //---------------------------------------------------------------------------
+
         public static Vector3 Reflect(this Vector3 source, Vector3 normal)
         {
             Vector3 normalizedNormal = Vector3.Normalize(normal);
