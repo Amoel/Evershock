@@ -24,8 +24,8 @@ namespace EvershockGame.Code
                 if (closed && target.HasComponent<AttributesComponent>())
                 {
                     target.GetComponent<AttributesComponent>().TransmitMovementAddend(150);
-                    Pickup yield = new Pickup("MovementOrbs");
-                    yield.Init(EPickups.HEALTH, EPickups.COINS);
+                    //Pickup yield = new Pickup("MovementOrbs");
+                    //yield.Init(EPickups.HEALTH, EPickups.COINS);
                     closed = false;
                 }
 
