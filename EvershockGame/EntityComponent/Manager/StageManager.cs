@@ -224,6 +224,21 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
+        public List<Vector2> GetCorners(Vector2 center, float distance)
+        {
+            List<Vector2> corners = new List<Vector2>();
+            foreach (Chunk chunk in m_Chunks)
+            {
+                foreach (Vector2 corner in chunk.GetCorners())
+                {
+                    if (Vector2.Distance(center, corner) <= distance) corners.Add(corner);
+                }
+            }
+            return corners;
+        }
+
+        //---------------------------------------------------------------------------
+
         private void OnStageChanged()
         {
             StageChanged?.Invoke();

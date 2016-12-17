@@ -1,4 +1,6 @@
-﻿using EntityComponent.Manager;
+﻿using EntityComponent;
+using EntityComponent.Factory;
+using EntityComponent.Manager;
 using EvershockGame.Code.Stage;
 using Microsoft.Xna.Framework;
 using System;
@@ -27,17 +29,24 @@ namespace EvershockGame.Code
             for (int i = 0; i < 40; i++)
             {
                 Point p = GetPointInCircle(15);
-                rooms.Add(new Room(p.X, p.Y, m_Rand.Next(5, 20), m_Rand.Next(5, 20)));
+                rooms.Add(new Room(p.X, p.Y, m_Rand.Next(10, 30), m_Rand.Next(10, 30)));
             }
             SpreadRooms(rooms);
             ConnectRooms(rooms);
+
+            Rectangle bounds = GetDungeonBounds(rooms);
+            //foreach (Room room in rooms)
+            //{
+            //    Area area = EntityFactory.Create<Area>(string.Format("Area[{0},{1},{2},{3}]", room.Bounds.X - bounds.X, room.Bounds.Y - bounds.Y, room.Bounds.Width, room.Bounds.Height));
+            //    area.Collider.AddRect(room.Bounds.X - bounds.X, room.Bounds.Y - bounds.Y, room.Bounds.Width, room.Bounds.Height);
+            //}
         }
 
         //---------------------------------------------------------------------------
 
         private void SpreadRooms(List<Room> rooms)
         {
-            int padding = 2;
+            int padding = 5;
             Room a, b;
             int dx, dxa, dxb, dy, dya, dyb;
             bool touching;
@@ -51,7 +60,7 @@ namespace EvershockGame.Code
                     {
                         b = rooms[j];
                         if (a.Intersects(b, padding))
-                        { 
+                        {
                             touching = true;
                             dx = Math.Min(a.Bounds.Right - b.Bounds.Left + padding, a.Bounds.Left - b.Bounds.Right - padding);
                             dy = Math.Min(a.Bounds.Bottom - b.Bounds.Top + padding, a.Bounds.Top - b.Bounds.Bottom - padding);
@@ -74,6 +83,7 @@ namespace EvershockGame.Code
                 }
             }
             while (touching);
+            //UpdateBounds(rooms);
         }
 
         //---------------------------------------------------------------------------
@@ -82,10 +92,9 @@ namespace EvershockGame.Code
         {
             rooms.RemoveAll(room => room.Bounds.Width * room.Bounds.Height < 130);
             Rectangle bounds = GetDungeonBounds(rooms);
-            rooms.Add(new Room(bounds.X + 10, bounds.Y + 10, 9, 9));
+            rooms.Add(new Room(new Rectangle(5 + bounds.X, 5 + bounds.Y, 10, 10)));
 
             Dictionary<Room, List<Room>> graph = new Dictionary<Room, List<Room>>();
-
             Room a, b, c;
             double abDist, acDist, bcDist;
             bool skip;
@@ -98,7 +107,7 @@ namespace EvershockGame.Code
                     b = rooms[j];
                     abDist = Math.Pow(a.Bounds.Center.X - b.Bounds.Center.X, 2) + Math.Pow(a.Bounds.Center.Y - b.Bounds.Center.Y, 2);
                     for (int k = 0; k < rooms.Count(); k++)
-                    { 
+                    {
                         if (k == i || k == j)
                         {
                             continue;
@@ -110,13 +119,13 @@ namespace EvershockGame.Code
                         {
                             skip = true;
                         }
-                        if (skip) 
+                        if (skip)
                         {
                             break;
                         }
                     }
                     if (!skip)
-                    { 
+                    {
                         if (!graph.ContainsKey(a))
                         {
                             graph.Add(a, new List<Room>());
@@ -125,11 +134,50 @@ namespace EvershockGame.Code
                     }
                 }
             }
-
             List<Corridor> corridors = GenerateCorridors(graph);
 
-            Rectangle dungeonBounds = GetDungeonBounds(rooms);
+            CreateMap(rooms, corridors);
+        }
 
+        //---------------------------------------------------------------------------
+
+        private List<Corridor> GenerateCorridors(Dictionary<Room, List<Room>> graph)
+        {
+            List<Corridor> corridors = new List<Corridor>();
+
+            int dx, dy, x, y;
+            Room a, b;
+
+            foreach (KeyValuePair<Room, List<Room>> kvp in graph)
+            {
+                foreach (Room room in kvp.Value)
+                {
+                    if (kvp.Key.Bounds.Center.X < room.Bounds.Center.X)
+                    {
+                        a = kvp.Key;
+                        b = room;
+                    }
+                    else
+                    {
+                        a = room;
+                        b = kvp.Key;
+                    }
+                    x = a.Bounds.Center.X;
+                    y = a.Bounds.Center.Y;
+                    dx = b.Bounds.Center.X - x;
+                    dy = b.Bounds.Center.Y - y;
+
+                    corridors.Add(new Corridor(new Point(x, y), new Point(x + dx, y + dy)));
+                }
+            }
+            return corridors;
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void CreateMap(List<Room> rooms, List<Corridor> corridors)
+        {
+            Rectangle dungeonBounds = GetDungeonBounds(rooms);
             bool[,] map = new bool[dungeonBounds.Width, dungeonBounds.Height];
             foreach (Room room in rooms)
             {
@@ -160,75 +208,6 @@ namespace EvershockGame.Code
             }
 
             StageManager.Get().Create(map);
-            //System.Drawing.Bitmap image =
-            //    new System.Drawing.Bitmap(dungeonBounds.Width * 10, dungeonBounds.Height * 10);
-            //foreach (Room room in rooms)
-            //{
-            //    System.Drawing.Color color = System.Drawing.Color.FromArgb(0, 150, 80);
-            //    for (int x = (room.Bounds.X - dungeonBounds.X) * 10; x < (room.Bounds.X - dungeonBounds.X + room.Bounds.Width) * 10; x++)
-            //    {
-            //        for (int y = (room.Bounds.Y - dungeonBounds.Y) * 10; y < (room.Bounds.Y - dungeonBounds.Y + room.Bounds.Height) * 10; y++)
-            //        {
-            //            image.SetPixel(x, y, color);
-            //        }
-            //    }
-            //}
-            //image.Save("C:/Users/Max/Desktop/Dungeon.png");
-        }
-
-        //---------------------------------------------------------------------------
-
-        private List<Corridor> GenerateCorridors(Dictionary<Room, List<Room>> graph)
-        {
-            List<Corridor> corridors = new List<Corridor>();
-
-            int dx, dy, x, y;
-            Room a, b;
-
-            foreach (KeyValuePair<Room, List<Room>> kvp in graph)
-            {
-                foreach (Room room in kvp.Value)
-                {
-                    if (kvp.Key.Bounds.Center.X < room.Bounds.Center.X)
-                    {
-                        a = kvp.Key;
-                        b = room;
-                    }
-                    else
-                    {
-                        a = room;
-                        b = kvp.Key;
-                    }
-                    x = a.Bounds.Center.X;
-                    y = a.Bounds.Center.Y;
-                    dx = b.Bounds.Center.X - x;
-                    dy = b.Bounds.Center.Y - y;
-                    
-                    if (dx >= 0)
-                    {
-                        if (dy >= 0)
-                        {
-                            corridors.Add(new Corridor(new Point(x, y), new Point(x + dx, y + dy)));
-                        }
-                        else
-                        {
-                            corridors.Add(new Corridor(new Point(x, y + dy), new Point(x + dx, y - dy)));
-                        }
-                    }
-                    else
-                    {
-                        if (dy >= 0)
-                        {
-                            corridors.Add(new Corridor(new Point(x + dx, y), new Point(x - dx, y + dy)));
-                        }
-                        else
-                        {
-                            corridors.Add(new Corridor(new Point(x + dx, y + dy), new Point(x - dx, y - dy)));
-                        }
-                    }
-                }
-            }
-            return corridors;
         }
 
         //---------------------------------------------------------------------------

@@ -34,15 +34,18 @@ namespace EvershockGame.Code
                     
             };
 
-            AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"));
+            //AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"));
         }
+
+        //---------------------------------------------------------------------------
 
         public void Init(Vector2 location)
         {
             TransformComponent transform = GetComponent<TransformComponent>();
             if (transform != null)
             {
-                transform.Init(location.To3D());
+                //transform.Init(location.To3D());
+                //transform.MoveTo(location.To3D());
             }
         }
         

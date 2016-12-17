@@ -2,6 +2,7 @@
 using Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -237,12 +238,14 @@ namespace EntityComponent.Components
 
                     if (m_LightingTarget != null && m_LightingEffect != null)
                     {
-                        Device.SetRenderTarget(m_LightingTarget);
-                        Device.Clear(Color.Black);
+                        //Device.SetRenderTarget(m_LightingTarget);
+                        //Device.Clear(Color.Black);
 
-                        batch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
-                        ComponentManager.Get().DrawLights(batch, new CameraData(transform.Location.To2D(), m_LightingTarget.Width, m_LightingTarget.Height));
-                        batch.End();
+                        //batch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
+                        //ComponentManager.Get().DrawLights(batch, new CameraData(transform.Location.To2D(), m_LightingTarget.Width, m_LightingTarget.Height));
+                        //batch.End();
+
+                        DrawShadowMask(batch, data);
 
                         if (m_MainTarget != null)
                         {
@@ -261,6 +264,8 @@ namespace EntityComponent.Components
                             m_LightingEffect.Parameters["shadowMask"].SetValue(m_ShadowTarget);
 
                             m_EffectWrapper.ApplyEffects(batch, m_ComponentsTarget, m_MainTarget, m_PostEffects);
+                            
+                            //LightingManager.Get().Draw(batch, new Vector2(500, 500), data);
 
                             return m_MainTarget;
                         }
@@ -273,6 +278,17 @@ namespace EntityComponent.Components
         }
 
         //---------------------------------------------------------------------------
+        
+        private void DrawShadowMask(SpriteBatch batch, CameraData data)
+        {
+            Device.SetRenderTarget(m_LightingTarget);
+            Device.Clear(Color.Black);
+            batch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
+            ComponentManager.Get().DrawLights(batch, data);
+            batch.End();
+        }
+
+        //---------------------------------------------------------------------------
 
         private void DrawShadows(SpriteBatch batch, CameraData data)
         {
@@ -280,21 +296,21 @@ namespace EntityComponent.Components
             Device.Clear(Color.Transparent);
             batch.Begin();
 
-            Texture2D tileset = AssetManager.Get().Find<Texture2D>("BasicTileset");
+            Texture2D tileset = CollisionManager.Get().PointTexture;// AssetManager.Get().Find<Texture2D>("BasicTileset");
             if (tileset != null)
             {
                 TransformComponent transform = GetComponent<TransformComponent>();
                 if (transform != null)
                 {
                     Vector2 location = new Vector2(Width / 2 - data.Center.X, Height / 2 - data.Center.Y);
-
+                    
                     for (int x = -1; x <= Width / 32 + 2; x++)
                     {
                         for (int y = -1; y <= Height / 32 + 2; y++)
                         {
                             int xPos = (x + (int)(data.Center.X - Width / 2) / 32);
                             int yPos = (y + (int)(data.Center.Y - Height / 2) / 32);
-                            
+
                             Rectangle layer = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.First);
                             Rectangle layerTop = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.Third);
                             if (layer.Width > 0 && layer.Height > 0 && (layerTop.Width == 0 || layerTop.Height == 0)) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer, Color.White);
@@ -317,7 +333,7 @@ namespace EntityComponent.Components
                 if (transform != null)
                 {
                     Vector2 location = new Vector2(Width / 2 - data.Center.X, Height / 2 - data.Center.Y);
-
+                    
                     for (int x = 0; x < Width / 32 + 2; x++)
                     {
                         for (int y = 0; y < Height / 32 + 2; y++)
@@ -343,7 +359,14 @@ namespace EntityComponent.Components
 
         public void Draw(SpriteBatch batch)
         {
-            batch.Draw(m_MainTarget, Viewport, Color.White);
+            if (Keyboard.GetState().IsKeyDown(Keys.Q))
+            {
+                batch.Draw(m_LightingTarget, Viewport, Color.White);
+            }
+            else
+            {
+                batch.Draw(m_MainTarget, Viewport, Color.White);
+            }
         }
 
         //---------------------------------------------------------------------------

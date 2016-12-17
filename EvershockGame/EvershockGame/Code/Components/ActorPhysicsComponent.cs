@@ -41,24 +41,24 @@ namespace EvershockGame.Code
                 if (movement.Length() > 0.01f) ApplyForce(new Vector3(xMovement, yMovement, 0));
             }
 
-#if DEBUG
-            if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
-            {
-                ColliderComponent collider = GetComponent<ColliderComponent>();
-                if (collider != null)
-                {
-                    collider.SetCollisionState(false);
-                }
-            }
-            else
-            {
-                ColliderComponent collider = GetComponent<ColliderComponent>();
-                if (collider != null)
-                {
-                    collider.SetCollisionState(true);
-                }
-            }
-#endif
+//#if DEBUG
+//            if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+//            {
+//                ColliderComponent collider = GetComponent<ColliderComponent>();
+//                if (collider != null)
+//                {
+//                    collider.SetCollisionState(false);
+//                }
+//            }
+//            else
+//            {
+//                ColliderComponent collider = GetComponent<ColliderComponent>();
+//                if (collider != null)
+//                {
+//                    collider.SetCollisionState(true);
+//                }
+//            }
+//#endif
         }
     }
 }

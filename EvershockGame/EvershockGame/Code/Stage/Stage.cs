@@ -27,7 +27,7 @@ namespace EvershockGame.Code.Stage
             Rooms = new List<Room>();
             Corridors = new List<Corridor>();
 
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < 30; i++)
             {
                 Point p = GetPointInCircle(15);
                 Rooms.Add(new Room(p.X, p.Y, m_Rand.Next(5, 20), m_Rand.Next(5, 20)));
@@ -211,8 +211,9 @@ namespace EvershockGame.Code.Stage
 
         public void SaveStageAsImage(string path)
         {
+            int size = 10;
             System.Drawing.Bitmap image =
-                new System.Drawing.Bitmap(Bounds.Width * 10, Bounds.Height * 10);
+                new System.Drawing.Bitmap(Bounds.Width * size, Bounds.Height * size);
             foreach (Room room in Rooms)
             {
                 System.Drawing.Color color;
@@ -228,9 +229,9 @@ namespace EvershockGame.Code.Stage
                         color = System.Drawing.Color.FromArgb(48, 159, 219);
                         break;
                 }
-                for (int x = (room.Bounds.X - Bounds.X) * 10; x < (room.Bounds.X - Bounds.X + room.Bounds.Width) * 10; x++)
+                for (int x = (room.Bounds.X - Bounds.X) * size; x < (room.Bounds.X - Bounds.X + room.Bounds.Width) * size; x++)
                 {
-                    for (int y = (room.Bounds.Y - Bounds.Y) * 10; y < (room.Bounds.Y - Bounds.Y + room.Bounds.Height) * 10; y++)
+                    for (int y = (room.Bounds.Y - Bounds.Y) * size; y < (room.Bounds.Y - Bounds.Y + room.Bounds.Height) * size; y++)
                     {
                         image.SetPixel(x, y, color);
                     }
@@ -238,16 +239,16 @@ namespace EvershockGame.Code.Stage
             }
             foreach (Corridor corridor in Corridors)
             {
-                for (int x = (Math.Min(corridor.Start.X, corridor.Center.X) - Bounds.X) * 10; x < (Math.Max(corridor.Start.X, corridor.Center.X) - Bounds.X + 1) * 10; x++)
+                for (int x = (Math.Min(corridor.Start.X, corridor.Center.X) - Bounds.X) * size; x < (Math.Max(corridor.Start.X, corridor.Center.X) - Bounds.X + 1) * size; x++)
                 {
-                    for (int y = (Math.Min(corridor.Start.Y, corridor.Center.Y) - Bounds.Y) * 10; y < (Math.Max(corridor.Start.Y, corridor.Center.Y) - Bounds.Y + 1) * 10; y++)
+                    for (int y = (Math.Min(corridor.Start.Y, corridor.Center.Y) - Bounds.Y) * size; y < (Math.Max(corridor.Start.Y, corridor.Center.Y) - Bounds.Y + 1) * size; y++)
                     {
                         image.SetPixel(x, y, System.Drawing.Color.Black);
                     }
                 }
-                for (int x = (Math.Min(corridor.End.X, corridor.Center.X) - Bounds.X) * 10; x < (Math.Max(corridor.End.X, corridor.Center.X) - Bounds.X + 1) * 10; x++)
+                for (int x = (Math.Min(corridor.End.X, corridor.Center.X) - Bounds.X) * size; x < (Math.Max(corridor.End.X, corridor.Center.X) - Bounds.X + 1) * size; x++)
                 {
-                    for (int y = (Math.Min(corridor.End.Y, corridor.Center.Y) - Bounds.Y) * 10; y < (Math.Max(corridor.End.Y, corridor.Center.Y) - Bounds.Y + 1) * 10; y++)
+                    for (int y = (Math.Min(corridor.End.Y, corridor.Center.Y) - Bounds.Y) * size; y < (Math.Max(corridor.End.Y, corridor.Center.Y) - Bounds.Y + 1) * size; y++)
                     {
                         image.SetPixel(x, y, System.Drawing.Color.Black);
                     }

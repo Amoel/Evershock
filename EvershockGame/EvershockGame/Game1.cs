@@ -5,6 +5,7 @@ using EntityComponent.Entities;
 using EntityComponent.Factory;
 using EntityComponent.Manager;
 using EvershockGame.Code;
+using EvershockGame.Code.Stage;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,8 +18,8 @@ namespace EvershockGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        IEntity player;
-        IEntity player2;
+        Player player;
+        Player player2;
         IEntity playerIndicatorP1;
         IEntity playerIndicatorP2;
         AnimationComponent piAnimationP1;
@@ -28,7 +29,10 @@ namespace EvershockGame
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8
+            };
             Content.RootDirectory = "Content";
         }
 
@@ -39,7 +43,9 @@ namespace EvershockGame
             base.Initialize();
             Window.AllowUserResizing = true;
 
-            GameWindowSettings.SetWindowSettings(graphics,Window,1920,1080);
+            LightingManager.Get().Device = GraphicsDevice;
+
+            GameWindowSettings.SetWindowSettings(graphics, Window, 1920, 1080);
 
             int width = GraphicsDevice.PresentationParameters.BackBufferWidth;
             int height = GraphicsDevice.PresentationParameters.BackBufferHeight;
@@ -53,76 +59,25 @@ namespace EvershockGame
             DungeonGenerator generator = new DungeonGenerator();
             generator.Run(0);
 
-            //Stage stage = new Stage(0);
+            //Stage stage = new Stage(1);
             //stage.SaveStageAsImage("C:/Users/Max/Desktop/StageMap.png");
 
             /*--------------------------------------------------------------------------
                        Player 1
             --------------------------------------------------------------------------*/
 
-            player = EntityFactory.Create<Entity>("Player");
-            player.AddComponent<TransformComponent>().Init(new Vector3(520, 450, 0));
-            player.AddComponent<AttributesComponent>().Init(0, 130.0f);
-            
-            MovementAnimationComponent animation = player.AddComponent<MovementAnimationComponent>();
-            animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"),new Vector2 (0.5f,0.5f));
-            animation.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true));
-            animation.AddSetting((int)Tag.MoveRight, new AnimationSetting(8, 2, 0, 7));
-
-            player.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
-            player.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
-            player.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(5, 5));
-
-            InputComponent input = player.AddComponent<InputComponent>();
-            input.MapAction(EGameAction.MOVE_LEFT, EInput.KEYBOARD_LEFT);
-            input.MapAction(EGameAction.MOVE_RIGHT, EInput.KEYBOARD_RIGHT);
-            input.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_UP);
-            input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_DOWN);
-
-            playerIndicatorP1 = EntityFactory.Create<Entity>(player.GUID, "PlayerIndicatorP1");
-            playerIndicatorP1.AddComponent<TransformComponent>().Init(new Vector3(0, -65, 0));
-            piAnimationP1 = playerIndicatorP1.AddComponent<AnimationComponent>();
-            piAnimationP1.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimationP1"), new Vector2(0.4f, 0.4f));
-            piAnimationP1.AddSetting(0, new AnimationSetting(8, 1, 0, 7, false));
-            playerIndicatorP1.Disable();
+            player = EntityFactory.Create<Player>("Player1");
 
             /*--------------------------------------------------------------------------
                         Player 2
             --------------------------------------------------------------------------*/
 
-            player2 = EntityFactory.Create<Entity>("Player2");
-            player2.AddComponent<TransformComponent>().Init(new Vector3(400, 450, 0));
-            player2.AddComponent<AttributesComponent>().Init(0, 120.0f);
-            
-            MovementAnimationComponent animation2 = player2.AddComponent<MovementAnimationComponent>();
-            animation2.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"), new Vector2(0.5f, 0.5f));
-            animation2.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true));
-            animation2.AddSetting((int)Tag.MoveRight, new AnimationSetting(8, 2, 0, 7));
-
-            player2.AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
-            player2.AddComponent<CircleColliderComponent>().Init(22, BodyType.Dynamic);
-            player2.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(5, 5));
-
-            InputComponent input2 = player2.AddComponent<InputComponent>();
-            input2.MapAction(EGameAction.MOVE_LEFT, EInput.KEYBOARD_A);
-            input2.MapAction(EGameAction.MOVE_RIGHT, EInput.KEYBOARD_D);
-            input2.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_W);
-            input2.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_S);
-
-            playerIndicatorP2 = EntityFactory.Create<Entity>(player2.GUID, "PlayerIndicatorP2");
-            playerIndicatorP2.AddComponent<TransformComponent>().Init(new Vector3(0, -65, 0));
-            piAnimationP2 = playerIndicatorP2.AddComponent<AnimationComponent>();
-            piAnimationP2.Init(AssetManager.Get().Find<Texture2D>("PlayerIndicatorAnimationP2"), new Vector2(0.4f, 0.4f));
-            piAnimationP2.AddSetting(0, new AnimationSetting(8, 1, 0, 7, false));
-            playerIndicatorP2.Disable();
-
-            //AIComponent ai = player2.AddComponent<AIComponent>();
-            //ai.AddTarget(player, EBehaviour.Follow);
+            player2 = EntityFactory.Create<Player>("Player2");
 
             /*--------------------------------------------------------------------------
                         Camera
             --------------------------------------------------------------------------*/
-            
+
             Camera cam1 = EntityFactory.Create<Camera>("Cam1");
             cam1.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
             cam1.Properties.Viewport = new Rectangle(0, 0, width / 2, height);
@@ -135,7 +90,7 @@ namespace EvershockGame
             cam2.Properties.AddTarget(player2);
             cam2.Properties.IsAmbientOcclusionEnabled = true;
 
-            CameraManager.Get().FuseCameras(cam1, cam2, 400);
+            CameraManager.Get().FuseCameras(cam1, cam2, 1000);
 
             /*--------------------------------------------------------------------------
                         Other
@@ -143,13 +98,6 @@ namespace EvershockGame
 
             Chest testChest = EntityFactory.Create<Chest>("hallo");
             testChest.Init(new Vector2(300, 200));
-
-            //IEntity map = EntityFactory.Create<Entity>("Map");
-            //map.AddComponent<TransformComponent>();
-            //map.AddComponent<PhysicsComponent>();
-            //map.AddComponent<MapComponent>().Init(AssetManager.Get().Find<Level.Map>("TestMap"));
-            
-            //MapManager.Get().CreateCollisionFromMap(map, AssetManager.Get().Find<Level.Map>("TestMap"));
 
             /*--------------------------------------------------------------------------
                         UI
@@ -253,17 +201,17 @@ namespace EvershockGame
 
             base.Update(gameTime);
 
-            if ((Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl))) && !playerIndicatorP1.IsEnabled)
-            {
-                playerIndicatorP1.Enable();
-                playerIndicatorP2.Enable();
-            }
+            //if ((Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl))) && !playerIndicatorP1.IsEnabled)
+            //{
+            //    playerIndicatorP1.Enable();
+            //    playerIndicatorP2.Enable();
+            //}
 
-            if (Keyboard.GetState().IsKeyUp(Keys.LeftControl) && (Keyboard.GetState().IsKeyUp(Keys.RightControl)) && playerIndicatorP1.IsEnabled)
-            {
-                playerIndicatorP1.Disable();
-                playerIndicatorP2.Disable();
-            }
+            //if (Keyboard.GetState().IsKeyUp(Keys.LeftControl) && (Keyboard.GetState().IsKeyUp(Keys.RightControl)) && playerIndicatorP1.IsEnabled)
+            //{
+            //    playerIndicatorP1.Disable();
+            //    playerIndicatorP2.Disable();
+            //}
         }
         
         protected override void Draw(GameTime gameTime)

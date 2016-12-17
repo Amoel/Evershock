@@ -49,6 +49,7 @@
     <Compile Include="Code\Components\MovementAnimationComponent.cs" />
     <Compile Include="Code\DungeonGenerator.cs" />
     <Compile Include="Code\Entities\Chest.cs" />
+    <Compile Include="Code\Entities\Player.cs" />
     <Compile Include="Code\GameTags.cs" />
     <Compile Include="Code\GameWindowSettings.cs" />
     <Compile Include="Code\Managers\MapManager.cs" />
@@ -82,6 +83,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Effects\DeferredLighting.fx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Effects\Mask.fx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Camera\BackgroundTexture1.png">

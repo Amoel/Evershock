@@ -21,6 +21,8 @@ namespace EntityComponent.Stage
         private ChunkCell[,] m_Cells;
         private Guid m_CollisionEntity;
 
+        private List<Vector2> m_Corners;
+
         public Chunk LeftChunk { get; set; }
         public Chunk RightChunk { get; set; }
         public Chunk TopChunk { get; set; }
@@ -38,6 +40,8 @@ namespace EntityComponent.Stage
             X = x;
             Y = y;
             m_Cells = new ChunkCell[Width, Height];
+            m_Corners = new List<Vector2>();
+
             for (int _y = 0; _y < Height; _y++)
             {
                 for (int _x = 0; _x < Width; _x++)
@@ -45,6 +49,13 @@ namespace EntityComponent.Stage
                     m_Cells[_x, _y] = new ChunkCell();
                 }
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public List<Vector2> GetCorners()
+        {
+            return m_Corners;
         }
 
         //---------------------------------------------------------------------------
@@ -102,79 +113,6 @@ namespace EntityComponent.Stage
             }
         }
 
-        //---------------------------------------------------------------------------
-
-        //public IEntity CreateCollision()
-        //{
-        //    IEntity entity = EntityManager.Get().Find(m_CollisionEntity);
-
-        //    if (entity == null)
-        //    {
-        //        entity = EntityFactory.Create<Entity>(string.Format("Chunk[{0}|{0}]", X, Y));
-        //        entity.AddComponent<TransformComponent>();
-        //        entity.AddComponent<PhysicsComponent>();
-        //        entity.AddComponent<MultiPathColliderComponent>().Init();
-        //    }
-        //    MultiPathColliderComponent path = entity.GetComponent<MultiPathColliderComponent>();
-
-        //    if (path != null)
-        //    {
-        //        path.Reset();
-        //        for (int x = 0; x < Width - 1; x++)
-        //        {
-        //            Vector2 start = new Vector2((GlobalX(x) + 1) * 32, GlobalY(0) * 32);
-        //            int length = 0;
-        //            for (int y = 0; y < Height; y++)
-        //            {
-        //                if (m_Cells[x, y].IsBlocked != m_Cells[x + 1, y].IsBlocked)
-        //                {
-        //                    length++;
-        //                }
-        //                else
-        //                {
-        //                    if (length > 0)
-        //                    {
-        //                        path.AddPath(start, new Vector2((GlobalX(x) + 1) * 32, GlobalY(y) * 32));
-        //                        length = 0;
-        //                    }
-        //                    start = new Vector2((GlobalX(x) + 1) * 32, (GlobalY(y) + 1) * 32);
-        //                }
-        //            }
-        //            if (length > 0)
-        //            {
-        //                path.AddPath(start, new Vector2((GlobalX(x) + 1) * 32, GlobalY(Height) * 32));
-        //            }
-        //        }
-
-        //        for (int y = 0; y < Height - 1; y++)
-        //        {
-        //            Vector2 start = new Vector2(GlobalX(0) * 32, (GlobalY(y) + 1) * 32);
-        //            int length = 0;
-        //            for (int x = 0; x < Width; x++)
-        //            {
-        //                if (m_Cells[x, y].IsBlocked != m_Cells[x, y + 1].IsBlocked)
-        //                {
-        //                    length++;
-        //                }
-        //                else
-        //                {
-        //                    if (length > 0)
-        //                    {
-        //                        path.AddPath(start, new Vector2(GlobalX(x) * 32, (GlobalY(y) + 1) * 32));
-        //                        length = 0;
-        //                    }
-        //                    start = new Vector2((GlobalX(x) + 1) * 32, (GlobalY(y) + 1) * 32);
-        //                }
-        //            }
-        //            if (length > 0)
-        //            {
-        //                path.AddPath(start, new Vector2(GlobalX(Width) * 32, (GlobalY(y) + 1) * 32));
-        //            }
-        //        }
-        //    }
-        //    return entity;
-        //}
-
         public IEntity CreateCollision()
         {
             IEntity entity = EntityManager.Get().Find(m_CollisionEntity);
@@ -190,7 +128,10 @@ namespace EntityComponent.Stage
 
             if (path != null)
             {
+                m_Corners.Clear();
                 path.Reset();
+                path.SetCollisionCategory(ECollisionCategory.Stage);
+
                 for (int x = -1; x < Width - 1; x++)
                 {
                     Vector2 start = new Vector2((GlobalX(x) + 1) * 32, GlobalY(0) * 32);
@@ -211,7 +152,10 @@ namespace EntityComponent.Stage
                             {
                                 if (length > 0)
                                 {
-                                    path.AddPath(start, new Vector2((GlobalX(x) + 1) * 32, GlobalY(y) * 32));
+                                    Vector2 end = new Vector2((GlobalX(x) + 1) * 32, GlobalY(y) * 32);
+                                    path.AddPath(start, end);
+                                    if (!m_Corners.Contains(start)) m_Corners.Add(start);
+                                    if (!m_Corners.Contains(end)) m_Corners.Add(end);
                                     length = 0;
                                 }
                                 start = new Vector2((GlobalX(x) + 1) * 32, (GlobalY(y) + 1) * 32);
@@ -220,7 +164,10 @@ namespace EntityComponent.Stage
                     }
                     if (length > 0)
                     {
-                        path.AddPath(start, new Vector2((GlobalX(x) + 1) * 32, GlobalY(Height) * 32));
+                        Vector2 end = new Vector2((GlobalX(x) + 1) * 32, GlobalY(Height) * 32);
+                        path.AddPath(start, end);
+                        if (!m_Corners.Contains(start)) m_Corners.Add(start);
+                        if (!m_Corners.Contains(end)) m_Corners.Add(end);
                     }
                 }
 
@@ -244,7 +191,10 @@ namespace EntityComponent.Stage
                             {
                                 if (length > 0)
                                 {
-                                    path.AddPath(start, new Vector2(GlobalX(x) * 32, (GlobalY(y) + 1) * 32));
+                                    Vector2 end = new Vector2(GlobalX(x) * 32, (GlobalY(y) + 1) * 32);
+                                    path.AddPath(start, end);
+                                    if (!m_Corners.Contains(start)) m_Corners.Add(start);
+                                    if (!m_Corners.Contains(end)) m_Corners.Add(end);
                                     length = 0;
                                 }
                                 start = new Vector2((GlobalX(x) + 1) * 32, (GlobalY(y) + 1) * 32);
@@ -253,7 +203,10 @@ namespace EntityComponent.Stage
                     }
                     if (length > 0)
                     {
-                        path.AddPath(start, new Vector2(GlobalX(Width) * 32, (GlobalY(y) + 1) * 32));
+                        Vector2 end = new Vector2(GlobalX(Width) * 32, (GlobalY(y) + 1) * 32);
+                        path.AddPath(start, end);
+                        if (!m_Corners.Contains(start)) m_Corners.Add(start);
+                        if (!m_Corners.Contains(end)) m_Corners.Add(end);
                     }
                 }
             }
