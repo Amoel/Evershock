@@ -71,13 +71,13 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
-        public Vector2 CheckCollision(Guid entity, Vector2 force)
+        public Vector2 CheckCollision(TransformComponent transform, Guid entity, Vector2 force)
         {
             var collider = FindCollider(entity);
 
             if (collider == null)
             {
-                return Vector2.Zero;
+                return transform.Location.To2D();
             }
             
             return collider.Step(force);

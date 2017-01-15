@@ -6,12 +6,12 @@ using EntityComponent.Factory;
 using EntityComponent.Manager;
 using EntityComponent.Stages;
 using EvershockGame.Code;
-using FarseerPhysics.Dynamics;
+using EvershockGame.Code.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
+using System.IO;
 
 namespace EvershockGame
 {
@@ -59,7 +59,7 @@ namespace EvershockGame
             StageManager.Get().Create(stage.CreateMap());
             StageManager.Get().Stage = stage;
 
-            stage.SaveStageAsImage("C:/Users/Max/Desktop/StageMap.png");
+            stage.SaveStageAsImage(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"Map.png"));
 
             /*--------------------------------------------------------------------------
                        Player 1
@@ -96,7 +96,8 @@ namespace EvershockGame
             --------------------------------------------------------------------------*/
 
             Chest testChest = EntityFactory.Create<Chest>("hallo");
-            testChest.Init(new Vector2(300, 200));
+            testChest.Init(new Vector2(460, 450));
+            Pickup testPickup = PickupFactory.Create(EPickups.HEALTH, new Vector3(460, 450, 0));
 
             /*--------------------------------------------------------------------------
                         UI
@@ -128,6 +129,8 @@ namespace EvershockGame
             Texture2D pointTex = new Texture2D(GraphicsDevice, 1, 1);
             pointTex.SetData(new Color[] { Color.White });
             CollisionManager.Get().PointTexture = pointTex;
+            AssetManager.Get().Store<Texture2D>("DefaultPlaceholder", "Graphics/Debug/DefaultPlaceholder");
+            SpriteComponent.DefaultTexture = AssetManager.Get().Find<Texture2D>("DefaultPlaceholder");
 #endif
 
             AssetManager.Get().Store<Texture2D>("Background1", "Graphics/Camera/BackgroundTexture1");

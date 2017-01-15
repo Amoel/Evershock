@@ -1,22 +1,12 @@
 ﻿using EntityComponent;
+using EvershockGame.Code.Factories;
 using System;
 
 namespace EvershockGame.Code
 {
     //Make all new :D
     //We need: A factory, a Pickup Component, 
-
-    public enum EPickups : byte
-    {
-        HEALTH,
-        MOVEMENTSPEED,
-        COINS,
-        ITEM1,
-        ITEM2,
-        ITEM3,
-        OTHER
-    }
-
+    
     public class Pickup : Entity
     {
         Random m_rand = new Random();

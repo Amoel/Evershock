@@ -70,7 +70,7 @@ namespace EntityComponent.Components
                     m_Force *= Inertia;
                 }
 
-                Vector2 newForce = CollisionManager.Get().CheckCollision(Entity, GetForce().To2D());
+                Vector2 newForce = CollisionManager.Get().CheckCollision(transform, Entity, GetForce().To2D());
                 transform.MoveTo(new Vector3(newForce.X, newForce.Y, GetForce().Z));
             }
         }
