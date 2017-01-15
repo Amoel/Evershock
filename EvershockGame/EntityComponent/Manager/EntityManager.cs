@@ -17,6 +17,8 @@ namespace EntityComponent.Manager
         private Dictionary<Guid, IEntity> m_Entities;
         private Dictionary<Guid, Guid> m_Hierarchy;
 
+        private Dictionary<Type, List<Guid>> m_Types;
+
         //---------------------------------------------------------------------------
 
         protected EntityManager() { GlobalManager.Get().Register(this); }
@@ -27,6 +29,7 @@ namespace EntityComponent.Manager
         {
             m_Entities = new Dictionary<Guid, IEntity>();
             m_Hierarchy = new Dictionary<Guid, Guid>();
+            m_Types = new Dictionary<Type, List<Guid>>();
         }
 
         //---------------------------------------------------------------------------
@@ -45,7 +48,18 @@ namespace EntityComponent.Manager
         {
             if (entity != null)
             {
-                if (!m_Entities.ContainsKey(entity.GUID)) m_Entities.Add(entity.GUID, (entity));
+                if (!m_Entities.ContainsKey(entity.GUID))
+                {
+                    m_Entities.Add(entity.GUID, (entity));
+                }
+                if (!m_Types.ContainsKey(entity.GetType()))
+                {
+                    m_Types.Add(entity.GetType(), new List<Guid>() { entity.GUID });
+                }
+                else
+                {
+                    m_Types[entity.GetType()].Add(entity.GUID);
+                }
             }
         }
 
@@ -53,10 +67,17 @@ namespace EntityComponent.Manager
 
         public void Unregister(IEntity entity)
         {
-            if (entity != null && m_Entities.ContainsKey(entity.GUID))
+            if (entity != null)
             {
-                entity.ClearComponents();
-                m_Entities.Remove(entity.GUID);
+                if (m_Entities.ContainsKey(entity.GUID))
+                {
+                    entity.ClearComponents();
+                    m_Entities.Remove(entity.GUID);
+                }
+                if (m_Types.ContainsKey(entity.GetType()) && m_Types[entity.GetType()].Contains(entity.GUID))
+                {
+                    m_Types[entity.GetType()].Remove(entity.GUID);
+                }
             }
         }
 
@@ -87,6 +108,22 @@ namespace EntityComponent.Manager
                 return (T)m_Entities[guid];
             }
             return default(T);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public List<T> Find<T>() where T : IEntity
+        {
+            List<T> entities = new List<T>();
+            if (m_Types.ContainsKey(typeof(T)))
+            {
+                foreach (Guid guid in m_Types[typeof(T)])
+                {
+                    T entity = Find<T>(guid);
+                    if (entity != null) entities.Add(entity);
+                }
+            }
+            return entities;
         }
 
         //---------------------------------------------------------------------------

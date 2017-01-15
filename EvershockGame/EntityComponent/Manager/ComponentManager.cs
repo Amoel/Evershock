@@ -218,7 +218,13 @@ namespace EntityComponent.Manager
             foreach (SmartContainer<ILightingComponent> container in m_LightingComponents.Values)
             {
                 if (!((IComponent)container.Data).IsEnabled) continue;
-                container.Data.Draw(batch, data);
+                container.Data.DrawLight(batch, data);
+            }
+            foreach (SmartContainer<ILightingComponent> container in m_LightingComponents.Values)
+            {
+                if (!((IComponent)container.Data).IsEnabled) continue;
+                
+                container.Data.DrawArea(batch, data);
             }
         }
 

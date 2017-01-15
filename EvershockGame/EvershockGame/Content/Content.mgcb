@@ -43,3 +43,9 @@
 /processorParam:DebugMode=Auto
 /build:Effects/Mask.fx
 
+#begin Effects/Occlusion.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/Occlusion.fx
+

@@ -1,4 +1,5 @@
 ﻿using EntityComponent.Components;
+using EntityComponent.Stages;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -80,6 +81,20 @@ namespace EntityComponent
             float angle = Vector3.Dot(source, -normalizedNormal);
             return source + (normalizedNormal * (source * normalizedNormal).Length());
             //return source - (Vector3.Negate(Vector3.Normalize(normal)) * (source * Vector3.Normalize(normal)).Length());
+        }
+
+        //---------------------------------------------------------------------------
+
+        public static EDirection Invert(this EDirection direction)
+        {
+            switch (direction)
+            {
+                case EDirection.Left: return EDirection.Right;
+                case EDirection.Right: return EDirection.Left;
+                case EDirection.Up: return EDirection.Down;
+                case EDirection.Down: return EDirection.Up;
+                default: return EDirection.None;
+            }
         }
     }
 }

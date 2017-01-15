@@ -82,7 +82,18 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch, CameraData data)
+        public void DrawArea(SpriteBatch batch, CameraData data)
+        {
+            TransformComponent transform = GetComponent<TransformComponent>();
+            if (transform != null)
+            {
+                LightingManager.Get().DrawArea(batch, transform.Location.To2D(), data);
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void DrawLight(SpriteBatch batch, CameraData data)
         {
             if (GetTex() != null)
             {
@@ -99,7 +110,6 @@ namespace EntityComponent.Components
                         Scale.X,
                         SpriteEffects.None,
                         0);
-                    LightingManager.Get().Draw(batch, transform.Location.To2D(), data);
                 }
             }
         }
