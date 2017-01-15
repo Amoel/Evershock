@@ -37,15 +37,9 @@ namespace EvershockGame.Code
                 randoms[i] = m_rand.NextDouble();
                 combinedRandoms += randoms[i];
             }
-
             //This will be needed, to figure out, which Pickups to actually spawn
             //foreach (EAttributes key in Enum.GetValues(typeof(EAttributes))) { }
         }
-
-        /// <summary> hui </summary>
-        public void Test()
-        { }
-          
 
         public void SpawnPickups(int amount = 1, params EPickups[] types)
         {

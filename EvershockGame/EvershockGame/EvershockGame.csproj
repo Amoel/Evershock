@@ -47,9 +47,12 @@
     <Compile Include="Code\Components\AttributesComponent.cs" />
     <Compile Include="Code\Components\MapComponent.cs" />
     <Compile Include="Code\Components\MovementAnimationComponent.cs" />
+    <Compile Include="Code\Components\PickupComponent.cs" />
     <Compile Include="Code\DungeonGenerator.cs" />
     <Compile Include="Code\Entities\Chest.cs" />
+    <Compile Include="Code\Entities\Pickup.cs" />
     <Compile Include="Code\Entities\Player.cs" />
+    <Compile Include="Code\Factories\PickupFactory.cs" />
     <Compile Include="Code\GameTags.cs" />
     <Compile Include="Code\GameWindowSettings.cs" />
     <Compile Include="Code\Managers\MapManager.cs" />

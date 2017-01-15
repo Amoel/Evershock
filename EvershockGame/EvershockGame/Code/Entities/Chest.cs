@@ -13,7 +13,7 @@ namespace EvershockGame.Code
         public Chest(string name) : base(name)
         {
             AddComponent<TransformComponent>().Init(new Vector3(300, 0, 0));
-            AddComponent<AttributesComponent>();
+            AddComponent<PickupComponent>();
             AddComponent<PhysicsComponent>();
             AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("ChestClosed1"));
             RectColliderComponent chestCollider = AddComponent<RectColliderComponent>();
