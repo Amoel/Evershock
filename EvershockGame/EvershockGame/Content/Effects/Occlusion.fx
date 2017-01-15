@@ -1,20 +1,27 @@
 sampler TextureSampler : register(s0);
-const float blurSizeHorizontal = 1.0f/960.0f;
-const float blurSizeVertical = 1.0f/540.0f;
-
-int dist = 25;
+const float blurSizeHorizontal = 1.0f/1920.0f;
+const float blurSizeVertical = 1.0f/1080.0f;
 
 float4 HorizontalBlurFunction(float4 pos : SV_POSITION, float4 color1 : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
 	float4 sum = float4(0.0, 0.0, 0.0, 0.0);
 	float4 col = tex2D(TextureSampler, coords);
 
+	int dist = clamp((int)(length(float2(0.5 - coords.x, 0.5 - coords.y)) * 150), 10, 100);
 	for (int i = 0; i < dist; i++)
 	{
 		sum += tex2D(TextureSampler, float2(coords.x + (i - (float)dist / 2.0f) * blurSizeHorizontal, coords.y));
 	}
 	sum /= dist;
-	return sum;
+
+	if (col.a > 0.0f)
+	{
+		return sum;
+	}
+	else
+	{
+		return float4(0.5, 0.5, 0.5, 0.5);
+	}
 }
 
 float4 VerticalBlurFunction(float4 pos : SV_POSITION, float4 color1 : COLOR0, float2 coords : TEXCOORD0) : COLOR0
@@ -22,12 +29,21 @@ float4 VerticalBlurFunction(float4 pos : SV_POSITION, float4 color1 : COLOR0, fl
 	float4 sum = float4(0.0, 0.0, 0.0, 0.0);
 	float4 col = tex2D(TextureSampler, coords);
 
+	int dist = clamp((int)(length(float2(0.5 - coords.x, 0.5 - coords.y)) * 150), 10, 100);
 	for (int i = 0; i < dist; i++)
 	{
 		sum += tex2D(TextureSampler, float2(coords.x, coords.y + (i - (float)dist / 2.0f) * blurSizeVertical));
 	}
 	sum /= dist;
-	return sum;
+
+	if (col.a > 0.0f)
+	{
+		return sum;
+	}
+	else
+	{
+		return float4(0.0, 0.0, 0.0, 1.0);
+	}
 }
 
 technique Technique1

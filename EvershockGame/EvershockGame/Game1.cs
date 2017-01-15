@@ -4,13 +4,14 @@ using EntityComponent.Components.UI;
 using EntityComponent.Entities;
 using EntityComponent.Factory;
 using EntityComponent.Manager;
+using EntityComponent.Stages;
 using EvershockGame.Code;
-using EvershockGame.Code.Stage;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace EvershockGame
 {
@@ -54,14 +55,11 @@ namespace EvershockGame
             UIManager.Get().Init(GraphicsDevice, width, height);
             CameraManager.Get().Init(width, height);
 
-            //StageManager.Get().Create(30, 30);
-            //StageManager.Get().Load(AssetManager.Get().Find<Level.Map>("TestMap"), 0, 0);
+            Stage stage = new Stage(0);
+            StageManager.Get().Create(stage.CreateMap());
+            StageManager.Get().Stage = stage;
 
-            DungeonGenerator generator = new DungeonGenerator();
-            generator.Run(0);
-
-            //Stage stage = new Stage(1);
-            //stage.SaveStageAsImage("C:/Users/Max/Desktop/StageMap.png");
+            stage.SaveStageAsImage("C:/Users/Max/Desktop/StageMap.png");
 
             /*--------------------------------------------------------------------------
                        Player 1
@@ -152,6 +150,7 @@ namespace EvershockGame
             AssetManager.Get().Store<Texture2D>("CircleLight", "Graphics/Lights/CircleLight");
 
             AssetManager.Get().Store<Effect>("LightingEffect", "Effects/DeferredLighting");
+            AssetManager.Get().Store<Effect>("Occlusion", "Effects/Occlusion");
             AssetManager.Get().Store<Effect>("Blur", "Effects/Blur");
         }
 

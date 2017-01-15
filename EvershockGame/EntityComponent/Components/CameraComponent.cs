@@ -249,23 +249,26 @@ namespace EntityComponent.Components
 
                         if (m_MainTarget != null)
                         {
-                            if (IsAmbientOcclusionEnabled)
-                            {
-                                DrawShadows(batch, data);
-                                List<Effect> shadowEffects = new List<Effect>()
-                                {
-                                    AssetManager.Get().Find<Effect>("Blur")
-                                };
-                                m_EffectWrapper.ApplyEffects(batch, m_ShadowTarget, m_ShadowTarget, shadowEffects);
-                            }
+                            //if (IsAmbientOcclusionEnabled)
+                            //{
+                            //    DrawShadows(batch, data);
+                            //    List<Effect> shadowEffects = new List<Effect>()
+                            //    {
+                            //        AssetManager.Get().Find<Effect>("Occlusion")
+                            //    };
+                            //    m_EffectWrapper.ApplyEffects(batch, m_ShadowTarget, m_ShadowTarget, shadowEffects);
+                            //}
 
                             m_LightingEffect.Parameters["isAmbientOcclusionEnabled"].SetValue(IsAmbientOcclusionEnabled);
                             m_LightingEffect.Parameters["lightMask"].SetValue(m_LightingTarget);
                             m_LightingEffect.Parameters["shadowMask"].SetValue(m_ShadowTarget);
 
                             m_EffectWrapper.ApplyEffects(batch, m_ComponentsTarget, m_MainTarget, m_PostEffects);
-                            
-                            //LightingManager.Get().Draw(batch, new Vector2(500, 500), data);
+
+                            if (CollisionManager.Get().IsDebugViewActive)
+                            {
+                                LightingManager.Get().DrawDebug(batch, data);
+                            }
 
                             return m_MainTarget;
                         }
@@ -286,6 +289,7 @@ namespace EntityComponent.Components
             batch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
             ComponentManager.Get().DrawLights(batch, data);
             batch.End();
+            m_EffectWrapper.ApplyEffects(batch, m_LightingTarget, m_LightingTarget, new List<Effect>() { AssetManager.Get().Find<Effect>("Blur") });
         }
 
         //---------------------------------------------------------------------------
@@ -332,23 +336,23 @@ namespace EntityComponent.Components
                 TransformComponent transform = GetComponent<TransformComponent>();
                 if (transform != null)
                 {
-                    Vector2 location = new Vector2(Width / 2 - data.Center.X, Height / 2 - data.Center.Y);
+                    Vector2 location = new Vector2(Width / 2.0f - data.Center.X, Height / 2.0f - data.Center.Y);
                     
                     for (int x = 0; x < Width / 32 + 2; x++)
                     {
                         for (int y = 0; y < Height / 32 + 2; y++)
                         {
-                            int xPos = (x + (int)(data.Center.X - Width / 2) / 32);
-                            int yPos = (y + (int)(data.Center.Y - Height / 2) / 32);
+                            float xPos = (x + (int)(data.Center.X - Width / 2.0f) / 32);
+                            float yPos = (y + (int)(data.Center.Y - Height / 2.0f) / 32);
                             
-                            Rectangle layer1 = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.First);
-                            if (layer1.Width > 0 && layer1.Height > 0) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer1, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00001f);
+                            Rectangle layer1 = StageManager.Get().GetTextureBounds((int)xPos, (int)yPos, ELayerMode.First);
+                            if (layer1.Width > 0 && layer1.Height > 0) batch.Draw(tileset, new Rectangle((int)(location.X + xPos * 32), (int)(location.Y + yPos * 32), 32, 32), layer1, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00001f);
 
-                            Rectangle layer2 = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.Second);
-                            if (layer2.Width > 0 && layer2.Height > 0) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer2, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00002f);
+                            Rectangle layer2 = StageManager.Get().GetTextureBounds((int)xPos, (int)yPos, ELayerMode.Second);
+                            if (layer2.Width > 0 && layer2.Height > 0) batch.Draw(tileset, new Rectangle((int)(location.X + xPos * 32), (int)(location.Y + yPos * 32), 32, 32), layer2, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00002f);
 
-                            Rectangle layer3 = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.Third);
-                            if (layer3.Width > 0 && layer3.Height > 0) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 32, (int)location.Y + yPos * 32, 32, 32), layer3, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.9f);
+                            Rectangle layer3 = StageManager.Get().GetTextureBounds((int)xPos, (int)yPos, ELayerMode.Third);
+                            if (layer3.Width > 0 && layer3.Height > 0) batch.Draw(tileset, new Rectangle((int)(location.X + xPos * 32), (int)(location.Y + yPos * 32), 32, 32), layer3, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.9f);
                         }
                     }
                 }
@@ -362,6 +366,10 @@ namespace EntityComponent.Components
             if (Keyboard.GetState().IsKeyDown(Keys.Q))
             {
                 batch.Draw(m_LightingTarget, Viewport, Color.White);
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.E))
+            {
+                batch.Draw(m_ShadowTarget, Viewport, Color.White);
             }
             else
             {

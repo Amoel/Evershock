@@ -1,23 +1,30 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EntityComponent.Pathfinding;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Code.Stage
+namespace EntityComponent.Stages
 {
     public class Stage
     {
         private Random m_Rand;
 
+        public static readonly int Size = 5;
+
         public List<Room> Rooms { get; private set; }
         public List<Corridor> Corridors { get; private set; }
+        public List<Corner> Corners { get; private set; }
+
         public Rectangle Bounds { get; private set; }
 
         public Room SpawnRoom { get; private set; }
 
-        private byte[,] m_Map; 
+        private byte[,] m_Map;
+
+        private CorridorGenerator m_CorridorGenerator;
 
         //---------------------------------------------------------------------------
 
@@ -26,21 +33,30 @@ namespace EvershockGame.Code.Stage
             m_Rand = (seed == 0 ? new Random() : new Random(seed));
             Rooms = new List<Room>();
             Corridors = new List<Corridor>();
+            Corners = new List<Corner>();
 
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 40; i++)
             {
-                Point p = GetPointInCircle(15);
-                Rooms.Add(new Room(p.X, p.Y, m_Rand.Next(5, 20), m_Rand.Next(5, 20)));
+                Rooms.Add(CreateRoom(Size));
             }
             SpreadRooms(Rooms);
             ConnectRooms(Rooms);
+            FindCorners(Rooms, Corridors);
+        }
+
+        //---------------------------------------------------------------------------
+
+        private Room CreateRoom(int size)
+        {
+            Point p = GetPointInCircle(50);
+            return new Room(p.X, p.Y, m_Rand.Next(3, 10) * size, m_Rand.Next(3, 10) * size);
         }
 
         //---------------------------------------------------------------------------
 
         private void SpreadRooms(List<Room> rooms)
         {
-            int padding = 5;
+            int padding = Size;
             Room a, b;
             int dx, dxa, dxb, dy, dya, dyb;
             bool touching;
@@ -70,14 +86,21 @@ namespace EvershockGame.Code.Stage
                             dxb = dx + dxa;
                             dya = -dy / 2;
                             dyb = dy + dya;
-                            a.Shift(dxa, dya);
-                            b.Shift(dxb, dyb);
+                            a.Shift(dxa + (dxa > 0 ? (Size - (dxa % Size)) : -(Size + (dxa % Size))), dya + (dya > 0 ? (Size - (dya % Size)) : -(Size + (dya % Size))));
+                            b.Shift(dxb + (dxb > 0 ? (Size - (dxb % Size)) : -(Size + (dxb % Size))), dyb + (dyb > 0 ? (Size - (dyb % Size)) : -(Size + (dyb % Size))));
+                            //a.Shift(dxa, dya);
+                            //b.Shift(dxb, dyb);
                         }
                     }
                 }
             }
             while (touching);
+
             UpdateBounds(rooms);
+            foreach (Room room in rooms)
+            {
+                room.Shift(-Bounds.X, -Bounds.Y);
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -85,6 +108,7 @@ namespace EvershockGame.Code.Stage
         private void ConnectRooms(List<Room> rooms)
         {
             rooms.RemoveAll(room => room.Bounds.Width * room.Bounds.Height < 130);
+            rooms.Add(new Room(new Rectangle(Size, Size, Size * 3, Size * 3)));
 
             Dictionary<Room, List<Room>> graph = new Dictionary<Room, List<Room>>();
             Room a, b, c;
@@ -128,7 +152,6 @@ namespace EvershockGame.Code.Stage
             }
             Corridors = GenerateCorridors(graph);
             SetSpawnRoom(Rooms[m_Rand.Next(Rooms.Count)]);
-            //StageManager.Get().Create(map);
         }
 
         //---------------------------------------------------------------------------
@@ -137,32 +160,64 @@ namespace EvershockGame.Code.Stage
         {
             List<Corridor> corridors = new List<Corridor>();
 
-            int dx, dy, x, y;
-            Room a, b;
+            m_CorridorGenerator = new CorridorGenerator(CreateMap(Size), Size);
+            //m_CorridorGenerator = new CorridorGenerator(CreateMap(1), 1);
 
             foreach (KeyValuePair<Room, List<Room>> kvp in graph)
             {
                 foreach (Room room in kvp.Value)
                 {
-                    if (kvp.Key.Bounds.Center.X < room.Bounds.Center.X)
-                    {
-                        a = kvp.Key;
-                        b = room;
-                    }
-                    else
-                    {
-                        a = room;
-                        b = kvp.Key;
-                    }
-                    x = a.Bounds.Center.X;
-                    y = a.Bounds.Center.Y;
-                    dx = b.Bounds.Center.X - x;
-                    dy = b.Bounds.Center.Y - y;
+                    Exit leftExit = null;
+                    Exit rightExit = null;
+                    Room.GetClosestExits(kvp.Key, room, out leftExit, out rightExit);
 
-                    corridors.Add(new Corridor(new Point(x, y), new Point(x + dx, y + dy)));
+                    Corridor corridor = m_CorridorGenerator.Execute(leftExit, rightExit);
+                    if (corridor != null) corridors.Add(corridor);
                 }
             }
             return corridors;
+        }
+
+        //---------------------------------------------------------------------------
+
+        private Corridor GenerateCorridor(Room first, Room second)
+        {
+            int dx, dy, x, y;
+            Room a, b;
+
+            if (first.Bounds.Center.X < first.Bounds.Center.X)
+            {
+                a = first;
+                b = second;
+            }
+            else
+            {
+                a = second;
+                b = first;
+            }
+            x = a.Bounds.Center.X;
+            y = a.Bounds.Center.Y;
+            dx = b.Bounds.Center.X - x;
+            dy = b.Bounds.Center.Y - y;
+
+            return new Corridor(new Point(x, y), new Point(x + dx, y + dy), 2);
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void FindCorners(List<Room> rooms, List<Corridor> corridors)
+        {
+            foreach (Room room in rooms)
+            {
+                Corners.Add(room.TopLeft());
+                Corners.Add(room.TopRight());
+                Corners.Add(room.BottomLeft());
+                Corners.Add(room.BottomRight());
+            }
+            foreach (Corridor corridor in corridors)
+            {
+                Corners.AddRange(corridor.Corners);
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -175,45 +230,44 @@ namespace EvershockGame.Code.Stage
 
         //---------------------------------------------------------------------------
 
-        private void CreateMap()
+        public byte[,] CreateMap(int size = 1)
         {
-            bool[,] map = new bool[Bounds.Width, Bounds.Height];
+            byte[,] map = new byte[Bounds.Width / size, Bounds.Height / size];
             foreach (Room room in Rooms)
             {
-                for (int x = room.Bounds.X - Bounds.X; x < room.Bounds.X - Bounds.X + room.Bounds.Width; x++)
+                for (int x = room.Bounds.X; x < room.Bounds.X + room.Bounds.Width; x++)
                 {
-                    for (int y = room.Bounds.Y - Bounds.Y; y < room.Bounds.Y - Bounds.Y + room.Bounds.Height; y++)
+                    for (int y = room.Bounds.Y; y < room.Bounds.Y + room.Bounds.Height; y++)
                     {
-                        map[x, y] = true;
+                        map[x / size, y / size] = 255;
                     }
                 }
             }
             foreach (Corridor corridor in Corridors)
             {
-                for (int x = Math.Min(corridor.Start.X, corridor.Center.X) - Bounds.X - 1; x <= Math.Max(corridor.Start.X, corridor.Center.X) - Bounds.X + 1; x++)
+                foreach (CorridorSegment segment in corridor.Segments)
                 {
-                    for (int y = Math.Min(corridor.Start.Y, corridor.Center.Y) - Bounds.Y - 1; y <= Math.Max(corridor.Start.Y, corridor.Center.Y) - Bounds.Y + 1; y++)
+                    int thickness = (segment.Thickness - 1) / 2;
+                    for (int x = Math.Min(segment.Start.X, segment.End.X) - thickness; x <= Math.Max(segment.Start.X, segment.End.X) + thickness; x++)
                     {
-                        map[x, y] = true;
-                    }
-                }
-                for (int x = Math.Min(corridor.End.X, corridor.Center.X) - Bounds.X - 1; x <= Math.Max(corridor.End.X, corridor.Center.X) - Bounds.X + 1; x++)
-                {
-                    for (int y = Math.Min(corridor.End.Y, corridor.Center.Y) - Bounds.Y - 1; y <= Math.Max(corridor.End.Y, corridor.Center.Y) - Bounds.Y + 1; y++)
-                    {
-                        if (y < Bounds.Height) map[x, y] = true;
+                        for (int y = Math.Min(segment.Start.Y, segment.End.Y) - thickness; y <= Math.Max(segment.Start.Y, segment.End.Y) + thickness; y++)
+                        {
+                            if (x >= 0 && x < map.GetLength(0) && y >= 0 && y < map.GetLength(1)) map[x, y] = 255;
+                        }
                     }
                 }
             }
+            return map;
         }
 
         //---------------------------------------------------------------------------
 
         public void SaveStageAsImage(string path)
         {
-            int size = 10;
+            int size = 5;
             System.Drawing.Bitmap image =
                 new System.Drawing.Bitmap(Bounds.Width * size, Bounds.Height * size);
+            
             foreach (Room room in Rooms)
             {
                 System.Drawing.Color color;
@@ -229,32 +283,64 @@ namespace EvershockGame.Code.Stage
                         color = System.Drawing.Color.FromArgb(48, 159, 219);
                         break;
                 }
-                for (int x = (room.Bounds.X - Bounds.X) * size; x < (room.Bounds.X - Bounds.X + room.Bounds.Width) * size; x++)
+                for (int x = room.Bounds.X * size; x < (room.Bounds.X + room.Bounds.Width) * size; x++)
                 {
-                    for (int y = (room.Bounds.Y - Bounds.Y) * size; y < (room.Bounds.Y - Bounds.Y + room.Bounds.Height) * size; y++)
+                    for (int y = room.Bounds.Y * size; y < (room.Bounds.Y + room.Bounds.Height) * size; y++)
                     {
                         image.SetPixel(x, y, color);
                     }
                 }
             }
+            
             foreach (Corridor corridor in Corridors)
             {
-                for (int x = (Math.Min(corridor.Start.X, corridor.Center.X) - Bounds.X) * size; x < (Math.Max(corridor.Start.X, corridor.Center.X) - Bounds.X + 1) * size; x++)
+                foreach (CorridorSegment segment in corridor.Segments)
                 {
-                    for (int y = (Math.Min(corridor.Start.Y, corridor.Center.Y) - Bounds.Y) * size; y < (Math.Max(corridor.Start.Y, corridor.Center.Y) - Bounds.Y + 1) * size; y++)
+                    int thickness = (segment.Thickness - 1) / 2;
+                    for (int x = (Math.Min(segment.Start.X, segment.End.X) - thickness) * size; x < (Math.Max(segment.Start.X, segment.End.X) + 1 + thickness) * size; x++)
                     {
-                        image.SetPixel(x, y, System.Drawing.Color.Black);
+                        for (int y = (Math.Min(segment.Start.Y, segment.End.Y) - thickness) * size; y < (Math.Max(segment.Start.Y, segment.End.Y) + 1 + thickness) * size; y++)
+                        {
+                            if (x >= 0 && x < image.Width && y >= 0 && y < image.Height) image.SetPixel(x, y, System.Drawing.Color.Black);
+                        }
                     }
-                }
-                for (int x = (Math.Min(corridor.End.X, corridor.Center.X) - Bounds.X) * size; x < (Math.Max(corridor.End.X, corridor.Center.X) - Bounds.X + 1) * size; x++)
-                {
-                    for (int y = (Math.Min(corridor.End.Y, corridor.Center.Y) - Bounds.Y) * size; y < (Math.Max(corridor.End.Y, corridor.Center.Y) - Bounds.Y + 1) * size; y++)
+                    foreach (EDirection extension in segment.Extensions)
                     {
-                        image.SetPixel(x, y, System.Drawing.Color.Black);
+                        Rectangle bounds = new Rectangle();
+                        switch (extension)
+                        {
+                            case EDirection.Left: bounds = new Rectangle(segment.Start.X - 2, segment.Start.Y - 1, 1, 3); break;
+                            case EDirection.Right: bounds = new Rectangle(segment.Start.X + 2, segment.Start.Y - 1, 1, 3); break;
+                            case EDirection.Up: bounds = new Rectangle(segment.Start.X - 1, segment.Start.Y - 2, 3, 1); break;
+                            case EDirection.Down: bounds = new Rectangle(segment.Start.X - 1, segment.Start.Y + 2, 3, 1); break;
+                        }
+                        DrawRect(image, bounds, Size, System.Drawing.Color.Black);
                     }
+
                 }
             }
-            image.Save("C:/Users/Max/Desktop/Dungeon.png");
+
+            for (int x = 0; x < Bounds.Width * size; x++)
+            {
+                for (int y = 0; y < Bounds.Height * size; y++)
+                {
+                    if (x % (size * Size) == 0 || y % (size * Size) == 0) image.SetPixel(x, y, System.Drawing.Color.DarkGray);
+                }
+            }
+            image.Save(path);
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void DrawRect(System.Drawing.Bitmap image, Rectangle bounds, int size, System.Drawing.Color color)
+        {
+            for (int x = bounds.X * size; x < (bounds.X + bounds.Width) * size; x++)
+            {
+                for (int y = bounds.Y * size; y < (bounds.Y + bounds.Height) * size; y++)
+                {
+                    if (x >= 0 && x < image.Width && y >= 0 && y < image.Height) image.SetPixel(x, y, color);
+                }
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -290,7 +376,9 @@ namespace EvershockGame.Code.Stage
             float t = (float)(2.0f * Math.PI * m_Rand.NextDouble());
             float u = (float)(m_Rand.NextDouble() + m_Rand.NextDouble());
             float r = (u > 1.0f ? 2.0f - u : u);
-            return new Point((int)(radius * r * Math.Cos(t)), (int)(radius * r * Math.Sin(t)));
+
+            Point temp = new Point((int)(radius * r * Math.Cos(t)), (int)(radius * r * Math.Sin(t)));
+            return new Point(temp.X + (temp.X > 0 ? (5 - (temp.X % 5)) : -(5 + (temp.X % 5))), temp.Y + (temp.Y > 0 ? (5 - (temp.Y % 5)) : -(5 + (temp.Y % 5))));
         }
     }
 }

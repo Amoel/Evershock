@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EntityComponent.Stage
+namespace EntityComponent.Stages
 {
     public class Chunk
     {
@@ -20,8 +20,6 @@ namespace EntityComponent.Stage
 
         private ChunkCell[,] m_Cells;
         private Guid m_CollisionEntity;
-
-        private List<Vector2> m_Corners;
 
         public Chunk LeftChunk { get; set; }
         public Chunk RightChunk { get; set; }
@@ -40,7 +38,6 @@ namespace EntityComponent.Stage
             X = x;
             Y = y;
             m_Cells = new ChunkCell[Width, Height];
-            m_Corners = new List<Vector2>();
 
             for (int _y = 0; _y < Height; _y++)
             {
@@ -49,13 +46,6 @@ namespace EntityComponent.Stage
                     m_Cells[_x, _y] = new ChunkCell();
                 }
             }
-        }
-
-        //---------------------------------------------------------------------------
-
-        public List<Vector2> GetCorners()
-        {
-            return m_Corners;
         }
 
         //---------------------------------------------------------------------------
@@ -128,7 +118,6 @@ namespace EntityComponent.Stage
 
             if (path != null)
             {
-                m_Corners.Clear();
                 path.Reset();
                 path.SetCollisionCategory(ECollisionCategory.Stage);
 
@@ -154,8 +143,7 @@ namespace EntityComponent.Stage
                                 {
                                     Vector2 end = new Vector2((GlobalX(x) + 1) * 32, GlobalY(y) * 32);
                                     path.AddPath(start, end);
-                                    if (!m_Corners.Contains(start)) m_Corners.Add(start);
-                                    if (!m_Corners.Contains(end)) m_Corners.Add(end);
+                                    AddCorners(start, end);
                                     length = 0;
                                 }
                                 start = new Vector2((GlobalX(x) + 1) * 32, (GlobalY(y) + 1) * 32);
@@ -166,8 +154,7 @@ namespace EntityComponent.Stage
                     {
                         Vector2 end = new Vector2((GlobalX(x) + 1) * 32, GlobalY(Height) * 32);
                         path.AddPath(start, end);
-                        if (!m_Corners.Contains(start)) m_Corners.Add(start);
-                        if (!m_Corners.Contains(end)) m_Corners.Add(end);
+                        AddCorners(start, end);
                     }
                 }
 
@@ -193,8 +180,7 @@ namespace EntityComponent.Stage
                                 {
                                     Vector2 end = new Vector2(GlobalX(x) * 32, (GlobalY(y) + 1) * 32);
                                     path.AddPath(start, end);
-                                    if (!m_Corners.Contains(start)) m_Corners.Add(start);
-                                    if (!m_Corners.Contains(end)) m_Corners.Add(end);
+                                    AddCorners(start, end);
                                     length = 0;
                                 }
                                 start = new Vector2((GlobalX(x) + 1) * 32, (GlobalY(y) + 1) * 32);
@@ -205,14 +191,29 @@ namespace EntityComponent.Stage
                     {
                         Vector2 end = new Vector2(GlobalX(Width) * 32, (GlobalY(y) + 1) * 32);
                         path.AddPath(start, end);
-                        if (!m_Corners.Contains(start)) m_Corners.Add(start);
-                        if (!m_Corners.Contains(end)) m_Corners.Add(end);
+                        AddCorners(start, end);
                     }
                 }
             }
             return entity;
         }
-    }
+
+        //---------------------------------------------------------------------------
+
+        private void AddCorners(Vector2 start, Vector2 end)
+        {
+            //if (!m_Corners.Contains(start))
+            //{
+            //    m_Corners.Add(start);
+            //    m_Corners.Add(start + Vector2.Normalize(start - end) * 0.001f);
+            //}
+            //if (!m_Corners.Contains(end))
+            //{
+            //    m_Corners.Add(end);
+            //    m_Corners.Add(end + Vector2.Normalize(end - start) * 0.001f);
+            //}
+        }
+    }    
 
     //---------------------------------------------------------------------------
 

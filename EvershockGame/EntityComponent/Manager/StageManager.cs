@@ -1,5 +1,5 @@
 ﻿using EntityComponent.Components;
-using EntityComponent.Stage;
+using EntityComponent.Stages;
 using Level;
 using Managers;
 using Microsoft.Xna.Framework;
@@ -18,7 +18,9 @@ namespace EntityComponent.Manager
 
     public class StageManager : BaseManager<StageManager>
     {
-        Chunk[,] m_Chunks;
+        public Stage Stage { get; set; }
+
+        private Chunk[,] m_Chunks;
 
         public int Left { get; private set; }
         public int Right { get; private set; }
@@ -61,7 +63,7 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
-        public void Create(bool[,] map)
+        public void Create(byte[,] map)
         {
             int horizontalChunks = (int)Math.Ceiling((float)map.GetLength(0) / Chunk.Width);
             int verticalChunks = (int)Math.Ceiling((float)map.GetLength(1) / Chunk.Height);
@@ -87,28 +89,29 @@ namespace EntityComponent.Manager
             int mapHeight = map.GetLength(1);
 
             Random r = new Random();
+            int tileSize = 24;
 
             for (int y = 0; y < mapHeight; y++)
             {
                 for (int x = 0; x < mapWidth; x++)
                 {
-                    SetIsBlocked(x, y, !map[x, y]);
-                    if (!map[x, y])
+                    SetIsBlocked(x, y, map[x, y] < 255);
+                    if (map[x, y] < 255)
                     {
                         int sumSide = CalcTileIndexSide(
-                            x > 0 && !map[x - 1, y],
-                            x < mapWidth - 1 && !map[x + 1, y]);
-                        SetTextureBounds(x, y, ELayerMode.First, new Rectangle(24 * (sumSide + (sumSide > 2 ? r.Next(0, 4) : 0)), 24, 24, 24));
+                            x > 0 && map[x - 1, y] < 255,
+                            x < mapWidth - 1 && map[x + 1, y] < 255);
+                        SetTextureBounds(x, y, ELayerMode.First, new Rectangle(tileSize * (sumSide + (sumSide > 2 ? r.Next(0, 4) : 0)), tileSize, tileSize, tileSize));
                         int sumTop = CalcTileIndexFull(
-                            y > 0 && !map[x, y - 1],
-                            x > 0 && !map[x - 1, y],
-                            y < mapHeight - 1 && !map[x, y + 1],
-                            x < mapWidth - 1 && !map[x + 1, y]);
-                        SetTextureBounds(x, y - 1, ELayerMode.Third, new Rectangle(24 * sumTop, 0, 24, 24));
+                            y > 0 && map[x, y - 1] < 255,
+                            x > 0 && map[x - 1, y] < 255,
+                            y < mapHeight - 1 && map[x, y + 1] < 255,
+                            x < mapWidth - 1 && map[x + 1, y] <255);
+                        SetTextureBounds(x, y - 1, ELayerMode.Third, new Rectangle(tileSize * sumTop, 0, tileSize, tileSize));
                     }
                     else
                     {
-                        SetTextureBounds(x, y, ELayerMode.First, new Rectangle(24 * r.Next(9), 48, 24, 24));
+                        SetTextureBounds(x, y, ELayerMode.First, new Rectangle(tileSize * r.Next(9), tileSize * 2, tileSize, tileSize));
                     }
                 }
             }           
@@ -224,17 +227,13 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
-        public List<Vector2> GetCorners(Vector2 center, float distance)
+        public List<Corner> GetCorners()
         {
-            List<Vector2> corners = new List<Vector2>();
-            foreach (Chunk chunk in m_Chunks)
+            if (Stage != null)
             {
-                foreach (Vector2 corner in chunk.GetCorners())
-                {
-                    if (Vector2.Distance(center, corner) <= distance) corners.Add(corner);
-                }
+                return Stage.Corners;
             }
-            return corners;
+            return new List<Corner>();
         }
 
         //---------------------------------------------------------------------------
