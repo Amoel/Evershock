@@ -1,20 +1,13 @@
 ﻿using EntityComponent;
 using EvershockGame.Code.Factories;
-using System;
 
 namespace EvershockGame.Code
 {
-    //Make all new :D
-    //We need: A factory, a Pickup Component, 
-    
     public class Pickup : Entity
     {
-        Random m_rand = new Random();
-
         public Pickup (string name) : base (name) { }
 
         
-
         //---------------------------------------------------------------------------
 
         public void Init(params EPickups[] types)
@@ -24,7 +17,7 @@ namespace EvershockGame.Code
 
             for (int i = 0; i < types.Length; i++)
             {
-                randoms[i] = m_rand.NextDouble();
+                //randoms[i] = m_rand.NextDouble();
                 combinedRandoms += randoms[i];
             }
             //This will be needed, to figure out, which Pickups to actually spawn

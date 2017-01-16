@@ -97,7 +97,7 @@ namespace EvershockGame
 
             Chest testChest = EntityFactory.Create<Chest>("hallo");
             testChest.Init(new Vector2(300, 300));
-            Pickup testPickup = PickupFactory.Create(EPickups.HEALTH, new Vector3(460, 450, 0));
+            //Pickup testPickup = PickupFactory.Create(EPickups.HEALTH, new Vector3(460, 450, 0));
 
             /*--------------------------------------------------------------------------
                         UI
