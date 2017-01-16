@@ -47,8 +47,10 @@
     <Compile Include="Code\Components\AttributesComponent.cs" />
     <Compile Include="Code\Components\MapComponent.cs" />
     <Compile Include="Code\Components\MovementAnimationComponent.cs" />
+    <Compile Include="Code\Components\PickupComponents\CoinPickupComponent.cs" />
     <Compile Include="Code\Components\PickupComponents\HealthPickupComponent.cs" />
     <Compile Include="Code\Components\PickupComponents\IPickupComponent.cs" />
+    <Compile Include="Code\Components\PickupComponents\ManaPickupComponent.cs" />
     <Compile Include="Code\Components\SpawnerComponents\PickupSpawnerComponent.cs" />
     <Compile Include="Code\Components\SpawnerComponents\SpawnerComponent.cs" />
     <Compile Include="Code\Entities\Chest.cs" />
@@ -195,6 +197,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Tiles\GroundTile1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Various\BlueOrb.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Various\RedOrb.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Various\YellowOrb.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Levels\Debug\Examples\Blacksmiths_House_Area.png">

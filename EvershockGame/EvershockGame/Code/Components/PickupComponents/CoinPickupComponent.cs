@@ -4,11 +4,13 @@ using System;
 
 namespace EvershockGame.Code.Components
 {
-    public class HealthPickupComponent : Component, IPickupComponent
+    public class CoinPickupComponent : Component, IPickupComponent
     {
-        public HealthPickupComponent(Guid entity) : base(entity) { }
+        public CoinPickupComponent(Guid entity) : base(entity) { }
 
         //---------------------------------------------------------------------------
+
+        //of course, this needs some content. Currently works exactly as the HealthPickupComponent
 
         public void OnPickup(IEntity collector)
         {

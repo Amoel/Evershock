@@ -6,7 +6,6 @@ using EntityComponent.Factory;
 using EntityComponent.Manager;
 using EntityComponent.Stages;
 using EvershockGame.Code;
-using EvershockGame.Code.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -97,7 +96,6 @@ namespace EvershockGame
 
             Chest testChest = EntityFactory.Create<Chest>("hallo");
             testChest.Init(new Vector2(300, 300));
-            //Pickup testPickup = PickupFactory.Create(EPickups.HEALTH, new Vector3(460, 450, 0));
 
             /*--------------------------------------------------------------------------
                         UI
@@ -138,6 +136,10 @@ namespace EvershockGame
             AssetManager.Get().Store<Texture2D>("GroundTile1", "Graphics/Camera/BackgroundTexture1");
 
             AssetManager.Get().Store<Texture2D>("Healthbar", "Graphics/Debug/Healthbar");
+
+            AssetManager.Get().Store<Texture2D>("RedOrb", "Graphics/Various/RedOrb");
+            AssetManager.Get().Store<Texture2D>("BlueOrb", "Graphics/Various/BlueOrb");
+            AssetManager.Get().Store<Texture2D>("YellowOrb", "Graphics/Various/YellowOrb");
 
             AssetManager.Get().Store<Texture2D>("ChestClosed1", "Graphics/Tiles/ChestClosed1");
             AssetManager.Get().Store<Texture2D>("ChestOpened1", "Graphics/Tiles/ChestOpened1");

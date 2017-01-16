@@ -1,20 +1,17 @@
-﻿using System;
-using EntityComponent.Components;
+﻿using EntityComponent.Components;
 using EntityComponent.Factory;
+using EntityComponent.Manager;
 using EvershockGame.Code.Components;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace EvershockGame.Code.Factories
 {
     public enum EPickups : byte
     {
         HEALTH,
-        MOVEMENTSPEED,
-        COINS,
-        ITEM1,
-        ITEM2,
-        ITEM3,
-        OTHER
+        MANA,
+        COIN
     }
 
     public class PickupFactory
@@ -23,7 +20,6 @@ namespace EvershockGame.Code.Factories
         {
             Pickup pickup = EntityFactory.Create<Pickup>(string.Format("{0}Pickup", pickupType.ToString()));
             pickup.AddComponent<TransformComponent>().Init(location);
-            pickup.AddComponent<SpriteComponent>().Init(SpriteComponent.DefaultTexture);
             pickup.AddComponent<PhysicsComponent>();
             pickup.AddComponent<CircleColliderComponent>().Init(16);
             pickup.AddComponent<DespawnComponent>();
@@ -32,21 +28,29 @@ namespace EvershockGame.Code.Factories
 
             switch (pickupType)
             {
-                case EPickups.COINS:
-                {
-
-                    break;
-                }
-
                 case EPickups.HEALTH:
-                    {
-                        pickupComponent = pickup.AddComponent<HealthPickupComponent>();
-                        break;
-                    }
+                    pickupComponent = pickup.AddComponent<HealthPickupComponent>();
+                    pickup.AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("RedOrb"));
+                    break;
+                
+
+                case EPickups.MANA:
+                    pickupComponent = pickup.AddComponent<ManaPickupComponent>();
+                    pickup.AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("BlueOrb"));
+                    break;
+
+                case EPickups.COIN:
+                    pickupComponent = pickup.AddComponent<CoinPickupComponent>();
+                    pickup.AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("YellowOrb"));
+                    break;
 
                 default:
+                    AssertManager.Get().Show("Value used by 'Create' does not fit range of EPickups");
                     break;
+
             }
+
+            //---------------------------------------------------------------------------
 
             if (pickupComponent != null)
             {
@@ -55,7 +59,8 @@ namespace EvershockGame.Code.Factories
                     pickupComponent.OnPickup(target);
                 };
             }
-            
+
+            //---------------------------------------------------------------------------
 
             return pickup;
         }
