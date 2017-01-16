@@ -134,5 +134,9 @@ namespace EvershockGame.Code
         {
 
         }
+
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup() { }
     }
 }

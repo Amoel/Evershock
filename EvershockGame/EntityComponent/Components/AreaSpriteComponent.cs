@@ -56,5 +56,9 @@ namespace EntityComponent.Components
                 }
             }
         }
+
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup() { }
     }
 }

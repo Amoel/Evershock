@@ -128,5 +128,9 @@ namespace EntityComponent.Components
         {
             RotationChanged?.Invoke(oldRotation, newRotation);
         }
+
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup() { }
     }
 }

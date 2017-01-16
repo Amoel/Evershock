@@ -37,5 +37,9 @@ namespace EntityComponent.Components
         {
             EntityManager.Get().Unregister(Entity);
         }
+
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup() { }
     }
 }

@@ -105,5 +105,9 @@ namespace EvershockGame.Code.Components
             m_Target = target.GUID;
             m_Behaviour = behaviour;
         }
+
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup() { }
     }
 }

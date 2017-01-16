@@ -11,6 +11,8 @@ namespace EvershockGame.Code.Components
 
         }
 
+        //---------------------------------------------------------------------------
+
         public void OnPickup(IEntity collector)
         {
             if (collector != null)
@@ -25,5 +27,9 @@ namespace EvershockGame.Code.Components
                 }
             }
         }
+
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup() { }
     }
 }
