@@ -49,6 +49,8 @@
     <Compile Include="Code\Components\MovementAnimationComponent.cs" />
     <Compile Include="Code\Components\PickupComponents\HealthPickupComponent.cs" />
     <Compile Include="Code\Components\PickupComponents\IPickupComponent.cs" />
+    <Compile Include="Code\Components\SpawnerComponents\PickupSpawnerComponent.cs" />
+    <Compile Include="Code\Components\SpawnerComponents\SpawnerComponent.cs" />
     <Compile Include="Code\Entities\Chest.cs" />
     <Compile Include="Code\Entities\Enemies\Enemy.cs" />
     <Compile Include="Code\Entities\Enemies\SimpleTestEnemy.cs" />
