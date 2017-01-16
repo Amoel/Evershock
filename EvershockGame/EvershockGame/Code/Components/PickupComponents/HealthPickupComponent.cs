@@ -27,5 +27,9 @@ namespace EvershockGame.Code.Components
                 }
             }
         }
+
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup() { }
     }
 }

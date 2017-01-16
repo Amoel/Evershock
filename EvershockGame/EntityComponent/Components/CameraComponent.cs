@@ -238,13 +238,6 @@ namespace EntityComponent.Components
 
                     if (m_LightingTarget != null && m_LightingEffect != null)
                     {
-                        //Device.SetRenderTarget(m_LightingTarget);
-                        //Device.Clear(Color.Black);
-
-                        //batch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
-                        //ComponentManager.Get().DrawLights(batch, new CameraData(transform.Location.To2D(), m_LightingTarget.Width, m_LightingTarget.Height));
-                        //batch.End();
-
                         DrawShadowMask(batch, data);
 
                         if (m_MainTarget != null)
@@ -272,7 +265,6 @@ namespace EntityComponent.Components
 
                             return m_MainTarget;
                         }
-
                         return m_LightingTarget;
                     }
                 }
@@ -451,6 +443,10 @@ namespace EntityComponent.Components
             m_Other = other;
             m_CameraMode = mode;
         }
+
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup() { }
 
         //---------------------------------------------------------------------------
 

@@ -87,9 +87,6 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        class InputMapping
-        {
-            public InputMapping() { }
-        }
+        public override void OnCleanup() { }
     }
 }

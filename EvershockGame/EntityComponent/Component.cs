@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace EntityComponent
 {
     [Serializable]
-    public class Component : IComponent
+    public abstract class Component : IComponent
     {
         public Guid GUID { get; private set; }
         public string Name { get { return GetType().Name; } }
@@ -66,7 +66,7 @@ namespace EntityComponent
 
         //---------------------------------------------------------------------------
 
-        public virtual void OnCleanup() { }
+        public abstract void OnCleanup();
 
         //---------------------------------------------------------------------------
 

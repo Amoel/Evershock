@@ -150,5 +150,9 @@ namespace EntityComponent.Components
             Vector3 movement = new Vector3(xMovement, yMovement, 0);
             if (movement.Length() > 0.01f) ApplyForce(new Vector3(xMovement, yMovement, 0));
         }
+
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup() { }
     }
 }
