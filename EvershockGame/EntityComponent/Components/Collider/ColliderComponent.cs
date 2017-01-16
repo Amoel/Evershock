@@ -67,6 +67,16 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
+        public void ResetLocation(Vector2 location)
+        {
+            if (Body != null)
+            {
+                Body.Position = location / Unit;
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
         public void SetCollisionCategory(ECollisionCategory category)
         {
             CollisionCategory = category;

@@ -13,9 +13,16 @@ namespace EvershockGame.Code.Components
 
         public void OnPickup(IEntity collector)
         {
-            if (collector is Player)
+            if (collector != null)
             {
-                GetComponent<DespawnComponent>().Trigger();
+                if (collector is Player)
+                {
+                    DespawnComponent despawn = GetComponent<DespawnComponent>();
+                    if (despawn != null)
+                    {
+                        despawn.Trigger();
+                    }
+                }
             }
         }
     }

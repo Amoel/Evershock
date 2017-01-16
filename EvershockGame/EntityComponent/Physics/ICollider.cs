@@ -16,5 +16,6 @@ namespace EntityComponent
         //---------------------------------------------------------------------------
 
         Vector2 Step(Vector2 force);
+        void ResetLocation(Vector2 location);
     }
 }

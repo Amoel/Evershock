@@ -129,6 +129,19 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
+        public void ResetLocation()
+        {
+            TransformComponent transform = GetComponent<TransformComponent>();
+            ICollider collider = CollisionManager.Get().FindCollider(Entity);
+
+            if (transform != null && collider != null)
+            {
+                collider.ResetLocation(transform.Location.To2D());
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
         public virtual void ReceiveInput(GameActionCollection actions, float deltaTime)
         {
             float xMovement = (actions[EGameAction.MOVE_RIGHT] - actions[EGameAction.MOVE_LEFT]) * deltaTime * 500 ;

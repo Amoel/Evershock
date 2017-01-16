@@ -47,6 +47,12 @@ namespace EvershockGame.Code
             {
                 //transform.Init(location.To3D());
                 transform.MoveTo(location.To3D());
+
+                PhysicsComponent physics = GetComponent<PhysicsComponent>();
+                if (physics != null)
+                {
+                    physics.ResetLocation();
+                }
             }
         }
         
