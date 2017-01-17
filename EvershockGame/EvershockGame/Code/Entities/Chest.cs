@@ -17,10 +17,10 @@ namespace EvershockGame.Code
             AddComponent<PhysicsComponent>();
             AddComponent<PickupSpawnerComponent>();
 
-            AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("ChestClosed1"));
-            AddComponent<ShadowComponent>().Init(AssetManager.Get().Find<Texture2D>("ChestClosed1"));
+            AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("ChestClosed1"), Vector2.Zero, new Vector2(2, 2));
+            //AddComponent<ShadowComponent>().Init(AssetManager.Get().Find<Texture2D>("ChestClosed1"), new Vector2(2, 2), new Vector2(0, 3));
 
-            AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(1, 1));
+            AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(2, 2), Color.White, 0.8f);
 
             RectColliderComponent chestCollider = AddComponent<RectColliderComponent>();
             chestCollider.Init(AssetManager.Get().Find<Texture2D>("ChestClosed1").Width, AssetManager.Get().Find<Texture2D>("ChestClosed1").Height);

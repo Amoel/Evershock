@@ -31,8 +31,8 @@ namespace EvershockGame.Code.Components
             if (transform != null)
             {
                 float rot = (float)(rnd.NextDouble() * Math.PI * 2.0f);
-                float dist = (float)(rnd.NextDouble() * 60.0f + 200.0f);
-                Vector3 force = new Vector3((float)Math.Sin(rot) * dist, (float)Math.Cos(rot) * dist, (float)(15.0f + rnd.NextDouble() * 8.0f));
+                float dist = (float)(rnd.NextDouble() * 120.0f + 400.0f);
+                Vector3 force = new Vector3((float)Math.Sin(rot) * dist, (float)Math.Cos(rot) * dist, (float)(30.0f + rnd.NextDouble() * 16.0f));
                 PickupFactory.Create(pickup, transform.Location, force);
             }
             

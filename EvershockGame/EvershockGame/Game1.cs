@@ -32,7 +32,7 @@ namespace EvershockGame
         {
             graphics = new GraphicsDeviceManager(this)
             {
-                PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8
+                PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8,
             };
             Content.RootDirectory = "Content";
         }
@@ -43,6 +43,8 @@ namespace EvershockGame
         {
             base.Initialize();
             Window.AllowUserResizing = true;
+
+            GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             LightingManager.Get().Device = GraphicsDevice;
 
@@ -61,7 +63,7 @@ namespace EvershockGame
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    Vector2 position = new Vector2(room.Bounds.Center.X * 32 + (float)Math.Sin((i / 2.5f) * Math.PI) * 150, room.Bounds.Center.Y * 32 + (float)Math.Cos((i / 2.5f) * Math.PI) * 150);
+                    Vector2 position = new Vector2(room.Bounds.Center.X * 64 + (float)Math.Sin((i / 2.5f) * Math.PI) * 300, room.Bounds.Center.Y * 64 + (float)Math.Cos((i / 2.5f) * Math.PI) * 300);
                     EntityFactory.Create<Chest>("hallo").Init(position);
                 }
             }
@@ -87,13 +89,13 @@ namespace EvershockGame
             --------------------------------------------------------------------------*/
 
             Camera cam1 = EntityFactory.Create<Camera>("Cam1");
-            cam1.Properties.Init(GraphicsDevice, width / 4, height / 2, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
+            cam1.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
             cam1.Properties.Viewport = new Rectangle(0, 0, width / 2, height);
             cam1.Properties.AddTarget(player);
             //cam1.Properties.IsAmbientOcclusionEnabled = true;
 
             Camera cam2 = EntityFactory.Create<Camera>("Cam2");
-            cam2.Properties.Init(GraphicsDevice, width / 4, height / 2, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
+            cam2.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
             cam2.Properties.Viewport = new Rectangle(width / 2, 0, width / 2, height);
             cam2.Properties.AddTarget(player2);
             //cam2.Properties.IsAmbientOcclusionEnabled = true;

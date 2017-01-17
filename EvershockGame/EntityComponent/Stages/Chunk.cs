@@ -123,7 +123,7 @@ namespace EntityComponent.Stages
 
                 for (int x = -1; x < Width - 1; x++)
                 {
-                    Vector2 start = new Vector2((GlobalX(x) + 1) * 32, GlobalY(0) * 32);
+                    Vector2 start = new Vector2((GlobalX(x) + 1) * 64, GlobalY(0) * 64);
                     int length = 0;
                     for (int y = 0; y < Height; y++)
                     {
@@ -141,18 +141,18 @@ namespace EntityComponent.Stages
                             {
                                 if (length > 0)
                                 {
-                                    Vector2 end = new Vector2((GlobalX(x) + 1) * 32, GlobalY(y) * 32);
+                                    Vector2 end = new Vector2((GlobalX(x) + 1) * 64, GlobalY(y) * 64);
                                     path.AddPath(start, end);
                                     AddCorners(start, end);
                                     length = 0;
                                 }
-                                start = new Vector2((GlobalX(x) + 1) * 32, (GlobalY(y) + 1) * 32);
+                                start = new Vector2((GlobalX(x) + 1) * 64, (GlobalY(y) + 1) * 64);
                             }
                         }
                     }
                     if (length > 0)
                     {
-                        Vector2 end = new Vector2((GlobalX(x) + 1) * 32, GlobalY(Height) * 32);
+                        Vector2 end = new Vector2((GlobalX(x) + 1) * 64, GlobalY(Height) * 64);
                         path.AddPath(start, end);
                         AddCorners(start, end);
                     }
@@ -160,7 +160,7 @@ namespace EntityComponent.Stages
 
                 for (int y = -1; y < Height - 1; y++)
                 {
-                    Vector2 start = new Vector2(GlobalX(0) * 32, (GlobalY(y) + 1) * 32);
+                    Vector2 start = new Vector2(GlobalX(0) * 64, (GlobalY(y) + 1) * 64);
                     int length = 0;
                     for (int x = 0; x < Width; x++)
                     {
@@ -178,18 +178,18 @@ namespace EntityComponent.Stages
                             {
                                 if (length > 0)
                                 {
-                                    Vector2 end = new Vector2(GlobalX(x) * 32, (GlobalY(y) + 1) * 32);
+                                    Vector2 end = new Vector2(GlobalX(x) * 64, (GlobalY(y) + 1) * 64);
                                     path.AddPath(start, end);
                                     AddCorners(start, end);
                                     length = 0;
                                 }
-                                start = new Vector2((GlobalX(x) + 1) * 32, (GlobalY(y) + 1) * 32);
+                                start = new Vector2((GlobalX(x) + 1) * 64, (GlobalY(y) + 1) * 64);
                             }
                         }
                     }
                     if (length > 0)
                     {
-                        Vector2 end = new Vector2(GlobalX(Width) * 32, (GlobalY(y) + 1) * 32);
+                        Vector2 end = new Vector2(GlobalX(Width) * 64, (GlobalY(y) + 1) * 64);
                         path.AddPath(start, end);
                         AddCorners(start, end);
                     }
