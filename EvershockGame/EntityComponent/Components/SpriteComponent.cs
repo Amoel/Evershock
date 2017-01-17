@@ -77,20 +77,7 @@ namespace EntityComponent.Components
                 TransformComponent transform = GetComponent<TransformComponent>();
                 if (transform != null)
                 {
-                    Vector3 absoluteLocation = transform.AbsoluteLocation;
-                    if (transform.Location.Z > 0.0f)
-                    {
-                        batch.Draw(
-                            GetTex(),
-                            absoluteLocation.ToLocal2DShadow(data),
-                            Texture.Bounds,
-                            Color.Black * (0.3f - MathHelper.Clamp(absoluteLocation.Z / 400.0f, 0.0f, 0.3f)),
-                            transform.Rotation,
-                            new Vector2(Texture.Width / 2 + Offset.X, Texture.Height / 2 + Offset.Y),
-                            1.0f,
-                            SpriteEffects.None,
-                            0.0f);
-                    }
+                    Vector3 absoluteLocation = transform.AbsoluteLocation;                    
                     batch.Draw(
                         GetTex(),
                         absoluteLocation.ToLocal2D(data),

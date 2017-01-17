@@ -12,8 +12,15 @@ namespace EntityComponent.Components
         public float Weight { get; set; }
         public float Softness { get; set; }
 
+        public bool IsGravityAffected { get; set; }
+
+        public bool IsResting { get; private set; }
+        public bool HasTouchedFloor { get; private set; }
+
         private Vector3 m_Force;
         private Vector3 m_Gravity;
+
+        private float m_RestingTimer;
 
         //---------------------------------------------------------------------------
 
@@ -22,6 +29,8 @@ namespace EntityComponent.Components
             Inertia = 0.0f;
             Weight = 1.0f;
             Softness = 0.0f;
+
+            IsGravityAffected = true;
 
             m_Force = Vector3.Zero;
             m_Gravity = Vector3.Zero;
@@ -59,19 +68,29 @@ namespace EntityComponent.Components
 
             if (transform != null)
             {
-                ApplyGravity(deltaTime);
-                
-                if (m_Force.Length() < 0.01f)
+                if (IsGravityAffected)
                 {
-                    m_Force = Vector3.Zero;
+                    ApplyGravity(deltaTime);
+                }
+                
+                m_Force *= Inertia;
+
+                if (m_Force.Length() < 1.0f)
+                {
+                    m_RestingTimer += deltaTime;
+                    if (m_RestingTimer >= 0.3f)
+                    {
+                        IsResting = true;
+                    }
                 }
                 else
                 {
-                    m_Force *= Inertia;
+                    m_RestingTimer = 0.0f;
+                    IsResting = false;
                 }
 
                 Vector2 newForce = CollisionManager.Get().CheckCollision(transform, Entity, GetForce().To2D());
-                transform.MoveTo(new Vector3(newForce.X, newForce.Y, GetForce().Z));
+                transform.MoveTo(new Vector3(newForce.X, newForce.Y, transform.Location.Z + m_Force.Z));
             }
         }
 
@@ -79,7 +98,7 @@ namespace EntityComponent.Components
 
         public Vector3 GetForce()
         {
-            return (m_Force + m_Gravity);
+            return m_Force;
         }
 
         //---------------------------------------------------------------------------
@@ -111,17 +130,18 @@ namespace EntityComponent.Components
                 if (transform != null)
                 {
                     Vector3 location = transform.AbsoluteLocation;
-                    if (Math.Abs(location.Z) <= 0.1f)
+
+                    if (location.Z + m_Force.Z < 0.0f)
                     {
+                        m_Force = new Vector3(m_Force.X, m_Force.Y, m_Force.Z * -Softness);
                         m_Gravity = Vector3.Zero;
-                    }
-                    else if (location.Z < 0.0f)
-                    {
-                        m_Gravity *= -0.8f;
+
+                        HasTouchedFloor = true;
                     }
                     else
                     {
                         m_Gravity += PhysicsManager.Get().Gravity * Weight * deltaTime;
+                        m_Force += m_Gravity;
                     }
                 }
             }
@@ -144,7 +164,7 @@ namespace EntityComponent.Components
 
         public virtual void ReceiveInput(GameActionCollection actions, float deltaTime)
         {
-            float xMovement = (actions[EGameAction.MOVE_RIGHT] - actions[EGameAction.MOVE_LEFT]) * deltaTime * 500 ;
+            float xMovement = (actions[EGameAction.MOVE_RIGHT] - actions[EGameAction.MOVE_LEFT]) * deltaTime * 500;
             float yMovement = (actions[EGameAction.MOVE_DOWN] - actions[EGameAction.MOVE_UP]) * deltaTime * 500;
 
             Vector3 movement = new Vector3(xMovement, yMovement, 0);

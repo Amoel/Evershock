@@ -21,7 +21,8 @@ namespace EntityComponent.Components
         None,
         All,
         Player,
-        Stage
+        Stage,
+        Pickup
     }
 
     //---------------------------------------------------------------------------
@@ -37,7 +38,8 @@ namespace EntityComponent.Components
             { ECollisionCategory.None, Category.None },
             { ECollisionCategory.All, Category.All },
             { ECollisionCategory.Player, Category.Cat1 },
-            { ECollisionCategory.Stage, Category.Cat2 }
+            { ECollisionCategory.Stage, Category.Cat2 },
+            { ECollisionCategory.Pickup, Category.Cat3 }
         };
 
         public event CollisionEnterEventHandler Enter;
@@ -73,6 +75,13 @@ namespace EntityComponent.Components
             {
                 Body.Position = location / Unit;
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SetSensor(bool isSensor)
+        {
+            Body.IsSensor = isSensor;
         }
 
         //---------------------------------------------------------------------------

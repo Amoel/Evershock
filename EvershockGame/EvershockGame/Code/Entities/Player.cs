@@ -27,13 +27,22 @@ namespace EvershockGame.Code
         {
             Index = (PlayerIndex)PlayerCount++;
 
-            AddComponent<TransformComponent>().Init(new Vector3(Index == PlayerIndex.One ? 400 : 520, 450, 0));
+            AddComponent<TransformComponent>().Init(new Vector3(Index == PlayerIndex.One ? 340 : 420, 400, 0));
             AddComponent<AttributesComponent>().Init(0, 130.0f);
 
             MovementAnimationComponent animation = AddComponent<MovementAnimationComponent>();
-            animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"), new Vector2(0.5f, 0.5f));
+            if (Index == PlayerIndex.One)
+            {
+                animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"), new Vector2(0.5f, 0.5f));
+            }
+            else
+            {
+                animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation2"), new Vector2(0.5f, 0.5f));
+            }
             animation.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true));
             animation.AddSetting((int)Tag.MoveRight, new AnimationSetting(8, 2, 0, 7));
+
+            AddComponent<ShadowComponent>().Init(AssetManager.Get().Find<Texture2D>("RedOrb"), new Vector2(3.0f, 1.0f), new Vector2(0.0f, 8.0f));
 
             AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
 
@@ -41,7 +50,7 @@ namespace EvershockGame.Code
             collider.Init(22, BodyType.Dynamic);
             //collider.SetCollisionCategory(ECollisionCategory.Player);
 
-            AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(5, 5), Color.Blue, 1.0f);
+            AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(3.5f, 3.5f), Color.White, 0.5f);
 
             InputComponent input = AddComponent<InputComponent>();
             if (input != null)

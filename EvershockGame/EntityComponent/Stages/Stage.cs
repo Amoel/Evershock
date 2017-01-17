@@ -1,4 +1,5 @@
-﻿using EntityComponent.Pathfinding;
+﻿using EntityComponent.Factory;
+using EntityComponent.Pathfinding;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

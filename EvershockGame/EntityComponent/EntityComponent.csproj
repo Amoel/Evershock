@@ -96,6 +96,7 @@
     <Compile Include="Components\InputComponent.cs" />
     <Compile Include="Components\LightingComponent.cs" />
     <Compile Include="Components\PhysicsComponent.cs" />
+    <Compile Include="Components\ShadowComponent.cs" />
     <Compile Include="Components\SpriteComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
     <Compile Include="Components\UI\ButtonComponent.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Manager\InputManager.cs" />
     <Compile Include="Manager\LightingManager.cs" />
     <Compile Include="Manager\PhysicsManager.cs" />
+    <Compile Include="Manager\SeedManager.cs" />
     <Compile Include="Manager\ShadowManager.cs" />
     <Compile Include="Manager\StageManager.cs" />
     <Compile Include="Manager\UIManager.cs" />

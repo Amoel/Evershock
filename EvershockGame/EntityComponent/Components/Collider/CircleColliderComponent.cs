@@ -84,6 +84,9 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        public override void OnCleanup() { }
+        public override void OnCleanup()
+        {
+            PhysicsManager.Get().World.RemoveBody(Body);
+        }
     }
 }

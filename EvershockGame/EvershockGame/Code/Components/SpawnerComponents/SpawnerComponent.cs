@@ -1,5 +1,6 @@
 ﻿using EntityComponent;
 using EntityComponent.Components;
+using EntityComponent.Manager;
 using System;
 
 namespace EvershockGame.Code.Components
@@ -9,8 +10,13 @@ namespace EvershockGame.Code.Components
     {
         protected Random m_Rand;
 
-        public SpawnerComponent (Guid entity) : base (entity) { m_Rand = new Random(); }
+        public SpawnerComponent (Guid entity) : base (entity)
+        {
+            m_Rand = new Random(SeedManager.Get().NextSeed());
+        }
 
-        
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup() { }
     }
 }

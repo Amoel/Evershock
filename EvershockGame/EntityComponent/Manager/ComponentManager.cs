@@ -135,6 +135,8 @@ namespace EntityComponent.Manager
         {
             if (component != null)
             {
+                component.OnCleanup();
+
                 if (component is ITickableComponent && m_TickableComponents.ContainsKey(component.GUID)) m_TickableComponents.Remove(component.GUID);
                 if (component is IDrawableComponent && m_DrawableComponents.ContainsKey(component.GUID)) m_DrawableComponents.Remove(component.GUID);
                 if (component is ILightingComponent && m_LightingComponents.ContainsKey(component.GUID)) m_LightingComponents.Remove(component.GUID);
@@ -220,12 +222,12 @@ namespace EntityComponent.Manager
                 if (!((IComponent)container.Data).IsEnabled) continue;
                 container.Data.DrawLight(batch, data);
             }
-            foreach (SmartContainer<ILightingComponent> container in m_LightingComponents.Values)
-            {
-                if (!((IComponent)container.Data).IsEnabled) continue;
+            //foreach (SmartContainer<ILightingComponent> container in m_LightingComponents.Values)
+            //{
+            //    if (!((IComponent)container.Data).IsEnabled) continue;
                 
-                container.Data.DrawArea(batch, data);
-            }
+            //    container.Data.DrawArea(batch, data);
+            //}
         }
 
         //---------------------------------------------------------------------------

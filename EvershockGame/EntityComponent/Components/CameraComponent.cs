@@ -236,7 +236,7 @@ namespace EntityComponent.Components
                     ComponentManager.Get().DrawComponents(batch, data);
                     batch.End();
 
-                    if (m_LightingTarget != null && m_LightingEffect != null)
+                    if (IsLightingEnabled && m_LightingTarget != null && m_LightingEffect != null)
                     {
                         DrawShadowMask(batch, data);
 
@@ -281,7 +281,7 @@ namespace EntityComponent.Components
             batch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
             ComponentManager.Get().DrawLights(batch, data);
             batch.End();
-            m_EffectWrapper.ApplyEffects(batch, m_LightingTarget, m_LightingTarget, new List<Effect>() { AssetManager.Get().Find<Effect>("Blur") });
+            //m_EffectWrapper.ApplyEffects(batch, m_LightingTarget, m_LightingTarget, new List<Effect>() { AssetManager.Get().Find<Effect>("Blur") });
         }
 
         //---------------------------------------------------------------------------
@@ -365,7 +365,14 @@ namespace EntityComponent.Components
             }
             else
             {
-                batch.Draw(m_MainTarget, Viewport, Color.White);
+                if (IsLightingEnabled)
+                {
+                    batch.Draw(m_MainTarget, Viewport, Color.White);
+                }
+                else
+                {
+                    batch.Draw(m_ComponentsTarget, Viewport, Color.White);
+                }
             }
         }
 

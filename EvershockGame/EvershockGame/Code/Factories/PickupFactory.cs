@@ -2,6 +2,7 @@
 using EntityComponent.Factory;
 using EntityComponent.Manager;
 using EvershockGame.Code.Components;
+using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,32 +17,50 @@ namespace EvershockGame.Code.Factories
 
     public class PickupFactory
     {
-        public static Pickup Create(EPickups pickupType, Vector3 location)
+        public static Pickup Create(EPickups pickupType, Vector3 location, Vector3 force)
         {
             Pickup pickup = EntityFactory.Create<Pickup>(string.Format("{0}Pickup", pickupType.ToString()));
             pickup.AddComponent<TransformComponent>().Init(location);
-            pickup.AddComponent<PhysicsComponent>();
-            pickup.AddComponent<CircleColliderComponent>().Init(16);
+
+            PhysicsComponent physics = pickup.AddComponent<PhysicsComponent>();
+            physics.Init(0.94f, 4.0f, 0.3f);
+
+            CircleColliderComponent collider = pickup.AddComponent<CircleColliderComponent>();
+            collider.Init(8, BodyType.Dynamic);
+            collider.SetCollidesWith(ECollisionCategory.Player);
+            collider.SetCollisionCategory(ECollisionCategory.Pickup);
+            collider.SetSensor(true);
+
+            physics.ApplyForce(force, true);
+
             pickup.AddComponent<DespawnComponent>();
 
             IPickupComponent pickupComponent = null;
+            SpriteComponent sprite = pickup.AddComponent<SpriteComponent>();
+            ShadowComponent shadow = pickup.AddComponent<ShadowComponent>();
+            LightingComponent light = pickup.AddComponent<LightingComponent>();
 
             switch (pickupType)
             {
                 case EPickups.HEALTH:
                     pickupComponent = pickup.AddComponent<HealthPickupComponent>();
-                    pickup.AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("RedOrb"));
+                    sprite.Init(AssetManager.Get().Find<Texture2D>("RedOrb"));
+                    shadow.Init(AssetManager.Get().Find<Texture2D>("RedOrb"));
+                    light.Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(0.5f, 0.5f), Color.Red, 1.0f);
                     break;
                 
-
                 case EPickups.MANA:
                     pickupComponent = pickup.AddComponent<ManaPickupComponent>();
-                    pickup.AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("BlueOrb"));
+                    sprite.Init(AssetManager.Get().Find<Texture2D>("BlueOrb"));
+                    shadow.Init(AssetManager.Get().Find<Texture2D>("BlueOrb"));
+                    light.Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(0.5f, 0.5f), Color.Blue, 1.0f);
                     break;
 
                 case EPickups.COIN:
                     pickupComponent = pickup.AddComponent<CoinPickupComponent>();
-                    pickup.AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("YellowOrb"));
+                    sprite.Init(AssetManager.Get().Find<Texture2D>("YellowOrb"));
+                    shadow.Init(AssetManager.Get().Find<Texture2D>("YellowOrb"));
+                    light.Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(0.5f, 0.5f), Color.Yellow, 1.0f);
                     break;
 
                 default:
@@ -50,8 +69,6 @@ namespace EvershockGame.Code.Factories
 
             }
 
-            //---------------------------------------------------------------------------
-
             if (pickupComponent != null)
             {
                 pickup.GetComponent<CircleColliderComponent>().Enter += (source, target) =>
@@ -59,9 +76,7 @@ namespace EvershockGame.Code.Factories
                     pickupComponent.OnPickup(target);
                 };
             }
-
-            //---------------------------------------------------------------------------
-
+            
             return pickup;
         }
     }

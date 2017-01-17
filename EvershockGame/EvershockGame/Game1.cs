@@ -48,6 +48,8 @@ namespace EvershockGame
 
             GameWindowSettings.SetWindowSettings(graphics, Window, 1920, 1080);
 
+            SeedManager.Get().ResetBaseSeed(1234);
+
             int width = GraphicsDevice.PresentationParameters.BackBufferWidth;
             int height = GraphicsDevice.PresentationParameters.BackBufferHeight;
 
@@ -55,6 +57,14 @@ namespace EvershockGame
             CameraManager.Get().Init(width, height);
 
             Stage stage = new Stage(0);
+            foreach (Room room in stage.Rooms)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector2 position = new Vector2(room.Bounds.Center.X * 32 + (float)Math.Sin((i / 2.5f) * Math.PI) * 150, room.Bounds.Center.Y * 32 + (float)Math.Cos((i / 2.5f) * Math.PI) * 150);
+                    EntityFactory.Create<Chest>("hallo").Init(position);
+                }
+            }
             StageManager.Get().Create(stage.CreateMap());
             StageManager.Get().Stage = stage;
 
@@ -77,25 +87,26 @@ namespace EvershockGame
             --------------------------------------------------------------------------*/
 
             Camera cam1 = EntityFactory.Create<Camera>("Cam1");
-            cam1.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
+            cam1.Properties.Init(GraphicsDevice, width / 4, height / 2, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
             cam1.Properties.Viewport = new Rectangle(0, 0, width / 2, height);
             cam1.Properties.AddTarget(player);
-            cam1.Properties.IsAmbientOcclusionEnabled = true;
+            //cam1.Properties.IsAmbientOcclusionEnabled = true;
 
             Camera cam2 = EntityFactory.Create<Camera>("Cam2");
-            cam2.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
+            cam2.Properties.Init(GraphicsDevice, width / 4, height / 2, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
             cam2.Properties.Viewport = new Rectangle(width / 2, 0, width / 2, height);
             cam2.Properties.AddTarget(player2);
-            cam2.Properties.IsAmbientOcclusionEnabled = true;
+            //cam2.Properties.IsAmbientOcclusionEnabled = true;
 
-            CameraManager.Get().FuseCameras(cam1, cam2, 1000);
+            CameraManager.Get().FuseCameras(cam1, cam2, 500);
 
             /*--------------------------------------------------------------------------
                         Other
             --------------------------------------------------------------------------*/
 
-            Chest testChest = EntityFactory.Create<Chest>("hallo");
-            testChest.Init(new Vector2(300, 300));
+            //EntityFactory.Create<Chest>("hallo").Init(new Vector2(300, 300));
+            //EntityFactory.Create<Chest>("hallo").Init(new Vector2(500, 300));
+            //EntityFactory.Create<Chest>("hallo").Init(new Vector2(300, 500));
 
             /*--------------------------------------------------------------------------
                         UI
@@ -151,6 +162,7 @@ namespace EvershockGame
 
             AssetManager.Get().Store<Texture2D>("Kakariko_Village_Tiles", "Graphics/Tilesets/Debug/Kakariko_Village_Tiles");
             AssetManager.Get().Store<Texture2D>("WalkingAnimation", "Graphics/Tilesets/Debug/WalkingAnimation");
+            AssetManager.Get().Store<Texture2D>("WalkingAnimation2", "Graphics/Tilesets/Debug/WalkingAnimation2");
 
             AssetManager.Get().Store<Texture2D>("CircleLight", "Graphics/Lights/CircleLight");
 

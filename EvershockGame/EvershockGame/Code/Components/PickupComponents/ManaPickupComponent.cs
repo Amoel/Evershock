@@ -4,7 +4,7 @@ using System;
 
 namespace EvershockGame.Code.Components
 {
-    public class ManaPickupComponent : Component, IPickupComponent
+    public class ManaPickupComponent : PickupComponent, IPickupComponent
     {
         public ManaPickupComponent(Guid entity) : base(entity) { }
 
@@ -14,7 +14,7 @@ namespace EvershockGame.Code.Components
 
         public void OnPickup(IEntity collector)
         {
-            if (collector != null)
+            if (collector != null && IsCollectable)
             {
                 if (collector is Player)
                 {
@@ -29,5 +29,9 @@ namespace EvershockGame.Code.Components
                 }
             }
         }
+
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup() { }
     }
 }

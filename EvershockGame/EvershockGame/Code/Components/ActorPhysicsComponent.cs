@@ -10,7 +10,10 @@ namespace EvershockGame.Code
     [RequireComponent(typeof(AttributesComponent), typeof(MovementAnimationComponent))]
     public class ActorPhysicsComponent : PhysicsComponent
     {
-        public ActorPhysicsComponent(Guid entity) : base(entity) { }
+        public ActorPhysicsComponent(Guid entity) : base(entity)
+        {
+            IsGravityAffected = false;
+        }
 
         //---------------------------------------------------------------------------
 

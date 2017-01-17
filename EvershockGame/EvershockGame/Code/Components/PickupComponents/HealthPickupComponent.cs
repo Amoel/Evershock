@@ -4,7 +4,7 @@ using System;
 
 namespace EvershockGame.Code.Components
 {
-    public class HealthPickupComponent : Component, IPickupComponent
+    public class HealthPickupComponent : PickupComponent, IPickupComponent
     {
         public HealthPickupComponent(Guid entity) : base(entity) { }
 
@@ -12,7 +12,7 @@ namespace EvershockGame.Code.Components
 
         public void OnPickup(IEntity collector)
         {
-            if (collector != null)
+            if (collector != null && IsCollectable)
             {
                 if (collector is Player)
                 {

@@ -26,14 +26,16 @@ namespace EntityComponent
 
         public static Vector2 ToLocal2D(this Vector3 source, CameraData data)
         {
-            return new Vector2(source.X, source.Y - source.Z / 2.0f) - data.Center + new Vector2(data.Width / 2.0f, data.Height / 2.0f);
+            //return new Vector2(source.X, source.Y - source.Z / 2.0f) - data.Center + new Vector2(data.Width / 2.0f, data.Height / 2.0f);
+            return new Vector2((int)(source.X + data.Width / 2 - data.Center.X), (int)(source.Y + data.Height / 2 - data.Center.Y - source.Z / 2.0f));
         }
 
         //---------------------------------------------------------------------------
 
         public static Vector2 ToLocal2DShadow(this Vector3 source, CameraData data)
         {
-            return new Vector2(source.X, source.Y + source.Z / 7.0f) - data.Center + new Vector2(data.Width / 2.0f, data.Height / 2.0f);
+            //return new Vector2(source.X, source.Y + source.Z / 7.0f + 5.0f) - data.Center + new Vector2(data.Width / 2.0f, data.Height / 2.0f);
+            return new Vector2((int)(source.X + data.Width / 2 - data.Center.X), (int)(source.Y + data.Height / 2 - data.Center.Y + source.Z / 7.0f + 5.0f));
         }
 
         //---------------------------------------------------------------------------
