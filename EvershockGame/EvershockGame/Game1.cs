@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
 
+
 namespace EvershockGame
 {
     public class Game1 : Game
@@ -19,12 +20,8 @@ namespace EvershockGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Player player;
-        Player player2;
-        IEntity playerIndicatorP1;
-        IEntity playerIndicatorP2;
-        AnimationComponent piAnimationP1;
-        AnimationComponent piAnimationP2;
+        IEntity playerIndicatorP1 = EntityFactory.Create<Entity>("playerIndicatorP1");
+        IEntity playerIndicatorP2 = EntityFactory.Create<Entity>("playerIndicatorP2");
 
         //---------------------------------------------------------------------------
 
@@ -43,20 +40,20 @@ namespace EvershockGame
         {
             base.Initialize();
             Window.AllowUserResizing = true;
+            GameWindowSettings.SetWindowSettings(graphics, Window, 1680, 1050);
+
+            int width = GraphicsDevice.PresentationParameters.BackBufferWidth;
+            int height = GraphicsDevice.PresentationParameters.BackBufferHeight;
 
             GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             LightingManager.Get().Device = GraphicsDevice;
 
-            GameWindowSettings.SetWindowSettings(graphics, Window, 1920, 1080);
-
             SeedManager.Get().ResetBaseSeed(1234);
 
-            int width = GraphicsDevice.PresentationParameters.BackBufferWidth;
-            int height = GraphicsDevice.PresentationParameters.BackBufferHeight;
-
-            UIManager.Get().Init(GraphicsDevice, width, height);
-            CameraManager.Get().Init(width, height);
+            /*--------------------------------------------------------------------------
+                       Stage
+            --------------------------------------------------------------------------*/
 
             Stage stage = new Stage(0);
             foreach (Room room in stage.Rooms)
@@ -76,17 +73,19 @@ namespace EvershockGame
                        Player 1
             --------------------------------------------------------------------------*/
 
-            player = EntityFactory.Create<Player>("Player1");
+            Player player = EntityFactory.Create<Player>("Player1");
 
             /*--------------------------------------------------------------------------
                         Player 2
             --------------------------------------------------------------------------*/
 
-            player2 = EntityFactory.Create<Player>("Player2");
+            Player player2 = EntityFactory.Create<Player>("Player2");
 
             /*--------------------------------------------------------------------------
                         Camera
             --------------------------------------------------------------------------*/
+
+            CameraManager.Get().Init(width, height);
 
             Camera cam1 = EntityFactory.Create<Camera>("Cam1");
             cam1.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
@@ -100,7 +99,7 @@ namespace EvershockGame
             cam2.Properties.AddTarget(player2);
             //cam2.Properties.IsAmbientOcclusionEnabled = true;
 
-            CameraManager.Get().FuseCameras(cam1, cam2, 500);
+            CameraManager.Get().FuseCameras(cam1, cam2, width/2);
 
             /*--------------------------------------------------------------------------
                         Other
@@ -113,6 +112,8 @@ namespace EvershockGame
             /*--------------------------------------------------------------------------
                         UI
             --------------------------------------------------------------------------*/
+
+            UIManager.Get().Init(GraphicsDevice, width, height);
 
             ImageControl leftHP = EntityFactory.CreateUI<ImageControl>("HP");
             leftHP.VerticalAlignment = EVerticalAlignment.Top;
@@ -206,11 +207,6 @@ namespace EvershockGame
                 CollisionManager.Get().IsDebugViewActive = false;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.G))
-            {
-                player.GetComponent<AttributesComponent>().TransmitMovementAddend(5);
-            }
-
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
@@ -220,17 +216,20 @@ namespace EvershockGame
 
             base.Update(gameTime);
 
-            //if ((Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl))) && !playerIndicatorP1.IsEnabled)
-            //{
-            //    playerIndicatorP1.Enable();
-            //    playerIndicatorP2.Enable();
-            //}
 
-            //if (Keyboard.GetState().IsKeyUp(Keys.LeftControl) && (Keyboard.GetState().IsKeyUp(Keys.RightControl)) && playerIndicatorP1.IsEnabled)
-            //{
-            //    playerIndicatorP1.Disable();
-            //    playerIndicatorP2.Disable();
-            //}
+            //TODO: Shift to UI
+
+            if ((Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl))) && !playerIndicatorP1.IsEnabled)
+            {
+                playerIndicatorP1.Enable();
+                playerIndicatorP2.Enable();
+            }
+
+            if (Keyboard.GetState().IsKeyUp(Keys.LeftControl) && (Keyboard.GetState().IsKeyUp(Keys.RightControl)) && playerIndicatorP1.IsEnabled)
+            {
+                playerIndicatorP1.Disable();
+                playerIndicatorP2.Disable();
+            }
         }
         
         protected override void Draw(GameTime gameTime)

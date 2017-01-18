@@ -15,10 +15,11 @@ namespace EvershockGame.Code.Components
 
         public void Spawn()
         {
-            for (int i = 0; i < 12; i++)
+            int t_rnd = rnd.Next(7, 21);
+
+            for (int i = 0; i < t_rnd; i++)
             {
-                int tempRand = m_Rand.Next(0, Enum.GetValues(typeof(EPickups)).Length);
-                Spawn((EPickups)tempRand);
+                Spawn((EPickups)rnd.Next(0, Enum.GetValues(typeof(EPickups)).Length));
             }
         }
 
