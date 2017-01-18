@@ -1,21 +1,19 @@
 ﻿using Managers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EntityComponent.Manager
 {
     public class SeedManager : BaseManager<SeedManager>
     {
         private Random m_RandSeed;
+        private Random m_Rand;
 
         //---------------------------------------------------------------------------
 
         protected SeedManager()
         {
             m_RandSeed = new Random();
+            m_Rand = new Random();
         }
 
         //---------------------------------------------------------------------------
@@ -37,6 +35,34 @@ namespace EntityComponent.Manager
         public int NextSeed(int min, int max)
         {
             return m_RandSeed.Next(min, max);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public int NextRand()
+        {
+            return m_Rand.Next();
+        }
+
+        //---------------------------------------------------------------------------
+
+        public float NextRandF()
+        {
+            return (float)m_Rand.NextDouble();
+        }
+
+        //---------------------------------------------------------------------------
+
+        public int NextRand(int min, int max)
+        {
+            return m_Rand.Next(min, max);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public float NextRandF(float min, float max)
+        {
+            return min + (float)m_Rand.NextDouble()* (max- min);
         }
     }
 }
