@@ -50,7 +50,7 @@ namespace EvershockGame.Code
             collider.Init(44, BodyType.Dynamic);
             //collider.SetCollisionCategory(ECollisionCategory.Player);
 
-            AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(5.0f, 5.0f), Color.White, 0.6f);
+            AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(5.0f, 5.0f), Color.White, 0.8f);
 
             InputComponent input = AddComponent<InputComponent>();
             if (input != null)

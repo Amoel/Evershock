@@ -1,15 +1,20 @@
 sampler TextureSampler : register(s0);
-sampler Bloom : register(s1);
 
-float4 PixelShaderFunction(float2 texCoord : TEXCOORD0) : COLOR0   
+texture bloom;
+sampler bloomSampler = sampler_state
+{
+	Texture = <bloom>;
+};
+
+float4 PixelShaderFunction(float4 pos : SV_POSITION, float4 color1 : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {    
-     float4 Color = tex2D(TextureSampler, texCoord); 
-     float4 BloomColor = tex2D(Bloom, texCoord); 
+     float4 Color = tex2D(TextureSampler, coords); 
+     float4 BloomColor = tex2D(bloomSampler, coords);
 
      return (Color + BloomColor);
 }   
 
-technique BloomExtract   
+technique Technique1   
 {   
      pass Pass1   
      {   

@@ -251,17 +251,25 @@ namespace EntityComponent.Components
                             //    };
                             //    m_EffectWrapper.ApplyEffects(batch, m_ShadowTarget, m_ShadowTarget, shadowEffects);
                             //}
-
-                            m_LightingEffect.Parameters["isAmbientOcclusionEnabled"].SetValue(IsAmbientOcclusionEnabled);
+                            
+                            //m_LightingEffect.Parameters["isAmbientOcclusionEnabled"].SetValue(IsAmbientOcclusionEnabled);
                             m_LightingEffect.Parameters["lightMask"].SetValue(m_LightingTarget);
-                            m_LightingEffect.Parameters["shadowMask"].SetValue(m_ShadowTarget);
-
+                            //m_LightingEffect.Parameters["shadowMask"].SetValue(m_ShadowTarget);
+                            
                             m_EffectWrapper.ApplyEffects(batch, m_ComponentsTarget, m_MainTarget, m_PostEffects);
 
-                            if (CollisionManager.Get().IsDebugViewActive)
-                            {
-                                LightingManager.Get().DrawDebug(batch, data);
-                            }
+                            Effect bloomExtract = AssetManager.Get().Find<Effect>("BloomExtract");
+                            Effect blur = AssetManager.Get().Find<Effect>("Blur");
+                            m_EffectWrapper.ApplyEffects(batch, m_MainTarget, m_ShadowTarget, new List<Effect>() { bloomExtract, blur });
+
+                            Effect bloomCombine = AssetManager.Get().Find<Effect>("BloomCombine");
+                            bloomCombine.Parameters["bloom"].SetValue(m_ShadowTarget);
+                            m_EffectWrapper.ApplyEffects(batch, m_MainTarget, m_ComponentsTarget, new List<Effect>() { bloomCombine });
+
+                            //if (CollisionManager.Get().IsDebugViewActive)
+                            //{
+                            //    LightingManager.Get().DrawDebug(batch, data);
+                            //}
 
                             return m_MainTarget;
                         }
@@ -365,14 +373,7 @@ namespace EntityComponent.Components
             }
             else
             {
-                if (IsLightingEnabled)
-                {
-                    batch.Draw(m_MainTarget, Viewport, Color.White);
-                }
-                else
-                {
-                    batch.Draw(m_ComponentsTarget, Viewport, Color.White);
-                }
+                batch.Draw(m_ComponentsTarget, Viewport, Color.White);
             }
         }
 

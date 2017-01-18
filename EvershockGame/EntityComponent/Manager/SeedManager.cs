@@ -31,5 +31,12 @@ namespace EntityComponent.Manager
         {
             return m_RandSeed.Next();
         }
+
+        //---------------------------------------------------------------------------
+
+        public int NextSeed(int min, int max)
+        {
+            return m_RandSeed.Next(min, max);
+        }
     }
 }

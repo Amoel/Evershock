@@ -43,6 +43,12 @@ namespace EntityComponent.Stages
             SpreadRooms(Rooms);
             ConnectRooms(Rooms);
             FindCorners(Rooms, Corridors);
+
+            foreach (Room room in Rooms)
+            {
+                Area area = EntityFactory.Create<Area>("Area");
+                area.Collider.AddRect(room.Bounds.X, room.Bounds.Y, room.Bounds.Width, room.Bounds.Height);
+            }
         }
 
         //---------------------------------------------------------------------------

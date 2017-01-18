@@ -38,14 +38,14 @@ namespace EntityComponent.Components
 
         public void AddRect(int x, int y, int width, int height)
         {
-            Fixture fixture = FixtureFactory.AttachRectangle(width * 32.0f / Unit, height * 32.0f / Unit, 0, new Vector2((x + width / 2.0f) * 32.0f / Unit, (y + height / 2.0f) * 32.0f / Unit), Body, Entity);
+            Fixture fixture = FixtureFactory.AttachRectangle(width * 64.0f / Unit, height * 64.0f / Unit, 0, new Vector2((x + width / 2.0f) * 64.0f / Unit, (y + height / 2.0f) * 64.0f / Unit), Body, Entity);
             fixture.CollisionCategories = m_CategoryMapping[CollisionCategory];
             fixture.CollidesWith = m_CategoryMapping[CollidesWith];
             fixture.IsSensor = true;
             fixture.OnCollision += OnCollision;
             fixture.OnSeparation += OnSeparation;
             Body.FixtureList.Add(fixture);
-            Rects.Add(new Rectangle(x * 32, y * 32, width * 32, height * 32));
+            Rects.Add(new Rectangle(x * 64, y * 64, width * 64, height * 64));
         }
 
         //---------------------------------------------------------------------------
