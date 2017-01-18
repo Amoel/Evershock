@@ -25,7 +25,11 @@ namespace EvershockGame.Code.Components
 
         //---------------------------------------------------------------------------
 
-        public AIComponent(Guid entity) : base(entity) { m_Pathfinder = new Pathfinder(); }
+        public AIComponent(Guid entity) : base(entity)
+        {
+            Area area = AreaManager.Get().FindAreaFromEntity(Entity);
+            m_Pathfinder = new Pathfinder(area);
+        }
 
         //---------------------------------------------------------------------------
 

@@ -58,14 +58,16 @@ namespace EvershockGame
             UIManager.Get().Init(GraphicsDevice, width, height);
             CameraManager.Get().Init(width, height);
 
-            Stage stage = new Stage(0);
+            Stage stage = new Stage(SeedManager.Get().NextSeed());
             foreach (Room room in stage.Rooms)
             {
-                for (int i = 0; i < 5; i++)
+                int max = SeedManager.Get().NextSeed(3, 7);
+                for (int i = 0; i < max; i++)
                 {
-                    Vector2 position = new Vector2(room.Bounds.Center.X * 64 + (float)Math.Sin((i / 2.5f) * Math.PI) * 300, room.Bounds.Center.Y * 64 + (float)Math.Cos((i / 2.5f) * Math.PI) * 300);
+                    Vector2 position = new Vector2(room.Bounds.Center.X * 64 + (float)Math.Sin((i / (max / 2.0f)) * Math.PI) * 300, room.Bounds.Center.Y * 64 + (float)Math.Cos((i / (max / 2.0f)) * Math.PI) * 300);
                     EntityFactory.Create<Chest>("hallo").Init(position);
                 }
+                EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));
             }
             StageManager.Get().Create(stage.CreateMap());
             StageManager.Get().Stage = stage;
@@ -171,6 +173,8 @@ namespace EvershockGame
             AssetManager.Get().Store<Effect>("LightingEffect", "Effects/DeferredLighting");
             AssetManager.Get().Store<Effect>("Occlusion", "Effects/Occlusion");
             AssetManager.Get().Store<Effect>("Blur", "Effects/Blur");
+            AssetManager.Get().Store<Effect>("BloomExtract", "Effects/BloomExtract");
+            AssetManager.Get().Store<Effect>("BloomCombine", "Effects/BloomCombine");
         }
 
         //---------------------------------------------------------------------------

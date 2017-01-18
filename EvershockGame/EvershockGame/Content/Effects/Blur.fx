@@ -2,7 +2,7 @@ sampler TextureSampler : register(s0);
 const float blurSizeHorizontal = 1.0f/960.0f;
 const float blurSizeVertical = 1.0f/540.0f;
 
-int dist = 25;
+int dist = 100;
 
 float4 HorizontalBlurFunction(float4 pos : SV_POSITION, float4 color1 : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {

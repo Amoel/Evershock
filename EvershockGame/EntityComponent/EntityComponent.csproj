@@ -121,6 +121,7 @@
     <Compile Include="ILightingComponent.cs" />
     <Compile Include="ITickableComponent.cs" />
     <Compile Include="IDrawableUIComponent.cs" />
+    <Compile Include="Manager\AreaManager.cs" />
     <Compile Include="Manager\AssertManager.cs" />
     <Compile Include="Manager\AssetManager.cs" />
     <Compile Include="Manager\CameraManager.cs" />

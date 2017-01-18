@@ -24,16 +24,17 @@ namespace EntityComponent.Pathfinding
 
         //---------------------------------------------------------------------------
 
-        public Pathfinder()
+        public Pathfinder(Area area)
         {
-            m_Nodes = new PathNode[StageManager.Get().Width, StageManager.Get().Height];
-            Bounds = new Rectangle(0, 0, StageManager.Get().Width, StageManager.Get().Height);
+            UpdateArea(area);
         }
 
         //---------------------------------------------------------------------------
 
         public List<Vector3> ExecuteSearch(Vector3 startLocation, Vector3 endLocation, EBehaviour behaviour = EBehaviour.Follow)
         {
+            if (!AreaManager.Get().IsSharedArea(startLocation.To2D(), endLocation.To2D())) return new List<Vector3>();
+
             Point startPoint = new Point(((int)startLocation.X - 16) / 32, ((int)startLocation.Y - 16) / 32);
             Point endPoint = new Point(((int)endLocation.X - 16) / 32, ((int)endLocation.Y - 16) / 32);
 
@@ -138,6 +139,17 @@ namespace EntityComponent.Pathfinding
             //if (!StageManager.Get().IsBlocked(center.X + 1, center.Y + 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X + 1, center.Y + 1), 14));
 
             return nodes;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void UpdateArea(Area area)
+        {
+            if (area != null)
+            {
+                m_Nodes = new PathNode[area.Collider.Rects[0].Width, area.Collider.Rects[0].Height];
+                Bounds = area.Collider.Rects[0];
+            }
         }
     }
 }
