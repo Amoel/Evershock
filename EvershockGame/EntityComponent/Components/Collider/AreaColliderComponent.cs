@@ -46,6 +46,8 @@ namespace EntityComponent.Components
             fixture.OnSeparation += OnSeparation;
             Body.FixtureList.Add(fixture);
             Rects.Add(new Rectangle(x * 64, y * 64, width * 64, height * 64));
+
+            AreaManager.Get().AddAreaRect(Entity, x, y, width, height);
         }
 
         //---------------------------------------------------------------------------

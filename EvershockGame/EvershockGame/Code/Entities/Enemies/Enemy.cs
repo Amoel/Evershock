@@ -12,7 +12,8 @@ namespace EvershockGame.Code
     public class Enemy : Entity
     {
         public TransformComponent Transform { get { return GetComponent<TransformComponent>(); } }
-        public PhysicsComponent Physics { get { return GetComponent<PhysicsComponent>(); } }
+        public MovementAnimationComponent Animation { get { return GetComponent<MovementAnimationComponent>(); } }
+        public ActorPhysicsComponent Physics { get { return GetComponent<ActorPhysicsComponent>(); } }
         public AIComponent AI { get { return GetComponent<AIComponent>(); } }
 
         //---------------------------------------------------------------------------
@@ -20,7 +21,9 @@ namespace EvershockGame.Code
         public Enemy(string name) : base(name)
         {
             AddComponent<TransformComponent>();
-            AddComponent<PhysicsComponent>();
+            AddComponent<AttributesComponent>();
+            AddComponent<MovementAnimationComponent>();
+            AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
             AddComponent<AIComponent>();
         }
     }

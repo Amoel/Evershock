@@ -88,7 +88,7 @@ namespace EntityComponent.Manager
             int mapWidth = map.GetLength(0);
             int mapHeight = map.GetLength(1);
 
-            Random r = new Random();
+            Random r = new Random(SeedManager.Get().NextSeed());
             int tileSize = 24;
 
             for (int y = 0; y < mapHeight; y++)

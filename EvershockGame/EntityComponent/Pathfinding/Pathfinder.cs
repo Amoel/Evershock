@@ -24,25 +24,35 @@ namespace EntityComponent.Pathfinding
 
         //---------------------------------------------------------------------------
 
-        public Pathfinder(Area area)
+        public Pathfinder()
         {
-            UpdateArea(area);
+            m_Nodes = new PathNode[StageManager.Get().Width, StageManager.Get().Height];
         }
 
         //---------------------------------------------------------------------------
 
         public List<Vector3> ExecuteSearch(Vector3 startLocation, Vector3 endLocation, EBehaviour behaviour = EBehaviour.Follow)
         {
-            if (!AreaManager.Get().IsSharedArea(startLocation.To2D(), endLocation.To2D())) return new List<Vector3>();
+            Area area = AreaManager.Get().GetSharedArea(startLocation.To2D(), endLocation.To2D());
 
-            Point startPoint = new Point(((int)startLocation.X - 16) / 32, ((int)startLocation.Y - 16) / 32);
-            Point endPoint = new Point(((int)endLocation.X - 16) / 32, ((int)endLocation.Y - 16) / 32);
+            if (area == null)
+            {
+                return new List<Vector3>();
+            }
+            else
+            {
+                Rectangle areaBounds = area.Collider.Rects[0];
+                Bounds = new Rectangle(areaBounds.X / 64, areaBounds.Y / 64, areaBounds.Width / 64, areaBounds.Height / 64);
+            }
+
+            Point startPoint = new Point(((int)startLocation.X - 32) / 64, ((int)startLocation.Y - 32) / 64);
+            Point endPoint = new Point(((int)endLocation.X - 32) / 64, ((int)endLocation.Y - 32) / 64);
 
             List<Vector3> path = new List<Vector3>();
             foreach (Point position in ExecuteSearch(startPoint, endPoint, behaviour))
             {
                 if (position.Equals(startPoint)) continue;
-                Vector3 pathLocation = new Vector3(position.X * 32 + 16, position.Y * 32 + 16, startLocation.Z);
+                Vector3 pathLocation = new Vector3(position.X * 64 + 32, position.Y * 64 + 32, startLocation.Z);
                 path.Add(pathLocation);
             }
             return path;
@@ -139,17 +149,6 @@ namespace EntityComponent.Pathfinding
             //if (!StageManager.Get().IsBlocked(center.X + 1, center.Y + 1)) nodes.Add(new Tuple<Point, int>(new Point(center.X + 1, center.Y + 1), 14));
 
             return nodes;
-        }
-
-        //---------------------------------------------------------------------------
-
-        public void UpdateArea(Area area)
-        {
-            if (area != null)
-            {
-                m_Nodes = new PathNode[area.Collider.Rects[0].Width, area.Collider.Rects[0].Height];
-                Bounds = area.Collider.Rects[0];
-            }
         }
     }
 }

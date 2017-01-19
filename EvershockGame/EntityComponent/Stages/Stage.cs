@@ -1,4 +1,5 @@
 ﻿using EntityComponent.Factory;
+using EntityComponent.Manager;
 using EntityComponent.Pathfinding;
 using Microsoft.Xna.Framework;
 using System;
@@ -44,6 +45,7 @@ namespace EntityComponent.Stages
             ConnectRooms(Rooms);
             FindCorners(Rooms, Corridors);
 
+            AreaManager.Get().Reset(Bounds.Width, Bounds.Height);
             foreach (Room room in Rooms)
             {
                 Area area = EntityFactory.Create<Area>("Area");

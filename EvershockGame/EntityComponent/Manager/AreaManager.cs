@@ -34,23 +34,6 @@ namespace EntityComponent.Manager
             if (area != null && !m_Areas.Contains(area.GUID))
             {
                 m_Areas.Add(area.GUID);
-                foreach (Rectangle rect in area.Collider.Rects)
-                {
-                    for (int x = 0; x < rect.Width; x++)
-                    {
-                        for (int y = 0; y < rect.Height; y++)
-                        {
-                            if (m_AreaMap[rect.X + x, rect.Y + y] == null)
-                            {
-                                m_AreaMap[rect.X + x, rect.Y + y] = new AreaData(area.GUID);
-                            }
-                            else
-                            {
-                                m_AreaMap[rect.X + x, rect.Y + y].Add(area.GUID);
-                            }
-                        }
-                    }
-                }
             }
         }
 
@@ -66,7 +49,27 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
-        public bool IsSharedArea(Vector2 left, Vector2 right)
+        public void AddAreaRect(Guid area, int x, int y, int width, int height)
+        {
+            for (int xPos = x; xPos < x + width; xPos++)
+            {
+                for (int yPos = y; yPos < y + height; yPos++)
+                {
+                    if (m_AreaMap[xPos, yPos] == null)
+                    {
+                        m_AreaMap[xPos, yPos] = new AreaData(area);
+                    }
+                    else
+                    {
+                        m_AreaMap[xPos, yPos].Add(area);
+                    }
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public Area GetSharedArea(Vector2 left, Vector2 right)
         {
             Point leftPoint = new Point(((int)left.X) / 64, ((int)left.Y) / 64);
             Point rightPoint = new Point(((int)right.X) / 64, ((int)right.Y) / 64);
@@ -75,10 +78,10 @@ namespace EntityComponent.Manager
             {
                 foreach (Guid area in m_AreaMap[leftPoint.X, leftPoint.Y].Areas)
                 {
-                    if (m_AreaMap[rightPoint.X, rightPoint.Y].Areas.Contains(area)) return true;
+                    if (m_AreaMap[rightPoint.X, rightPoint.Y].Areas.Contains(area)) return EntityManager.Get().Find<Area>(area);
                 }
             }
-            return false;
+            return null;
         }
 
         //---------------------------------------------------------------------------

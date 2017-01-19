@@ -2,6 +2,7 @@
 using EntityComponent.Components;
 using EntityComponent.Manager;
 using EntityComponent.Pathfinding;
+using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -28,7 +29,7 @@ namespace EvershockGame.Code.Components
         public AIComponent(Guid entity) : base(entity)
         {
             Area area = AreaManager.Get().FindAreaFromEntity(Entity);
-            m_Pathfinder = new Pathfinder(area);
+            m_Pathfinder = new Pathfinder();
         }
 
         //---------------------------------------------------------------------------
@@ -43,6 +44,15 @@ namespace EvershockGame.Code.Components
 
         public void Tick(float deltaTime)
         {
+            if (m_Target == Guid.Empty)
+            {
+                List<Player> players = EntityManager.Get().Find<Player>();
+                if (players.Count > 0)
+                {
+                    AddTarget(players[0], EBehaviour.Follow);
+                }
+            }
+
             m_Timer += deltaTime;
             if (m_Timer >= 0.2f)
             {
@@ -50,13 +60,14 @@ namespace EvershockGame.Code.Components
                 TickPathfinding();
             }
                 
-            if (m_Path != null && m_Path.Count > 1)
+            if (m_Path != null && m_Path.Count > 0)
             {
+
                 TransformComponent transform = GetComponent<TransformComponent>();
                 PhysicsComponent physics = GetComponent<PhysicsComponent>();
                 if (transform != null && physics != null)
                 {
-                    Vector3 step = Vector3.Normalize(m_Path[1] - transform.Location) * 2;
+                    Vector3 step = Vector3.Normalize(m_Path[0] - transform.Location) * 400;
                     physics.ApplyForce(step);
                 }
             }
@@ -75,8 +86,27 @@ namespace EvershockGame.Code.Components
                 if (transform != null && targetTransform != null)
                 {
                     m_Path = m_Pathfinder.ExecuteSearch(transform.Location, targetTransform.Location, m_Behaviour);
+
+                    hasLineOfSight = true;
+                    while (m_Path.Count > 1 && hasLineOfSight)
+                    {
+                        PhysicsManager.Get().World.RayCast(RaycastCallback, transform.Location.To2D() / ColliderComponent.Unit, m_Path[1].To2D() / ColliderComponent.Unit);
+                        if (hasLineOfSight)
+                        {
+                            m_Path.RemoveAt(0);
+                        }
+                    }
                 }
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        bool hasLineOfSight = true;
+        private float RaycastCallback(Fixture fix, Vector2 hit, Vector2 normal, float fraction)
+        {
+            hasLineOfSight = false;
+            return fraction;
         }
 
         //---------------------------------------------------------------------------

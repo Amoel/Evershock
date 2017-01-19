@@ -59,6 +59,9 @@ namespace EvershockGame
             CameraManager.Get().Init(width, height);
 
             Stage stage = new Stage(SeedManager.Get().NextSeed());
+            StageManager.Get().Create(stage.CreateMap());
+            StageManager.Get().Stage = stage;
+
             foreach (Room room in stage.Rooms)
             {
                 int max = SeedManager.Get().NextSeed(3, 7);
@@ -69,8 +72,7 @@ namespace EvershockGame
                 }
                 EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));
             }
-            StageManager.Get().Create(stage.CreateMap());
-            StageManager.Get().Stage = stage;
+            
 
             stage.SaveStageAsImage(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"Map.png"));
 
