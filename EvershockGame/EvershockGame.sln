@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Managers", "Managers\Managers.csproj", "{85EB4DEA-38A6-45DC-B308-5D333073440E}"
 EndProject
@@ -19,6 +19,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Level", "Level\Level.csproj", "{7F7E17F7-8732-4265-8D97-6167C6CC91C4}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
@@ -51,14 +54,12 @@ Global
 		{6A32590E-DC9A-4E35-B646-EA70B6AC14C4}.Release|x86.ActiveCfg = Release|Any CPU
 		{6A32590E-DC9A-4E35-B646-EA70B6AC14C4}.Release|x86.Build.0 = Release|Any CPU
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Debug|Any CPU.Build.0 = Debug|x86
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Debug|x86.ActiveCfg = Debug|x86
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Debug|x86.Build.0 = Debug|x86
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Release|Any CPU.ActiveCfg = Release|x86
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Release|x86.ActiveCfg = Release|x86
 		{0AAD36E3-51A5-4A07-AB60-5C8A66BD38B7}.Release|x86.Build.0 = Release|x86
 		{DE8ED430-DF2D-4009-8F55-FEDF88580893}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{DE8ED430-DF2D-4009-8F55-FEDF88580893}.Debug|Any CPU.Build.0 = Debug|x86
 		{DE8ED430-DF2D-4009-8F55-FEDF88580893}.Debug|x86.ActiveCfg = Debug|x86
 		{DE8ED430-DF2D-4009-8F55-FEDF88580893}.Debug|x86.Build.0 = Debug|x86
 		{DE8ED430-DF2D-4009-8F55-FEDF88580893}.Release|Any CPU.ActiveCfg = Release|x86
