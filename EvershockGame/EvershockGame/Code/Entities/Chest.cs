@@ -13,13 +13,12 @@ namespace EvershockGame.Code
 
         public Chest(string name) : base(name)
         {
-            AddComponent<TransformComponent>().Init(new Vector3(300, 0, 0));
+            AddComponent<TransformComponent>();
             AddComponent<PhysicsComponent>();
             AddComponent<PickupSpawnerComponent>();
 
             AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("ChestClosed1"), Vector2.Zero, new Vector2(2, 2));
             //AddComponent<ShadowComponent>().Init(AssetManager.Get().Find<Texture2D>("ChestClosed1"), new Vector2(2, 2), new Vector2(0, 3));
-
             AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(2, 2), Color.White, 0.8f);
 
             RectColliderComponent chestCollider = AddComponent<RectColliderComponent>();
@@ -29,19 +28,12 @@ namespace EvershockGame.Code
             {
                 if (closed)
                 {
-                    if (target.HasComponent<AttributesComponent>())
-                    {
-                        //target.GetComponent<AttributesComponent>().TransmitMovementAddend(150);
-                        //Pickup yield = new Pickup("MovementOrbs");
-                        //yield.Init(EPickups.HEALTH, EPickups.COINS);
-                    }
-
                     if (source.HasComponent<SpriteComponent>())
                     {
                         source.GetComponent<SpriteComponent>().Texture = AssetManager.Get().Find<Texture2D>("ChestOpened1");
                     }
 
-                    if (HasComponent<PickupSpawnerComponent>())
+                    if (source.HasComponent<PickupSpawnerComponent>())
                     {
                         GetComponent<PickupSpawnerComponent>().Spawn();
                     }
