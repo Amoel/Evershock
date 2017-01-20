@@ -42,6 +42,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Code\AssetData.cs" />
     <Compile Include="Code\Components\ActorPhysicsComponent.cs" />
     <Compile Include="Code\Components\AIComponent.cs" />
     <Compile Include="Code\Components\AttributesComponent.cs" />
@@ -180,6 +181,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Tilesets\Debug\WalkingAnimation2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Tilesets\Debug\WalkingAnimation3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Tilesets\DungeonTileset.png">

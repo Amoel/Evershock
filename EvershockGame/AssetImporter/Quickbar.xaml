@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="AssetImporter.Quickbar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AssetImporter"
+             mc:Ignorable="d" 
+             d:DesignHeight="25" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Save" Click="OnSaveClicked" Margin="3" Padding="3,0,3,0"/>
+            <Button Content="Add" Click="OnAddClicked" Margin="3" Padding="3,0,3,0"/>
+            <Button Content="Generate" Click="OnGenerateClicked" Margin="3" Padding="3,0,3,0"/>
+            <Button Content="Settings" Click="OnSettingsClicked" Margin="3" Padding="3,0,3,0"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock Text="Filter" Margin="3"/>
+            <TextBox Width="150" Margin="3"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

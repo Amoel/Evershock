@@ -17,6 +17,12 @@ namespace EntityComponent.Manager
 
         public ContentManager Content { get; set; }
 
+        private Dictionary<Type, List<string>> m_AllowedExtensions = new Dictionary<Type, List<string>>()
+        {
+            { typeof(Effect), new List<string> { "fx" } },
+            { typeof(Texture2D), new List<string> { "xnb" } }
+        };
+
         //---------------------------------------------------------------------------
 
         protected AssetManager()
@@ -107,8 +113,39 @@ namespace EntityComponent.Manager
             {
                 string name = Path.GetFileNameWithoutExtension(file);
                 T data = Content.Load<T>(string.Format("{0}/{1}", relativeDirectory, name));
-                Store(name, data);
+                if (IsAllowedExtension<T>(Path.GetExtension(file))) Store(name, data);
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void LoadAll(string relativeDirectory)
+        {
+            string directory = string.Format("{0}/{1}", Content.RootDirectory, relativeDirectory);
+            foreach (string file in Directory.GetFiles(directory))
+            {
+                string name = Path.GetFileNameWithoutExtension(file);
+                switch (Path.GetExtension(file))
+                {
+                    case "png":
+                        Store(name, Content.Load<Texture2D>(string.Format("{0}/{1}", relativeDirectory, name)));
+                        break;
+                    case "fx":
+                        Store(name, Content.Load<Effect>(string.Format("{0}/{1}", relativeDirectory, name)));
+                        break;
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private bool IsAllowedExtension<T>(string extension)
+        {
+            if (m_AllowedExtensions.ContainsKey(typeof(T)))
+            {
+                return m_AllowedExtensions[typeof(T)].Contains(extension);
+            }
+            return true;
         }
     }
 }

@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="AssetImporter.AssetTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AssetImporter"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600">
+
+    <UserControl.Resources>
+        <local:BoolToColorConverter x:Key="BoolToColorConverter"/>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.Resources>
+            <CollectionViewSource x:Key="FilteredAssets" Source="{Binding Assets}" Filter="OnFilter"/>
+        </Grid.Resources>
+        <DataGrid 
+                        Name="Container" 
+                        Grid.Row="1" 
+                        AutoGenerateColumns="False" 
+                        HorizontalGridLinesBrush="White"
+                        VerticalGridLinesBrush="White"
+                        RowHeaderWidth="0"
+                        SelectionChanged="OnSelectionChanged"
+                        ItemsSource="{Binding Source={StaticResource FilteredAssets}}">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#CCCCCC"/>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn IsReadOnly="True" Width="20">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Thumbnail, UpdateSourceTrigger=PropertyChanged}" Width="15" Height="15"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="30*" Foreground="Black"/>
+                <DataGridTextColumn Header="Path" Binding="{Binding Path, UpdateSourceTrigger=PropertyChanged}" Width="70*" Foreground="Black"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding AssetType, UpdateSourceTrigger=PropertyChanged}" Width="100" IsReadOnly="True" Foreground="Black"/>
+                <DataGridCheckBoxColumn Header="Debug" Binding="{Binding IncludeInDebug, UpdateSourceTrigger=PropertyChanged}" Width="50" MinWidth="50" MaxWidth="50"/>
+                <DataGridCheckBoxColumn Header="Release" Binding="{Binding IncludeInRelease, UpdateSourceTrigger=PropertyChanged}" Width="50" MinWidth="50" MaxWidth="50"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
