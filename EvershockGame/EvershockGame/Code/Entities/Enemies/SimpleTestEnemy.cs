@@ -16,7 +16,7 @@ namespace EvershockGame.Code
     {
         public SimpleTestEnemy(string name) : base(name)
         {
-            Animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation"), Vector2.One);
+            Animation.Init(AssetManager.Get().Find<Texture2D>("WalkingAnimation3"), Vector2.One);
             Animation.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true));
             Animation.AddSetting((int)Tag.MoveRight, new AnimationSetting(8, 2, 0, 7));
             Animation.Stop();

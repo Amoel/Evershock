@@ -139,8 +139,8 @@ namespace EvershockGame
 
 #if DEBUG
             // Load debug content
-            CollisionManager.Get().RectTexture = Content.Load<Texture2D>("Graphics/Debug/RectTextureDebug");
-            CollisionManager.Get().CircleTexture = Content.Load<Texture2D>("Graphics/Debug/CircleTextureDebug");
+            //CollisionManager.Get().RectTexture = Content.Load<Texture2D>("Graphics/Debug/RectTextureDebug");
+            //CollisionManager.Get().CircleTexture = Content.Load<Texture2D>("Graphics/Debug/CircleTextureDebug");
 
             Texture2D pointTex = new Texture2D(GraphicsDevice, 1, 1);
             pointTex.SetData(new Color[] { Color.White });
@@ -149,35 +149,39 @@ namespace EvershockGame
             SpriteComponent.DefaultTexture = AssetManager.Get().Find<Texture2D>("DefaultPlaceholder");
 #endif
 
-            AssetManager.Get().Store<Texture2D>("Background1", "Graphics/Camera/BackgroundTexture1");
-            AssetManager.Get().Store<Texture2D>("Background2", "Graphics/Camera/BackgroundTexture1");
-            AssetManager.Get().Store<Texture2D>("GroundTile1", "Graphics/Camera/BackgroundTexture1");
+            AssetManager.Get().LoadAll<Texture2D>("Graphics");
+            AssetManager.Get().LoadAll<Effect>("Effects");
 
-            AssetManager.Get().Store<Texture2D>("Healthbar", "Graphics/Debug/Healthbar");
+            //AssetManager.Get().Store<Texture2D>("Background1", "Graphics/Camera/BackgroundTexture1");
+            //AssetManager.Get().Store<Texture2D>("Background2", "Graphics/Camera/BackgroundTexture1");
+            //AssetManager.Get().Store<Texture2D>("GroundTile1", "Graphics/Camera/BackgroundTexture1");
 
-            AssetManager.Get().Store<Texture2D>("RedOrb", "Graphics/Various/RedOrb");
-            AssetManager.Get().Store<Texture2D>("BlueOrb", "Graphics/Various/BlueOrb");
-            AssetManager.Get().Store<Texture2D>("YellowOrb", "Graphics/Various/YellowOrb");
+            //AssetManager.Get().Store<Texture2D>("Healthbar", "Graphics/Debug/Healthbar");
 
-            AssetManager.Get().Store<Texture2D>("ChestClosed1", "Graphics/Tiles/ChestClosed1");
-            AssetManager.Get().Store<Texture2D>("ChestOpened1", "Graphics/Tiles/ChestOpened1");
-            AssetManager.Get().Store<Texture2D>("Barrel1", "Graphics/Tiles/Barrel1");
-            AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimationP1", "Graphics/Debug/ArrowSheetP1");
-            AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimationP2", "Graphics/Debug/ArrowSheetP2");
+            //AssetManager.Get().Store<Texture2D>("RedOrb", "Graphics/Various/RedOrb");
+            //AssetManager.Get().Store<Texture2D>("BlueOrb", "Graphics/Various/BlueOrb");
+            //AssetManager.Get().Store<Texture2D>("YellowOrb", "Graphics/Various/YellowOrb");
 
-            AssetManager.Get().Store<Texture2D>("BasicTileset", "Graphics/Tilesets/DungeonTileset");
+            //AssetManager.Get().Store<Texture2D>("ChestClosed1", "Graphics/Tiles/ChestClosed1");
+            //AssetManager.Get().Store<Texture2D>("ChestOpened1", "Graphics/Tiles/ChestOpened1");
+            //AssetManager.Get().Store<Texture2D>("Barrel1", "Graphics/Tiles/Barrel1");
+            //AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimationP1", "Graphics/Debug/ArrowSheetP1");
+            //AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimationP2", "Graphics/Debug/ArrowSheetP2");
 
-            AssetManager.Get().Store<Texture2D>("Kakariko_Village_Tiles", "Graphics/Tilesets/Debug/Kakariko_Village_Tiles");
-            AssetManager.Get().Store<Texture2D>("WalkingAnimation", "Graphics/Tilesets/Debug/WalkingAnimation");
-            AssetManager.Get().Store<Texture2D>("WalkingAnimation2", "Graphics/Tilesets/Debug/WalkingAnimation2");
+            //AssetManager.Get().Store<Texture2D>("BasicTileset", "Graphics/Tilesets/DungeonTileset");
 
-            AssetManager.Get().Store<Texture2D>("CircleLight", "Graphics/Lights/CircleLight");
+            //AssetManager.Get().Store<Texture2D>("Kakariko_Village_Tiles", "Graphics/Tilesets/Debug/Kakariko_Village_Tiles");
+            //AssetManager.Get().Store<Texture2D>("WalkingAnimation", "Graphics/Tilesets/Debug/WalkingAnimation");
+            //AssetManager.Get().Store<Texture2D>("WalkingAnimation2", "Graphics/Tilesets/Debug/WalkingAnimation2");
+            //AssetManager.Get().Store<Texture2D>("WalkingAnimation3", "Graphics/Tilesets/Debug/WalkingAnimation3");
 
-            AssetManager.Get().Store<Effect>("LightingEffect", "Effects/DeferredLighting");
-            AssetManager.Get().Store<Effect>("Occlusion", "Effects/Occlusion");
-            AssetManager.Get().Store<Effect>("Blur", "Effects/Blur");
-            AssetManager.Get().Store<Effect>("BloomExtract", "Effects/BloomExtract");
-            AssetManager.Get().Store<Effect>("BloomCombine", "Effects/BloomCombine");
+            //AssetManager.Get().Store<Texture2D>("CircleLight", "Graphics/Lights/CircleLight");
+
+            //AssetManager.Get().Store<Effect>("LightingEffect", "Effects/DeferredLighting");
+            //AssetManager.Get().Store<Effect>("Occlusion", "Effects/Occlusion");
+            //AssetManager.Get().Store<Effect>("Blur", "Effects/Blur");
+            //AssetManager.Get().Store<Effect>("BloomExtract", "Effects/BloomExtract");
+            //AssetManager.Get().Store<Effect>("BloomCombine", "Effects/BloomCombine");
         }
 
         //---------------------------------------------------------------------------

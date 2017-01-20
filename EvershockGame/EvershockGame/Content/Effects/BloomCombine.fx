@@ -11,7 +11,7 @@ float4 PixelShaderFunction(float4 pos : SV_POSITION, float4 color1 : COLOR0, flo
 	 float4 Color = tex2D(TextureSampler, coords); 
 	 float4 BloomColor = tex2D(bloomSampler, coords);
 
-	 return (Color + BloomColor - 0.1f);
+	 return (Color + BloomColor);
 }   
 
 technique Technique1   
