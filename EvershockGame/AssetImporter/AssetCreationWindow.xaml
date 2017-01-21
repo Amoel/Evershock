@@ -38,12 +38,12 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="40"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" VerticalAlignment="Center" Margin="3,0,0,0"/>
-                <TextBox Name="AssetName" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="3,0,4,0"/>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Relative Path" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                <TextBox Name="AssetName" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="3,0,4,0" TextChanged="OnNameChanged"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Path" VerticalAlignment="Center" Margin="6,0,0,0"/>
                 <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,4,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -54,12 +54,12 @@
                         <Image Source="Resources/SearchIcon.png"/>
                     </Button>
                 </Grid>
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Type" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Type" VerticalAlignment="Center" Margin="6,0,0,0"/>
                 <ComboBox Name="AssetTypeBox" Grid.Row="2" Grid.Column="1" Margin="3,3,4,1" ItemsSource="{Binding Source={StaticResource AssetTypeValues}}" SelectedIndex="1"/>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="Cancel" Margin="0,4,4,4" Padding="3,0,3,0" Click="OnCancelClicked"/>
-                <Button Content="Add" Margin="0,4,4,4" Padding="3,0,3,0" Click="OnAddClicked"/>
+                <Button Content="Add" Margin="0,4,4,4" Padding="3,0,3,0" Click="OnAddClicked" IsEnabled="{Binding IsValidName, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </Grid>
     </Grid>

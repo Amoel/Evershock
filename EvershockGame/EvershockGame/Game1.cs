@@ -111,7 +111,7 @@ namespace EvershockGame
             cam2.Properties.AddTarget(player2);
             //cam2.Properties.IsAmbientOcclusionEnabled = true;
 
-            CameraManager.Get().FuseCameras(cam1, cam2, width/2);
+            CameraManager.Get().FuseCameras(cam1, cam2, width / 2);
 
             /*--------------------------------------------------------------------------
                         Other

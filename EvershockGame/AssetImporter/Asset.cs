@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace AssetImporter
 {
@@ -24,7 +26,9 @@ namespace AssetImporter
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        [JsonIgnore]
         private bool m_HasUnsavedChanges;
+        [JsonIgnore]
         public bool HasUnsavedChanges
         {
             get { return m_HasUnsavedChanges; }
@@ -111,7 +115,7 @@ namespace AssetImporter
 
         public Asset(string name, string path, EAssetType assetType)
         {
-            HasUnsavedChanges = true;
+            Save();
             Name = name;
             Path = path;
             IncludeInDebug = false;

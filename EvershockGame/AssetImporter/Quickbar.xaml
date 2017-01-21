@@ -15,11 +15,10 @@
             <Button Content="Save" Click="OnSaveClicked" Margin="3" Padding="3,0,3,0"/>
             <Button Content="Add" Click="OnAddClicked" Margin="3" Padding="3,0,3,0"/>
             <Button Content="Generate" Click="OnGenerateClicked" Margin="3" Padding="3,0,3,0"/>
-            <Button Content="Settings" Click="OnSettingsClicked" Margin="3" Padding="3,0,3,0"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <TextBlock Text="Filter" Margin="3"/>
-            <TextBox Width="150" Margin="3"/>
+            <TextBox Name="Filter" Width="150" Margin="3" TextChanged="OnFilterTextChanged"/>
         </StackPanel>
     </Grid>
 </UserControl>

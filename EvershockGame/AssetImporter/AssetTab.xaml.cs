@@ -50,6 +50,8 @@ namespace AssetImporter
         {
             InitializeComponent();
             DataContext = AssetManager.Get();
+
+            AssetManager.Get().RegisterTab(this);
         }
 
         //---------------------------------------------------------------------------
@@ -61,10 +63,22 @@ namespace AssetImporter
 
         //---------------------------------------------------------------------------
 
+        public void RefreshView()
+        {
+            ((CollectionViewSource)BaseGrid.Resources["FilteredAssets"]).View.Refresh();
+        }
+
+        //---------------------------------------------------------------------------
+
         private void OnFilter(object sender, FilterEventArgs e)
         {
             var item = e.Item as Asset;
             e.Accepted = (item.AssetType.HasFlag(AssetType));
+            if (e.Accepted && AssetManager.Get().FilterText != null && AssetManager.Get().FilterText != string.Empty)
+            {
+                string filter = AssetManager.Get().FilterText.ToLower();
+                if (!item.Name.ToLower().Contains(filter) && !item.Path.ToLower().Contains(filter)) e.Accepted = false;
+            }
         }
     }
 }

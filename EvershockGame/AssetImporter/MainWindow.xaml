@@ -42,7 +42,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <Image Grid.Row="0" Source="{Binding Path=Selection.Thumbnail}" Margin="5"/>
+            <Image Grid.Row="0" Source="{Binding Path=Selection.Thumbnail}" Margin="5" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton Name="LightTheme" VerticalAlignment="Center" IsChecked="True"/>
                 <RadioButton Name="DarkTheme" VerticalAlignment="Center"/>

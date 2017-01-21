@@ -54,5 +54,12 @@ namespace AssetImporter
         {
 
         }
+
+        //---------------------------------------------------------------------------
+
+        private void OnFilterTextChanged(object sender, EventArgs e)
+        {
+            AssetManager.Get().FilterText = Filter.Text;
+        }
     }
 }

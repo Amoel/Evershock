@@ -8,28 +8,6 @@ using Managers;
 
 namespace EvershockGame.Code
 {
-    public enum EAllAssets
-    {
-        WalkingAnimation,
-        WalkingAnimation2,
-        WalkingAnimation3,
-        BlueOrb,
-        RedOrb,
-        YellowOrb,
-        CameraBackground1,
-        CircleLight,
-        ChestClosed1,
-        ChestOpened1,
-        DeferredLighting,
-        BloomExtract,
-        BloomCombine,
-        Blur,
-        DefaultTexture,
-        DungeonTileset1,
-    }
-
-    //---------------------------------------------------------------------------
-
     public enum ESpriteAssets
     {
         WalkingAnimation,

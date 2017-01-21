@@ -35,6 +35,17 @@ namespace AssetImporter
             }
         }
 
+        private bool m_IsValidName;
+        public bool IsValidName
+        {
+            get { return m_IsValidName; }
+            set
+            {
+                m_IsValidName = value;
+                OnPropertyChanged("IsValidName");
+            }
+        }
+
         //---------------------------------------------------------------------------
 
         public AssetCreationWindow()
@@ -71,6 +82,13 @@ namespace AssetImporter
         {
             AssetManager.Get().Add(AssetName.Text, RelativePath.Text, (EAssetType)AssetTypeBox.SelectedItem);
             Close();
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void OnNameChanged(object sender, EventArgs e)
+        {
+            IsValidName = (AssetName.Text != string.Empty && AssetManager.Get().IsNameAvailable(AssetName.Text));
         }
 
         //---------------------------------------------------------------------------

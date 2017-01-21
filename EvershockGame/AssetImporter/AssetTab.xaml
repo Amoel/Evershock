@@ -8,25 +8,37 @@
              d:DesignHeight="300" d:DesignWidth="600">
 
     <UserControl.Resources>
-        <local:BoolToColorConverter x:Key="BoolToColorConverter"/>
+        
     </UserControl.Resources>
     
-    <Grid>
+    <Grid Name="BaseGrid">
         <Grid.Resources>
-            <CollectionViewSource x:Key="FilteredAssets" Source="{Binding Assets}" Filter="OnFilter"/>
+            <local:BoolToColorConverter x:Key="BoolToColorConverter"/>
+            <CollectionViewSource x:Key="FilteredAssets" Source="{Binding Assets}" Filter="OnFilter" />
         </Grid.Resources>
         <DataGrid 
                         Name="Container" 
                         Grid.Row="1" 
                         AutoGenerateColumns="False" 
-                        HorizontalGridLinesBrush="White"
-                        VerticalGridLinesBrush="White"
+                        HorizontalGridLinesBrush="Transparent"
+                        VerticalGridLinesBrush="Transparent"
                         RowHeaderWidth="0"
                         SelectionChanged="OnSelectionChanged"
                         ItemsSource="{Binding Source={StaticResource FilteredAssets}}">
             <DataGrid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#CCCCCC"/>
             </DataGrid.Resources>
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasUnsavedChanges}" Value="True">
+                            <Setter Property="Background" Value="#E0FF8F"/>
+                            <Setter Property="BorderBrush" Value="#E0FF8F"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn IsReadOnly="True" Width="20">
                     <DataGridTemplateColumn.CellTemplate>
@@ -37,7 +49,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="30*" Foreground="Black"/>
                 <DataGridTextColumn Header="Path" Binding="{Binding Path, UpdateSourceTrigger=PropertyChanged}" Width="70*" Foreground="Black"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding AssetType, UpdateSourceTrigger=PropertyChanged}" Width="100" IsReadOnly="True" Foreground="Black"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding AssetType, UpdateSourceTrigger=PropertyChanged}" Width="70" MinWidth="70" MaxWidth="70" IsReadOnly="True" Foreground="Black"/>
                 <DataGridCheckBoxColumn Header="Debug" Binding="{Binding IncludeInDebug, UpdateSourceTrigger=PropertyChanged}" Width="50" MinWidth="50" MaxWidth="50"/>
                 <DataGridCheckBoxColumn Header="Release" Binding="{Binding IncludeInRelease, UpdateSourceTrigger=PropertyChanged}" Width="50" MinWidth="50" MaxWidth="50"/>
             </DataGrid.Columns>

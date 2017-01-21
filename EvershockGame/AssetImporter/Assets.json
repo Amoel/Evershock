@@ -1,6 +1,5 @@
 [
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Tilesets/Debug/WalkingAnimation.png",
     "Name": "WalkingAnimation",
     "Path": "Graphics/Tilesets/Debug/WalkingAnimation.png",
@@ -9,7 +8,6 @@
     "AssetType": 1
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Tilesets/Debug/WalkingAnimation2.png",
     "Name": "WalkingAnimation2",
     "Path": "Graphics/Tilesets/Debug/WalkingAnimation2.png",
@@ -18,7 +16,6 @@
     "AssetType": 1
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Tilesets/Debug/WalkingAnimation3.png",
     "Name": "WalkingAnimation3",
     "Path": "Graphics/Tilesets/Debug/WalkingAnimation3.png",
@@ -27,7 +24,6 @@
     "AssetType": 1
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Various/BlueOrb.png",
     "Name": "BlueOrb",
     "Path": "Graphics/Various/BlueOrb.png",
@@ -36,7 +32,6 @@
     "AssetType": 1
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Various/RedOrb.png",
     "Name": "RedOrb",
     "Path": "Graphics/Various/RedOrb.png",
@@ -45,7 +40,6 @@
     "AssetType": 1
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Various/YellowOrb.png",
     "Name": "YellowOrb",
     "Path": "Graphics/Various/YellowOrb.png",
@@ -54,7 +48,6 @@
     "AssetType": 1
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Camera/BackgroundTexture1.png",
     "Name": "CameraBackground1",
     "Path": "Graphics/Camera/BackgroundTexture1.png",
@@ -63,7 +56,6 @@
     "AssetType": 1
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Lights/CircleLight.png",
     "Name": "CircleLight",
     "Path": "Graphics/Lights/CircleLight.png",
@@ -72,7 +64,6 @@
     "AssetType": 4
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Tiles/ChestClosed1.png",
     "Name": "ChestClosed1",
     "Path": "Graphics/Tiles/ChestClosed1.png",
@@ -81,7 +72,6 @@
     "AssetType": 1
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Tiles/ChestOpened1.png",
     "Name": "ChestOpened1",
     "Path": "Graphics/Tiles/ChestOpened1.png",
@@ -90,7 +80,6 @@
     "AssetType": 1
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Effects/DeferredLighting.fx",
     "Name": "DeferredLighting",
     "Path": "Effects/DeferredLighting.fx",
@@ -99,7 +88,6 @@
     "AssetType": 8
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Effects/BloomExtract.fx",
     "Name": "BloomExtract",
     "Path": "Effects/BloomExtract.fx",
@@ -108,7 +96,6 @@
     "AssetType": 8
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Effects/BloomCombine.fx",
     "Name": "BloomCombine",
     "Path": "Effects/BloomCombine.fx",
@@ -117,7 +104,6 @@
     "AssetType": 8
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Effects/Blur.fx",
     "Name": "Blur",
     "Path": "Effects/Blur.fx",
@@ -126,7 +112,6 @@
     "AssetType": 8
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Debug/DefaultPlaceholder.png",
     "Name": "DefaultTexture",
     "Path": "Graphics/Debug/DefaultPlaceholder.png",
@@ -135,12 +120,19 @@
     "AssetType": 1
   },
   {
-    "HasUnsavedChanges": false,
     "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Tilesets/DungeonTileset.png",
     "Name": "DungeonTileset1",
     "Path": "Graphics/Tilesets/DungeonTileset.png",
     "IncludeInDebug": false,
     "IncludeInRelease": false,
     "AssetType": 2
+  },
+  {
+    "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Debug/ArrowSheetP1.png",
+    "Name": "Arrows1",
+    "Path": "Graphics/Debug/ArrowSheetP1.png",
+    "IncludeInDebug": false,
+    "IncludeInRelease": false,
+    "AssetType": 1
   }
 ]
