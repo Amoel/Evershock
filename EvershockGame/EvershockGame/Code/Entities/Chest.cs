@@ -17,13 +17,13 @@ namespace EvershockGame.Code
             AddComponent<PhysicsComponent>();
             AddComponent<PickupSpawnerComponent>();
 
-            AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>("ChestClosed1"), Vector2.Zero, new Vector2(2, 2));
+            AddComponent<SpriteComponent>().Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.ChestClosed1), Vector2.Zero, new Vector2(2, 2));
             //AddComponent<ShadowComponent>().Init(AssetManager.Get().Find<Texture2D>("ChestClosed1"), new Vector2(2, 2), new Vector2(0, 3));
 
-            AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, new Vector2(2, 2), Color.White, 0.8f);
+            AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), Vector2.Zero, new Vector2(2, 2), Color.White, 0.8f);
 
             RectColliderComponent chestCollider = AddComponent<RectColliderComponent>();
-            chestCollider.Init(AssetManager.Get().Find<Texture2D>("ChestClosed1").Width, AssetManager.Get().Find<Texture2D>("ChestClosed1").Height);
+            chestCollider.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.ChestClosed1).Width, AssetManager.Get().Find<Texture2D>(ESpriteAssets.ChestClosed1).Height);
 
             chestCollider.Enter += (source, target) =>
             {
@@ -38,7 +38,7 @@ namespace EvershockGame.Code
 
                     if (source.HasComponent<SpriteComponent>())
                     {
-                        source.GetComponent<SpriteComponent>().Texture = AssetManager.Get().Find<Texture2D>("ChestOpened1");
+                        source.GetComponent<SpriteComponent>().Texture = AssetManager.Get().Find<Texture2D>(ESpriteAssets.ChestOpened1);
                     }
 
                     if (HasComponent<PickupSpawnerComponent>())

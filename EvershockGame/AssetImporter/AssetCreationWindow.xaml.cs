@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,11 +20,27 @@ namespace AssetImporter
     /// <summary>
     /// Interaction logic for AssetCreationWindow.xaml
     /// </summary>
-    public partial class AssetCreationWindow : Window
+    public partial class AssetCreationWindow : Window, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private string m_Preview;
+        public string Preview
+        {
+            get { return m_Preview; }
+            set
+            {
+                m_Preview = value;
+                OnPropertyChanged("Preview");
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
         public AssetCreationWindow()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
         //---------------------------------------------------------------------------
@@ -37,6 +54,7 @@ namespace AssetImporter
             if (File.Exists(dialog.FileName))
             {
                 RelativePath.Text = dialog.FileName.Substring(AssetManager.Get().RootPath.Length + 1).Replace('\\', '/');
+                Preview = dialog.FileName;
             }
         }
 
@@ -51,8 +69,15 @@ namespace AssetImporter
 
         private void OnAddClicked(object sender, EventArgs e)
         {
-            AssetManager.Get().Add(AssetName.Text, RelativePath.Text, EAssetType.Sprite);
+            AssetManager.Get().Add(AssetName.Text, RelativePath.Text, (EAssetType)AssetTypeBox.SelectedItem);
             Close();
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

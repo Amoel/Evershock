@@ -14,7 +14,8 @@ namespace AssetImporter
         All = 0,
         Sprite = 1,
         Tileset = 2,
-        Effect = 4
+        Light = 4,
+        Effect = 8
     }
 
     //---------------------------------------------------------------------------

@@ -28,12 +28,16 @@ namespace EntityComponent.Components
         private RenderTarget2D m_ShadowTarget;
         private RenderTarget2D m_MainTarget;
 
-        private Texture2D m_BackgroundTexture;
+        public Texture2D BackgroundTexture { get; set; }
+        public Texture2D Tileset { get; set; }
 
         private Dictionary<Guid, CameraTarget> m_Targets;
         private Vector3 m_Center;
 
-        private Effect m_LightingEffect;
+        public Effect LightingEffect { get; set; }
+        public Effect BlurEffect { get; set; }
+        public Effect BloomExtractEffect { get; set; }
+        public Effect BloomCombineEffect { get; set; }
         private List<Effect> m_PostEffects;
 
         private EffectWrapper m_EffectWrapper;
@@ -73,8 +77,8 @@ namespace EntityComponent.Components
             m_ShadowTarget = new RenderTarget2D(device, width, height);
             m_MainTarget = new RenderTarget2D(device, width, height);
 
-            m_BackgroundTexture = backgroundTexture;
-            m_LightingEffect = lightingEffect;
+            BackgroundTexture = backgroundTexture;
+            LightingEffect = lightingEffect;
 
             if (lightingEffect != null) AddEffect(lightingEffect);
 
@@ -215,14 +219,14 @@ namespace EntityComponent.Components
 
                 if (m_ComponentsTarget != null)
                 {
-                    if (m_BackgroundTexture != null)
+                    if (BackgroundTexture != null)
                     {
                         Vector2 location = transform.Location.To2D();
                         batch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
                         batch.Draw(
-                            m_BackgroundTexture,
+                            BackgroundTexture,
                             Vector2.Zero,
-                            new Rectangle((int)(location.X % m_BackgroundTexture.Width), (int)(location.Y % m_BackgroundTexture.Height), m_ComponentsTarget.Width, m_ComponentsTarget.Height),
+                            new Rectangle((int)(location.X % BackgroundTexture.Width), (int)(location.Y % BackgroundTexture.Height), m_ComponentsTarget.Width, m_ComponentsTarget.Height),
                             Color.White,
                             0,
                             Vector2.Zero,
@@ -236,41 +240,19 @@ namespace EntityComponent.Components
                     ComponentManager.Get().DrawComponents(batch, data);
                     batch.End();
 
-                    if (IsLightingEnabled && m_LightingTarget != null && m_LightingEffect != null)
+                    if (IsLightingEnabled && m_LightingTarget != null && LightingEffect != null)
                     {
                         DrawShadowMask(batch, data);
 
                         if (m_MainTarget != null)
                         {
-                            //if (IsAmbientOcclusionEnabled)
-                            //{
-                            //    DrawShadows(batch, data);
-                            //    List<Effect> shadowEffects = new List<Effect>()
-                            //    {
-                            //        AssetManager.Get().Find<Effect>("Occlusion")
-                            //    };
-                            //    m_EffectWrapper.ApplyEffects(batch, m_ShadowTarget, m_ShadowTarget, shadowEffects);
-                            //}
-                            
-                            //m_LightingEffect.Parameters["isAmbientOcclusionEnabled"].SetValue(IsAmbientOcclusionEnabled);
-                            m_LightingEffect.Parameters["lightMask"].SetValue(m_LightingTarget);
-                            //m_LightingEffect.Parameters["shadowMask"].SetValue(m_ShadowTarget);
-                            
+                            LightingEffect.Parameters["lightMask"].SetValue(m_LightingTarget);
                             m_EffectWrapper.ApplyEffects(batch, m_ComponentsTarget, m_MainTarget, m_PostEffects);
-
-                            Effect bloomExtract = AssetManager.Get().Find<Effect>("BloomExtract");
-                            Effect blur = AssetManager.Get().Find<Effect>("Blur");
-                            m_EffectWrapper.ApplyEffects(batch, m_MainTarget, m_ShadowTarget, new List<Effect>() { bloomExtract, blur });
-
-                            Effect bloomCombine = AssetManager.Get().Find<Effect>("BloomCombine");
-                            bloomCombine.Parameters["bloom"].SetValue(m_ShadowTarget);
-                            m_EffectWrapper.ApplyEffects(batch, m_MainTarget, m_ComponentsTarget, new List<Effect>() { bloomCombine });
-
-                            //if (CollisionManager.Get().IsDebugViewActive)
-                            //{
-                            //    LightingManager.Get().DrawDebug(batch, data);
-                            //}
-
+                            m_EffectWrapper.ApplyEffects(batch, m_MainTarget, m_ShadowTarget, new List<Effect>() { BloomExtractEffect, BlurEffect });
+                            
+                            BloomCombineEffect.Parameters["bloom"].SetValue(m_ShadowTarget);
+                            m_EffectWrapper.ApplyEffects(batch, m_MainTarget, m_ComponentsTarget, new List<Effect>() { BloomCombineEffect });
+                            
                             return m_MainTarget;
                         }
                         return m_LightingTarget;
@@ -330,8 +312,7 @@ namespace EntityComponent.Components
 
         private void DrawStage(SpriteBatch batch, CameraData data)
         {
-            Texture2D tileset = AssetManager.Get().Find<Texture2D>("BasicTileset");
-            if (tileset != null)
+            if (Tileset != null)
             {
                 TransformComponent transform = GetComponent<TransformComponent>();
                 if (transform != null)
@@ -346,13 +327,13 @@ namespace EntityComponent.Components
                             float yPos = (y + (int)(data.Center.Y - Height / 2.0f) / 64);
                             
                             Rectangle layer1 = StageManager.Get().GetTextureBounds((int)xPos, (int)yPos, ELayerMode.First);
-                            if (layer1.Width > 0 && layer1.Height > 0) batch.Draw(tileset, new Rectangle((int)(location.X + xPos * 64), (int)(location.Y + yPos * 64), 64, 64), layer1, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00001f);
+                            if (layer1.Width > 0 && layer1.Height > 0) batch.Draw(Tileset, new Rectangle((int)(location.X + xPos * 64), (int)(location.Y + yPos * 64), 64, 64), layer1, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00001f);
 
                             Rectangle layer2 = StageManager.Get().GetTextureBounds((int)xPos, (int)yPos, ELayerMode.Second);
-                            if (layer2.Width > 0 && layer2.Height > 0) batch.Draw(tileset, new Rectangle((int)(location.X + xPos * 64), (int)(location.Y + yPos * 64), 64, 64), layer2, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00002f);
+                            if (layer2.Width > 0 && layer2.Height > 0) batch.Draw(Tileset, new Rectangle((int)(location.X + xPos * 64), (int)(location.Y + yPos * 64), 64, 64), layer2, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.00002f);
 
                             Rectangle layer3 = StageManager.Get().GetTextureBounds((int)xPos, (int)yPos, ELayerMode.Third);
-                            if (layer3.Width > 0 && layer3.Height > 0) batch.Draw(tileset, new Rectangle((int)(location.X + xPos * 64), (int)(location.Y + yPos * 64), 64, 64), layer3, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.9f);
+                            if (layer3.Width > 0 && layer3.Height > 0) batch.Draw(Tileset, new Rectangle((int)(location.X + xPos * 64), (int)(location.Y + yPos * 64), 64, 64), layer3, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.9f);
                         }
                     }
                 }

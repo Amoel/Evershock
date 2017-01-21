@@ -37,7 +37,6 @@ namespace EntityComponent.Components.UI
         public void Init(EImageAlignment alignment)
         {
             Alignment = alignment;
-            Image = AssetManager.Get().Find<Texture2D>("Healthbar");
         }
 
         //---------------------------------------------------------------------------

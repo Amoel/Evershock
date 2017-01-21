@@ -24,6 +24,17 @@ namespace AssetImporter
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private bool m_IsDarkPreviewActive;
+        public bool IsDarkPreviewActive
+        {
+            get { return m_IsDarkPreviewActive; }
+            set
+            {
+                m_IsDarkPreviewActive = value;
+                OnPropertyChanged("IsDarkPreviewActive");
+            }
+        }
+
         //---------------------------------------------------------------------------
 
         public MainWindow()

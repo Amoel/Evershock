@@ -92,14 +92,22 @@ namespace EvershockGame
             CameraManager.Get().Init(width, height);
 
             Camera cam1 = EntityFactory.Create<Camera>("Cam1");
-            cam1.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
+            cam1.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>(ESpriteAssets.CameraBackground1), AssetManager.Get().Find<Effect>(EEffectAssets.DeferredLighting));
             cam1.Properties.Viewport = new Rectangle(0, 0, width / 2, height);
+            cam1.Properties.BloomExtractEffect = AssetManager.Get().Find<Effect>(EEffectAssets.BloomExtract);
+            cam1.Properties.BloomCombineEffect = AssetManager.Get().Find<Effect>(EEffectAssets.BloomCombine);
+            cam1.Properties.BlurEffect = AssetManager.Get().Find<Effect>(EEffectAssets.Blur);
+            cam1.Properties.Tileset = AssetManager.Get().Find<Texture2D>(ETilesetAssets.DungeonTileset1);
             cam1.Properties.AddTarget(player);
             //cam1.Properties.IsAmbientOcclusionEnabled = true;
 
             Camera cam2 = EntityFactory.Create<Camera>("Cam2");
-            cam2.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>("GroundTile1"), AssetManager.Get().Find<Effect>("LightingEffect"));
+            cam2.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>(ESpriteAssets.CameraBackground1), AssetManager.Get().Find<Effect>(EEffectAssets.DeferredLighting));
             cam2.Properties.Viewport = new Rectangle(width / 2, 0, width / 2, height);
+            cam2.Properties.BloomExtractEffect = AssetManager.Get().Find<Effect>(EEffectAssets.BloomExtract);
+            cam2.Properties.BloomCombineEffect = AssetManager.Get().Find<Effect>(EEffectAssets.BloomCombine);
+            cam2.Properties.BlurEffect = AssetManager.Get().Find<Effect>(EEffectAssets.Blur);
+            cam2.Properties.Tileset = AssetManager.Get().Find<Texture2D>(ETilesetAssets.DungeonTileset1);
             cam2.Properties.AddTarget(player2);
             //cam2.Properties.IsAmbientOcclusionEnabled = true;
 
@@ -135,7 +143,7 @@ namespace EvershockGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             AssetManager.Get().Content = Content;
-            AssetManager.Get().LoadMaps();
+            AssetManager.Get().LoadAll();
 
 #if DEBUG
             // Load debug content
@@ -145,13 +153,9 @@ namespace EvershockGame
             Texture2D pointTex = new Texture2D(GraphicsDevice, 1, 1);
             pointTex.SetData(new Color[] { Color.White });
             CollisionManager.Get().PointTexture = pointTex;
-            AssetManager.Get().Store<Texture2D>("DefaultPlaceholder", "Graphics/Debug/DefaultPlaceholder");
-            SpriteComponent.DefaultTexture = AssetManager.Get().Find<Texture2D>("DefaultPlaceholder");
+            SpriteComponent.DefaultTexture = AssetManager.Get().Find<Texture2D>(ESpriteAssets.DefaultTexture);
 #endif
-
-            AssetManager.Get().LoadAll<Texture2D>("Graphics");
-            AssetManager.Get().LoadAll<Effect>("Effects");
-
+            
             //AssetManager.Get().Store<Texture2D>("Background1", "Graphics/Camera/BackgroundTexture1");
             //AssetManager.Get().Store<Texture2D>("Background2", "Graphics/Camera/BackgroundTexture1");
             //AssetManager.Get().Store<Texture2D>("GroundTile1", "Graphics/Camera/BackgroundTexture1");

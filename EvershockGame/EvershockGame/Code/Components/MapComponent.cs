@@ -28,7 +28,7 @@ namespace EvershockGame.Code
         public void Init(Map map)
         {
             Map = map;
-            m_Tileset = AssetManager.Get().Find<Texture2D>(map.Tileset);
+            //m_Tileset = AssetManager.Get().Find<Texture2D>(ESpriteAssets.CameraBackground1);
         }
 
         //---------------------------------------------------------------------------

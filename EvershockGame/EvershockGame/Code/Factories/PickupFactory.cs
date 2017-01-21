@@ -44,23 +44,23 @@ namespace EvershockGame.Code.Factories
             {
                 case EPickups.HEALTH:
                     pickupComponent = pickup.AddComponent<HealthPickupComponent>();
-                    sprite.Init(AssetManager.Get().Find<Texture2D>("RedOrb"), Vector2.Zero, new Vector2(2, 2));
-                    shadow.Init(AssetManager.Get().Find<Texture2D>("RedOrb"), new Vector2(2, 2), new Vector2(0, 3));
-                    light.Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, Vector2.One, Color.Red, 1.0f);
+                    sprite.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.RedOrb), Vector2.Zero, new Vector2(2, 2));
+                    shadow.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.RedOrb), new Vector2(2, 2), new Vector2(0, 3));
+                    light.Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), Vector2.Zero, Vector2.One, Color.Red, 1.0f);
                     break;
                 
                 case EPickups.MANA:
                     pickupComponent = pickup.AddComponent<ManaPickupComponent>();
-                    sprite.Init(AssetManager.Get().Find<Texture2D>("BlueOrb"), Vector2.Zero, new Vector2(2, 2));
-                    shadow.Init(AssetManager.Get().Find<Texture2D>("BlueOrb"), new Vector2(2, 2), new Vector2(0, 3));
-                    light.Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, Vector2.One, Color.Blue, 1.0f);
+                    sprite.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.BlueOrb), Vector2.Zero, new Vector2(2, 2));
+                    shadow.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.BlueOrb), new Vector2(2, 2), new Vector2(0, 3));
+                    light.Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), Vector2.Zero, Vector2.One, Color.Blue, 1.0f);
                     break;
 
                 case EPickups.COIN:
                     pickupComponent = pickup.AddComponent<CoinPickupComponent>();
-                    sprite.Init(AssetManager.Get().Find<Texture2D>("YellowOrb"), Vector2.Zero, new Vector2(2, 2));
-                    shadow.Init(AssetManager.Get().Find<Texture2D>("YellowOrb"), new Vector2(2, 2), new Vector2(0, 3));
-                    light.Init(AssetManager.Get().Find<Texture2D>("CircleLight"), Vector2.Zero, Vector2.One, Color.Yellow, 1.0f);
+                    sprite.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.YellowOrb), Vector2.Zero, new Vector2(2, 2));
+                    shadow.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.YellowOrb), new Vector2(2, 2), new Vector2(0, 3));
+                    light.Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), Vector2.Zero, Vector2.One, Color.Yellow, 1.0f);
                     break;
 
                 default:
