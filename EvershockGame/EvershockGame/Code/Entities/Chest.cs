@@ -13,7 +13,7 @@ namespace EvershockGame.Code
 
         public Chest(string name) : base(name)
         {
-            AddComponent<TransformComponent>().Init(new Vector3(300, 0, 0));
+            AddComponent<TransformComponent>();
             AddComponent<PhysicsComponent>();
             AddComponent<PickupSpawnerComponent>();
 
@@ -29,19 +29,12 @@ namespace EvershockGame.Code
             {
                 if (closed)
                 {
-                    if (target.HasComponent<AttributesComponent>())
-                    {
-                        //target.GetComponent<AttributesComponent>().TransmitMovementAddend(150);
-                        //Pickup yield = new Pickup("MovementOrbs");
-                        //yield.Init(EPickups.HEALTH, EPickups.COINS);
-                    }
-
                     if (source.HasComponent<SpriteComponent>())
                     {
                         source.GetComponent<SpriteComponent>().Texture = AssetManager.Get().Find<Texture2D>(ESpriteAssets.ChestOpened1);
                     }
 
-                    if (HasComponent<PickupSpawnerComponent>())
+                    if (source.HasComponent<PickupSpawnerComponent>())
                     {
                         GetComponent<PickupSpawnerComponent>().Spawn();
                     }
