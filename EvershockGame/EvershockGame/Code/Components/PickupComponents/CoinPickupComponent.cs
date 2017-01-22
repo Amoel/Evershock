@@ -10,7 +10,7 @@ namespace EvershockGame.Code.Components
 
         //---------------------------------------------------------------------------
 
-        //of course, this needs some content. Currently works exactly as the HealthPickupComponent
+        //TODO_lukas: Add functionality 
 
         public void OnPickup(IEntity collector)
         {
@@ -19,7 +19,6 @@ namespace EvershockGame.Code.Components
                 if (collector is Player)
                 {
                     AttributesComponent attributes = collector.GetComponent<AttributesComponent>();
-                    attributes.ReplenishHealth(15);
 
                     DespawnComponent despawn = GetComponent<DespawnComponent>();
                     if (despawn != null)
