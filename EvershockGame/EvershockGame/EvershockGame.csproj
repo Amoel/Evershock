@@ -57,6 +57,7 @@
     <Compile Include="Code\Entities\Chest.cs" />
     <Compile Include="Code\Entities\Enemies\Enemy.cs" />
     <Compile Include="Code\Entities\Enemies\SimpleTestEnemy.cs" />
+    <Compile Include="Code\Entities\Level\Spike.cs" />
     <Compile Include="Code\Entities\Pickup.cs" />
     <Compile Include="Code\Entities\Player.cs" />
     <Compile Include="Code\Factories\PickupFactory.cs" />
@@ -193,6 +194,9 @@
     <Content Include="Content\Graphics\Tilesets\DungeonTileset2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Tilesets\Spikes.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Tilesets\tileset2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -265,11 +269,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\Fonts\" />
+    <Folder Include="Code\Entities\UI\" />
     <Folder Include="Content\Sounds\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Content\Fonts\DebugFont.spritefont">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Levels\Debug\Test.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

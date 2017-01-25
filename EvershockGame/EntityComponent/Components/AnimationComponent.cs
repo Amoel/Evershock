@@ -33,7 +33,11 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        public AnimationComponent(Guid entity) : base(entity) { m_Settings = new Dictionary<int, AnimationSetting>(); }
+        public AnimationComponent(Guid entity) : base(entity)
+        {
+            m_Settings = new Dictionary<int, AnimationSetting>();
+            m_State = EAnimationState.Stopped;
+        }
 
         //---------------------------------------------------------------------------
 
@@ -165,7 +169,13 @@ namespace EntityComponent.Components
 
         public void Tick(float deltaTime)
         {
-            if (m_State == EAnimationState.Playing) m_Settings[m_ActiveSetting].Tick(deltaTime);
+            if (m_State == EAnimationState.Playing)
+            {
+                if (!m_Settings[m_ActiveSetting].Tick(deltaTime))
+                {
+                    Pause();
+                }
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -205,51 +215,79 @@ namespace EntityComponent.Components
 
     public class AnimationSetting
     {
+        enum EPlayDirection
+        {
+            Forward,
+            Backward
+        }
+
         public int Width { get; set; }
         public int Height { get; set; }
         public int StartFrame { get; set; }
         public int EndFrame { get; set; }
         public int FPS { get; set; }
         public bool IsReversed { get; set; }
+        public bool IsBounced { get; set; }
+        public bool Loop { get; set; }
 
         private int m_Frame;
         private float m_Time;
 
-        //---------------------------------------------------------------------------
-
-        public AnimationSetting(int width, int height, bool isReversed = false)
-            : this(width, height, 0, width * height, isReversed) { }
+        private EPlayDirection m_Direction;
 
         //---------------------------------------------------------------------------
 
-        public AnimationSetting(int width, int height, int startFrame, int endFrame, bool isReversed = false)
+        public AnimationSetting(int width, int height, bool loop, bool isReversed = false, bool isBounced = false)
+            : this(width, height, 0, (width * height) - 1, loop, isReversed, isBounced) { }
+
+        //---------------------------------------------------------------------------
+
+        public AnimationSetting(int width, int height, int startFrame, int endFrame, bool loop, bool isReversed = false, bool isBounced = false)
         {
             Width = width;
             Height = height;
             StartFrame = startFrame;
             EndFrame = endFrame;
             FPS = 12;
+            Loop = loop;
             IsReversed = isReversed;
+            IsBounced = isBounced;
 
             Reset();
         }
 
         //---------------------------------------------------------------------------
 
-        public void Tick(float deltaTime)
+        public bool Tick(float deltaTime)
         {
             float duration = (1.0f / FPS);
             float maxDuration = duration * (EndFrame - StartFrame);
             m_Time += deltaTime;
-            if (m_Time > maxDuration) m_Time -= maxDuration;
-            if (IsReversed)
+            
+            switch (m_Direction)
             {
-                m_Frame = EndFrame - (int)(m_Time / duration);
+                case EPlayDirection.Forward:
+                    m_Frame = StartFrame + (int)(m_Time / duration);
+                    if (IsBounced && m_Frame == EndFrame)
+                    {
+                        m_Direction = EPlayDirection.Backward;
+                    }
+                    break;
+                case EPlayDirection.Backward:
+                    m_Frame = EndFrame - (int)(m_Time / duration);
+                    if (IsBounced && m_Frame == StartFrame)
+                    {
+                        m_Direction = EPlayDirection.Forward;
+                    }
+                    break;
             }
-            else
+
+            if (m_Time > maxDuration)
             {
-                m_Frame = StartFrame + (int)(m_Time / duration);
+                m_Time -= maxDuration;
+                if (!Loop) return false;
             }
+            return true;
         }
 
         //---------------------------------------------------------------------------
@@ -268,7 +306,16 @@ namespace EntityComponent.Components
         public void Reset()
         {
             m_Time = 0.0f;
-            m_Frame = IsReversed ? EndFrame : StartFrame;
+            if (IsReversed)
+            {
+                m_Frame = EndFrame;
+                m_Direction = EPlayDirection.Backward;
+            }
+            else
+            {
+                m_Frame = StartFrame;
+                m_Direction = EPlayDirection.Forward;
+            }
         }
     }
 }

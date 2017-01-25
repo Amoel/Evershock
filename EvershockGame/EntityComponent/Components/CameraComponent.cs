@@ -55,6 +55,8 @@ namespace EntityComponent.Components
 
         public GraphicsDevice Device { get; private set; }
 
+        private float m_Time = 0.0f;
+
         //---------------------------------------------------------------------------
 
         public CameraComponent(Guid entity) : base(entity)
@@ -112,6 +114,8 @@ namespace EntityComponent.Components
 
         public void PostTick(float deltaTime)
         {
+            m_Time += deltaTime;
+
             TransformComponent transform = GetComponent<TransformComponent>();
             if (transform != null)
             {
@@ -242,6 +246,13 @@ namespace EntityComponent.Components
 
                     if (IsLightingEnabled && m_LightingTarget != null && LightingEffect != null)
                     {
+                        BlurEffect.Parameters["blurSizeHorizontal"].SetValue(1.0f / m_MainTarget.Width);
+                        BlurEffect.Parameters["blurSizeVertical"].SetValue(1.0f / m_MainTarget.Height);
+
+                        LightingEffect.Parameters["horizontalOffset"].SetValue(transform.Location.X + m_Time * 100.0f);
+                        LightingEffect.Parameters["verticalOffset"].SetValue(transform.Location.Y + m_Time * 100.0f);
+                        LightingEffect.Parameters["time"].SetValue(m_Time / 5.0f);
+
                         DrawShadowMask(batch, data);
 
                         if (m_MainTarget != null)

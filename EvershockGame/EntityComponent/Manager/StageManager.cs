@@ -99,15 +99,15 @@ namespace EntityComponent.Manager
                     if (map[x, y] < 255)
                     {
                         int sumSide = CalcTileIndexSide(
-                            x > 0 && map[x - 1, y] < 255,
-                            x < mapWidth - 1 && map[x + 1, y] < 255);
-                        SetTextureBounds(x, y, ELayerMode.First, new Rectangle(tileSize * (sumSide + (sumSide > 2 ? r.Next(0, 4) : 0)), tileSize, tileSize, tileSize));
+                            x > 0 && map[x - 1, y] == map[x, y],
+                            x < mapWidth - 1 && map[x + 1, y] == map[x, y]);
+                        SetTextureBounds(x, y, ELayerMode.First, new Rectangle(tileSize * (sumSide + (sumSide > 2 ? r.Next(0, 4) : 0)), tileSize + tileSize * 3 * map[x, y], tileSize, tileSize));
                         int sumTop = CalcTileIndexFull(
-                            y > 0 && map[x, y - 1] < 255,
-                            x > 0 && map[x - 1, y] < 255,
-                            y < mapHeight - 1 && map[x, y + 1] < 255,
-                            x < mapWidth - 1 && map[x + 1, y] <255);
-                        SetTextureBounds(x, y - 1, ELayerMode.Third, new Rectangle(tileSize * sumTop, 0, tileSize, tileSize));
+                            y > 0 && map[x, y - 1] == map[x, y],
+                            x > 0 && map[x - 1, y] == map[x, y],
+                            y < mapHeight - 1 && map[x, y + 1] == map[x, y],
+                            x < mapWidth - 1 && map[x + 1, y] == map[x, y]);
+                        SetTextureBounds(x, y - 1, ELayerMode.Third, new Rectangle(tileSize * sumTop, tileSize * 3 * map[x, y], tileSize, tileSize));
                     }
                     else
                     {

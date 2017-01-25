@@ -1,6 +1,6 @@
 sampler TextureSampler : register(s0);
-const float blurSizeHorizontal = 1.0f/960.0f;
-const float blurSizeVertical = 1.0f/540.0f;
+float blurSizeHorizontal = 1.0f/960.0f;
+float blurSizeVertical = 1.0f/540.0f;
 
 int dist = 100;
 

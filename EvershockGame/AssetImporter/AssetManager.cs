@@ -21,7 +21,8 @@ namespace AssetImporter
             { EAssetType.Sprite, "Texture2D" },
             { EAssetType.Tileset, "Texture2D" },
             { EAssetType.Light, "Texture2D" },
-            { EAssetType.Effect, "Effect" }
+            { EAssetType.Effect, "Effect" },
+            { EAssetType.Font, "SpriteFont" }
         };
 
         public string RootPath { get; private set; }

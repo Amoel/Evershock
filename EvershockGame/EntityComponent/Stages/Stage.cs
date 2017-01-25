@@ -242,6 +242,16 @@ namespace EntityComponent.Stages
         public byte[,] CreateMap(int size = 1)
         {
             byte[,] map = new byte[Bounds.Width / size, Bounds.Height / size];
+
+            for (int x = 0; x < Bounds.Width / size; x++)
+            {
+                for (int y = 0; y < Bounds.Height / size; y++)
+                {
+
+                    map[x, y] = SeedManager.Get().NextRand(0, 2) == 0 ? (byte)0 : (byte)2;
+                }
+            }
+
             foreach (Room room in Rooms)
             {
                 for (int x = room.Bounds.X; x < room.Bounds.X + room.Bounds.Width; x++)

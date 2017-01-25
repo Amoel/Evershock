@@ -101,12 +101,14 @@
     <Compile Include="Components\TransformComponent.cs" />
     <Compile Include="Components\UI\ButtonComponent.cs" />
     <Compile Include="Components\UI\ImageComponent.cs" />
+    <Compile Include="Components\UI\TextComponent.cs" />
     <Compile Include="Components\UI\UITransformComponent.cs" />
     <Compile Include="DuplicateKeyComparer.cs" />
     <Compile Include="Entities\Area.cs" />
     <Compile Include="Entities\UI\AreaControl.cs" />
     <Compile Include="Entities\UI\ButtonControl.cs" />
     <Compile Include="Entities\UI\ImageControl.cs" />
+    <Compile Include="Entities\UI\TextControl.cs" />
     <Compile Include="Entities\UI\UIEntity.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Extensions.cs" />
@@ -149,9 +151,7 @@
     <Compile Include="Stages\Room.cs" />
     <Compile Include="Stages\Stage.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Animation\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

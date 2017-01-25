@@ -134,5 +134,29 @@
     "IncludeInDebug": false,
     "IncludeInRelease": false,
     "AssetType": 1
+  },
+  {
+    "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Tiles/Barrel1.png",
+    "Name": "Barrel1",
+    "Path": "Graphics/Tiles/Barrel1.png",
+    "IncludeInDebug": false,
+    "IncludeInRelease": false,
+    "AssetType": 1
+  },
+  {
+    "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Tilesets/Spikes.png",
+    "Name": "Spikes1",
+    "Path": "Graphics/Tilesets/Spikes.png",
+    "IncludeInDebug": false,
+    "IncludeInRelease": false,
+    "AssetType": 1
+  },
+  {
+    "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Fonts/DebugFont.spritefont",
+    "Name": "DebugFont",
+    "Path": "Fonts/DebugFont.spritefont",
+    "IncludeInDebug": false,
+    "IncludeInRelease": false,
+    "AssetType": 16
   }
 ]

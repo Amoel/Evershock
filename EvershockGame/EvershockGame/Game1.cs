@@ -67,6 +67,10 @@ namespace EvershockGame
                     Vector2 position = new Vector2(room.Bounds.Center.X * 64 + (float)Math.Sin((i / (max / 2.0f)) * Math.PI) * 300, room.Bounds.Center.Y * 64 + (float)Math.Cos((i / (max / 2.0f)) * Math.PI) * 300);
                     EntityFactory.Create<Chest>("hallo").Init(position);
                 }
+                for (int i = 0; i < 9; i++)
+                {
+                    EntityFactory.Create<Spike>("Spike").Init(new Vector2(room.Bounds.Center.X * 64 + (i % 3) * 64, room.Bounds.Center.Y * 64 + 128 + (i / 3) * 64));
+                }
                 EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));
             }
             
@@ -114,28 +118,31 @@ namespace EvershockGame
             CameraManager.Get().FuseCameras(cam1, cam2, width / 2);
 
             /*--------------------------------------------------------------------------
-                        Other
-            --------------------------------------------------------------------------*/
-
-            //EntityFactory.Create<Chest>("hallo").Init(new Vector2(300, 300));
-            //EntityFactory.Create<Chest>("hallo").Init(new Vector2(500, 300));
-            //EntityFactory.Create<Chest>("hallo").Init(new Vector2(300, 500));
-
-            /*--------------------------------------------------------------------------
                         UI
             --------------------------------------------------------------------------*/
 
             UIManager.Get().Init(GraphicsDevice, width, height);
 
-            ImageControl leftHP = EntityFactory.CreateUI<ImageControl>("HP");
-            leftHP.VerticalAlignment = EVerticalAlignment.Top;
-            leftHP.HorizontalAlignment = EHorizontalAlignment.Left;
-            leftHP.Size = new Point(225, 50);
+            TextControl control = EntityFactory.CreateUI<TextControl>("Test");
+            control.Properties.Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
+            control.VerticalAlignment = EVerticalAlignment.Top;
+            control.HorizontalAlignment = EHorizontalAlignment.Center;
+            control.Bind(player.Transform, "Location", (value) =>
+            {
+                Vector3 location = (Vector3)value;
+                control.Properties.Text = string.Format("X: {0}, Y: {1}", (int)location.X, (int)location.Y);
+            });
 
-            ImageControl rightHP = EntityFactory.CreateUI<ImageControl>("HP");
-            rightHP.VerticalAlignment = EVerticalAlignment.Top;
-            rightHP.HorizontalAlignment = EHorizontalAlignment.Right;
-            rightHP.Size = new Point(225, 50);
+            //ImageControl leftHP = EntityFactory.CreateUI<ImageControl>("HP");
+            //leftHP.Image = AssetManager.Get().Find<Texture2D>(ESpriteAssets.ChestClosed1);
+            //leftHP.VerticalAlignment = EVerticalAlignment.Top;
+            //leftHP.HorizontalAlignment = EHorizontalAlignment.Left;
+            //leftHP.Size = new Point(225, 100);
+
+            //ImageControl rightHP = EntityFactory.CreateUI<ImageControl>("HP");
+            //rightHP.VerticalAlignment = EVerticalAlignment.Top;
+            //rightHP.HorizontalAlignment = EHorizontalAlignment.Right;
+            //rightHP.Size = new Point(225, 100);
         }
         
         protected override void LoadContent()
@@ -155,37 +162,6 @@ namespace EvershockGame
             CollisionManager.Get().PointTexture = pointTex;
             SpriteComponent.DefaultTexture = AssetManager.Get().Find<Texture2D>(ESpriteAssets.DefaultTexture);
 #endif
-            
-            //AssetManager.Get().Store<Texture2D>("Background1", "Graphics/Camera/BackgroundTexture1");
-            //AssetManager.Get().Store<Texture2D>("Background2", "Graphics/Camera/BackgroundTexture1");
-            //AssetManager.Get().Store<Texture2D>("GroundTile1", "Graphics/Camera/BackgroundTexture1");
-
-            //AssetManager.Get().Store<Texture2D>("Healthbar", "Graphics/Debug/Healthbar");
-
-            //AssetManager.Get().Store<Texture2D>("RedOrb", "Graphics/Various/RedOrb");
-            //AssetManager.Get().Store<Texture2D>("BlueOrb", "Graphics/Various/BlueOrb");
-            //AssetManager.Get().Store<Texture2D>("YellowOrb", "Graphics/Various/YellowOrb");
-
-            //AssetManager.Get().Store<Texture2D>("ChestClosed1", "Graphics/Tiles/ChestClosed1");
-            //AssetManager.Get().Store<Texture2D>("ChestOpened1", "Graphics/Tiles/ChestOpened1");
-            //AssetManager.Get().Store<Texture2D>("Barrel1", "Graphics/Tiles/Barrel1");
-            //AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimationP1", "Graphics/Debug/ArrowSheetP1");
-            //AssetManager.Get().Store<Texture2D>("PlayerIndicatorAnimationP2", "Graphics/Debug/ArrowSheetP2");
-
-            //AssetManager.Get().Store<Texture2D>("BasicTileset", "Graphics/Tilesets/DungeonTileset");
-
-            //AssetManager.Get().Store<Texture2D>("Kakariko_Village_Tiles", "Graphics/Tilesets/Debug/Kakariko_Village_Tiles");
-            //AssetManager.Get().Store<Texture2D>("WalkingAnimation", "Graphics/Tilesets/Debug/WalkingAnimation");
-            //AssetManager.Get().Store<Texture2D>("WalkingAnimation2", "Graphics/Tilesets/Debug/WalkingAnimation2");
-            //AssetManager.Get().Store<Texture2D>("WalkingAnimation3", "Graphics/Tilesets/Debug/WalkingAnimation3");
-
-            //AssetManager.Get().Store<Texture2D>("CircleLight", "Graphics/Lights/CircleLight");
-
-            //AssetManager.Get().Store<Effect>("LightingEffect", "Effects/DeferredLighting");
-            //AssetManager.Get().Store<Effect>("Occlusion", "Effects/Occlusion");
-            //AssetManager.Get().Store<Effect>("Blur", "Effects/Blur");
-            //AssetManager.Get().Store<Effect>("BloomExtract", "Effects/BloomExtract");
-            //AssetManager.Get().Store<Effect>("BloomCombine", "Effects/BloomCombine");
         }
 
         //---------------------------------------------------------------------------
@@ -249,6 +225,11 @@ namespace EvershockGame
         protected override void Draw(GameTime gameTime)
         {
             GameManager.Get().Render(GraphicsDevice, spriteBatch);
+
+            spriteBatch.Begin();
+            spriteBatch.DrawString(AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont), "Hello World!", new Vector2(10, 10), Color.White);
+            spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }

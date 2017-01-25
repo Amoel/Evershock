@@ -10,6 +10,8 @@ namespace EvershockGame.Code.Components
     {
         protected Random m_Rand;
 
+        //---------------------------------------------------------------------------
+
         public SpawnerComponent (Guid entity) : base (entity)
         {
             m_Rand = new Random(SeedManager.Get().NextSeed());

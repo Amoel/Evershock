@@ -65,5 +65,15 @@ namespace EntityComponent.Entities
         {
             UIManager.Get().Focus(Next);
         }
+
+        //---------------------------------------------------------------------------
+
+        public void Bind(IComponent component, string property, PropertyChangedEventHandler callback)
+        {
+            if (component != null)
+            {
+                UIManager.Get().RegisterListener(component, property, callback);
+            }
+        }
     }
 }

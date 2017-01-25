@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -17,7 +18,8 @@ namespace AssetImporter
         Sprite = 1,
         Tileset = 2,
         Light = 4,
-        Effect = 8
+        Effect = 8,
+        Font = 16
     }
 
     //---------------------------------------------------------------------------
@@ -36,6 +38,19 @@ namespace AssetImporter
             {
                 m_HasUnsavedChanges = value;
                 OnPropertyChanged("HasUnsavedChanges");
+            }
+        }
+
+        [JsonIgnore]
+        private bool m_IsSourceAvailable;
+        [JsonIgnore]
+        public bool IsSourceAvailable
+        {
+            get { return m_IsSourceAvailable; }
+            set
+            {
+                m_IsSourceAvailable = value;
+                OnPropertyChanged("IsSourceAvailable");
             }
         }
 
@@ -140,6 +155,7 @@ namespace AssetImporter
             {
                 Thumbnail = temp;
             }
+            IsSourceAvailable = File.Exists(temp.AbsolutePath);
         }
 
         //---------------------------------------------------------------------------

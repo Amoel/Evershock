@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +15,7 @@ namespace EntityComponent
         public string Name { get { return GetType().Name; } }
 
         public Guid Entity { get; private set; }
+        public string EntityName { get; private set; }
 
         public bool IsEnabled { get; private set; }
 
@@ -23,6 +25,7 @@ namespace EntityComponent
         {
             GUID = Guid.NewGuid();
             Entity = entity;
+            EntityName = EntityManager.Get().Find(Entity).Name;
 
             IsEnabled = true;
         }
@@ -102,6 +105,13 @@ namespace EntityComponent
             {
                 entity.Disable();
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        protected void OnPropertyChanged(dynamic value, [CallerMemberName]string propertyName = "")
+        {
+            UIManager.Get().UpdateProperty(GUID, propertyName, value);
         }
     }
 }

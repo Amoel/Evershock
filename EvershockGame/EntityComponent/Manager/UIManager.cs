@@ -5,11 +5,16 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace EntityComponent.Manager
 {
+    public delegate void PropertyChangedEventHandler(object value);
+
+    //---------------------------------------------------------------------------
+
     public class UIManager : BaseManager<UIManager>
     {
         private RenderTarget2D m_Target;
@@ -19,9 +24,14 @@ namespace EntityComponent.Manager
 
         public bool IsUIDebugViewActive { get; set; }
 
+        private Dictionary<Guid, Dictionary<string, PropertyChangedEventHandler>> m_RegisteredProperties;
+
         //---------------------------------------------------------------------------
 
-        protected UIManager() { }
+        protected UIManager()
+        {
+            m_RegisteredProperties = new Dictionary<Guid, Dictionary<string, PropertyChangedEventHandler>>();
+        }
 
         //---------------------------------------------------------------------------
 
@@ -55,6 +65,34 @@ namespace EntityComponent.Manager
             batch.Begin();
             ComponentManager.Get().DrawUIComponents(batch);
             batch.End();
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void RegisterListener(IComponent component, string property, PropertyChangedEventHandler callback)
+        {
+            if (!m_RegisteredProperties.ContainsKey(component.GUID))
+            {
+                m_RegisteredProperties.Add(component.GUID, new Dictionary<string, PropertyChangedEventHandler>());
+            }
+            if (!m_RegisteredProperties[component.GUID].ContainsKey(property))
+            {
+                m_RegisteredProperties[component.GUID].Add(property, null);
+            }
+            m_RegisteredProperties[component.GUID][property] += callback;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void UpdateProperty(Guid guid, string name, object value)
+        {
+            if (m_RegisteredProperties.ContainsKey(guid))
+            {
+                if (m_RegisteredProperties[guid].ContainsKey(name))
+                {
+                    m_RegisteredProperties[guid][name]?.Invoke(value);
+                }
+            }
         }
 
         //---------------------------------------------------------------------------

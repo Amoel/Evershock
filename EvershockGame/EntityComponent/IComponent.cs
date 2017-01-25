@@ -8,6 +8,9 @@ namespace EntityComponent
         Guid GUID { get; }
         string Name { get; }
 
+        Guid Entity { get; }
+        string EntityName { get; }
+
         bool IsEnabled { get; }
 
         //---------------------------------------------------------------------------

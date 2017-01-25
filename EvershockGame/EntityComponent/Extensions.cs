@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace EntityComponent
@@ -97,6 +99,13 @@ namespace EntityComponent
                 case EDirection.Down: return EDirection.Up;
                 default: return EDirection.None;
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public static string ToBinding(this object source, [CallerMemberName]string name = "")
+        {
+            return name;
         }
     }
 }

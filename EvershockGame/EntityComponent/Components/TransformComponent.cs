@@ -14,7 +14,20 @@ namespace EntityComponent.Components
     {
         public Vector3 AbsoluteLocation { get { return FindAbsoluteLocation(); } }
 
-        public Vector3 Location { get; set; }
+        private Vector3 m_Location;
+        public Vector3 Location
+        {
+            get { return m_Location; }
+            set
+            {
+                if (!m_Location.Equals(value))
+                {
+                    m_Location = value;
+                    OnPropertyChanged(m_Location);
+                }
+            }
+        }
+
         public Vector2 Scale { get; set; }
         public float Rotation { get; set; }
 

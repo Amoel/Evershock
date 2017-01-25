@@ -33,6 +33,9 @@
                 <TabItem Header="Effects">
                     <local:AssetTab AssetType="Effect"/>
                 </TabItem>
+                <TabItem Header="Fonts">
+                    <local:AssetTab AssetType="Font"/>
+                </TabItem>
             </TabControl>
             <local:Quickbar Grid.Row="1"/>
         </Grid>

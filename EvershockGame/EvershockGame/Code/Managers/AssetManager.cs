@@ -20,6 +20,9 @@ namespace EvershockGame.Code
         ChestClosed1,
         ChestOpened1,
         DefaultTexture,
+        Arrows1,
+        Barrel1,
+        Spikes1,
     }
 
     //---------------------------------------------------------------------------
@@ -48,6 +51,13 @@ namespace EvershockGame.Code
 
     //---------------------------------------------------------------------------
 
+    public enum EFontAssets
+    {
+        DebugFont,
+    }
+
+    //---------------------------------------------------------------------------
+
     public class AssetManager : BaseManager<AssetManager>
     {
         public ContentManager Content { get; set; }
@@ -66,6 +76,9 @@ namespace EvershockGame.Code
             { ESpriteAssets.ChestClosed1, "Graphics/Tiles/ChestClosed1" },
             { ESpriteAssets.ChestOpened1, "Graphics/Tiles/ChestOpened1" },
             { ESpriteAssets.DefaultTexture, "Graphics/Debug/DefaultPlaceholder" },
+            { ESpriteAssets.Arrows1, "Graphics/Debug/ArrowSheetP1" },
+            { ESpriteAssets.Barrel1, "Graphics/Tiles/Barrel1" },
+            { ESpriteAssets.Spikes1, "Graphics/Tilesets/Spikes" },
         };
 
         private Dictionary<Type, Dictionary<ESpriteAssets, dynamic>> m_SpriteAssets;
@@ -102,12 +115,22 @@ namespace EvershockGame.Code
 
         //---------------------------------------------------------------------------
 
+        private Dictionary<EFontAssets, string> m_FontMapping = new Dictionary<EFontAssets, string>()
+        {
+            { EFontAssets.DebugFont, "Fonts/DebugFont" },
+        };
+
+        private Dictionary<Type, Dictionary<EFontAssets, dynamic>> m_FontAssets;
+
+        //---------------------------------------------------------------------------
+
         protected AssetManager()
         {
             m_SpriteAssets = new Dictionary<Type, Dictionary<ESpriteAssets, dynamic>>();
             m_TilesetAssets = new Dictionary<Type, Dictionary<ETilesetAssets, dynamic>>();
             m_LightAssets = new Dictionary<Type, Dictionary<ELightAssets, dynamic>>();
             m_EffectAssets = new Dictionary<Type, Dictionary<EEffectAssets, dynamic>>();
+            m_FontAssets = new Dictionary<Type, Dictionary<EFontAssets, dynamic>>();
         }
 
         //---------------------------------------------------------------------------
@@ -160,6 +183,18 @@ namespace EvershockGame.Code
 
         //---------------------------------------------------------------------------
 
+        public T Find<T>(EFontAssets asset)
+        {
+            if (m_FontAssets.ContainsKey(typeof(T)))
+            {
+                if (m_FontAssets[typeof(T)].ContainsKey(asset))
+                    return (T)m_FontAssets[typeof(T)][asset];
+            }
+            return default(T);
+        }
+
+        //---------------------------------------------------------------------------
+
         public void LoadAll()
         {
             foreach (KeyValuePair<ESpriteAssets, string> kvp in m_SpriteMapping)
@@ -177,6 +212,10 @@ namespace EvershockGame.Code
             foreach (KeyValuePair<EEffectAssets, string> kvp in m_EffectMapping)
             {
                 Store<Effect>(kvp.Key, kvp.Value);
+            }
+            foreach (KeyValuePair<EFontAssets, string> kvp in m_FontMapping)
+            {
+                Store<SpriteFont>(kvp.Key, kvp.Value);
             }
         }
 
@@ -237,6 +276,21 @@ namespace EvershockGame.Code
             if (!m_EffectAssets[typeof(T)].ContainsKey(type))
             {
                 m_EffectAssets[typeof(T)].Add(type, asset);
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Store<T>(EFontAssets type, string path)
+        {
+            T asset = Content.Load<T>(path);
+            if (!m_FontAssets.ContainsKey(typeof(T)))
+            {
+                m_FontAssets.Add(typeof(T), new Dictionary<EFontAssets, dynamic>());
+            }
+            if (!m_FontAssets[typeof(T)].ContainsKey(type))
+            {
+                m_FontAssets[typeof(T)].Add(type, asset);
             }
         }
     }

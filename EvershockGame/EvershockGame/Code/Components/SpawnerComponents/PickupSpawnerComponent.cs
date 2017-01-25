@@ -8,12 +8,7 @@ namespace EvershockGame.Code.Components
 {
     public class PickupSpawnerComponent : SpawnerComponent
     {
-        private Random m_Rand;
-
-        public PickupSpawnerComponent (Guid entity) : base (entity)
-        {
-            m_Rand = new Random(SeedManager.Get().NextSeed());
-        }
+        public PickupSpawnerComponent(Guid entity) : base(entity) { }
 
         //---------------------------------------------------------------------------
 

@@ -36,6 +36,10 @@
                             <Setter Property="Background" Value="#E0FF8F"/>
                             <Setter Property="BorderBrush" Value="#E0FF8F"/>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding IsSourceAvailable}" Value="False">
+                            <Setter Property="Background" Value="#FF9691"/>
+                            <Setter Property="BorderBrush" Value="#FF9691"/>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </DataGrid.CellStyle>

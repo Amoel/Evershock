@@ -39,8 +39,8 @@ namespace EvershockGame.Code
             {
                 animation.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.WalkingAnimation2), Vector2.One);
             }
-            animation.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true));
-            animation.AddSetting((int)Tag.MoveRight, new AnimationSetting(8, 2, 0, 7));
+            animation.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true, true));
+            animation.AddSetting((int)Tag.MoveRight, new AnimationSetting(8, 2, 0, 7, true));
 
             AddComponent<ShadowComponent>().Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.RedOrb), new Vector2(6.0f, 2.0f), new Vector2(0.0f, 10.0f));
 
