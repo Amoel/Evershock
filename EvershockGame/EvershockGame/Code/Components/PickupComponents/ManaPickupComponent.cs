@@ -9,9 +9,7 @@ namespace EvershockGame.Code.Components
         public ManaPickupComponent(Guid entity) : base(entity) { }
 
         //---------------------------------------------------------------------------
-
-        //of course, this needs some content. Currently works exactly as the HealthPickupComponent
-
+        
         public void OnPickup(IEntity collector)
         {
             if (collector != null && IsCollectable)
@@ -19,7 +17,7 @@ namespace EvershockGame.Code.Components
                 if (collector is Player)
                 {
                     AttributesComponent attributes = collector.GetComponent<AttributesComponent>();
-                    attributes.ReplenishHealth(15);
+                    attributes.ReplenishMana(10);
 
                     DespawnComponent despawn = GetComponent<DespawnComponent>();
                     if (despawn != null)
