@@ -8,28 +8,28 @@ namespace EvershockGame.Code
     [Serializable]
     public class AttributesComponent : Component, IInputReceiver, ITickableComponent
     {
-        //TODO_lukas: Think about negative influences on Factors and Boni and re-evaluate formulas, if necessary (Health, Mana, MovementSpeed)
+        //TODO_lukas: Split into several Attribute Components for Enemies / Players, etc.
 
         //Health
         float m_MaxHealth;
         float m_CurrentHealth;
         float m_BaseHealthRegen;
-        List<float> m_HealthRegenFactors = new List<float>();
-        List<float> m_HealthRegenBoni = new List<float>();
+        Dictionary<string, float> m_HealthRegenFactors = new Dictionary<string, float>();
+        Dictionary<string, float> m_HealthRegenBoni = new Dictionary<string, float>();
 
         //Mana
         float m_MaxMana;
         float m_CurrentMana;
         float m_BaseManaRegen;
-        List<float> m_ManaRegenFactors = new List<float>();
-        List<float> m_ManaRegenBoni = new List<float>();
+        Dictionary<string, float> m_ManaRegenFactors = new Dictionary<string, float>();
+        Dictionary<string, float> m_ManaRegenBoni = new Dictionary<string, float>();
 
         //MovementSpeed
         float m_BaseMovementSpeed;
-        List<float> m_MovementFactors = new List<float>();
-        List<float> m_MovementBoni = new List<float>();
+        Dictionary<string, float> m_MovementFactors = new Dictionary<string, float>();
+        Dictionary<string, float> m_MovementBoni = new Dictionary<string, float>();
 
-        //public read only handles
+        //public read-only handles
         public float HealthRegen { get; private set; }
         public float ManaRegen { get; private set; }
         public float MovementSpeed { get; private set; }
@@ -94,51 +94,69 @@ namespace EvershockGame.Code
         //---------------------------------------------------------------------------
 
         /// <summary>
-        ///Values above 0 increase Health Regeneration; Values below 0 decrease Health Regeneration;
-        ///Standard Factor is 1.0f; If factor is negative, Health will be constantly drained.
+        /// Factors above 0 increase Health Regeneration; Factors below 0 decrease Health Regeneration;
         /// </summary>
-        public void AddHealthRegenFactor(float factor)
+        public void AddHealthRegenFactor(string name, float factor)
         {
-            m_HealthRegenFactors.Add(factor);
+            m_HealthRegenFactors.Add(name,factor);
 
             UpdateHealthRegen();
         }
 
         //---------------------------------------------------------------------------
 
-        public void AddHealthRegenBonus(float bonus)
+        /// <summary>
+        /// Remove Health Regeneration Factors by name;
+        /// </summary>
+        public void RemoveHealthRegenFactor (string name)
         {
-            m_HealthRegenBoni.Add(bonus);
+            m_HealthRegenFactors.Remove(name);
 
             UpdateHealthRegen();
         }
 
-        //TODO_lukas: Create 'Remove Health Regen' Factor/Bonus methods
+        //---------------------------------------------------------------------------
+
+        /// <summary>
+        /// Values above 0 increase Health Regeneration; Values below 0 decrease Health Regeneration;
+        /// </summary>
+        public void AddHealthRegenBonus(string name, float bonus)
+        {
+            m_HealthRegenBoni.Add(name, bonus);
+
+            UpdateHealthRegen();
+        }
 
         //---------------------------------------------------------------------------
 
-        void UpdateHealthRegen()
+        /// <summary>
+        /// Remove Health Regeneration Boni/Mali by name;
+        /// </summary>
+        public void RemoveHealthRegenBonus(string name)
+        {
+            m_HealthRegenBoni.Remove(name);
+
+            UpdateHealthRegen();
+        }
+
+        //---------------------------------------------------------------------------
+
+        void UpdateHealthRegen() //If this becomes too big, it would be more efficient not to go through all values each time
         {
             float combinedFactors = 1.0f;
             float combinedBoni = 0.0f;
 
-            if (m_HealthRegenFactors.Count != 0)
+            foreach (float factor in m_HealthRegenFactors.Values)
             {
-                for (int j = 0; j < m_HealthRegenFactors.Count; j++)
-                {
-                    combinedFactors += m_HealthRegenFactors[j];
-                }
+                combinedFactors += factor;
+            }
+            
+            foreach (float bonus in m_HealthRegenBoni.Values)
+            {
+                combinedBoni += bonus;
             }
 
-            if (m_HealthRegenBoni.Count != 0)
-            {
-                for (int i = 0; i < m_HealthRegenBoni.Count; i++)
-                {
-                    combinedBoni += m_HealthRegenBoni[i];
-                }
-            }
-
-            HealthRegen = combinedFactors * (m_BaseHealthRegen + combinedBoni);
+            HealthRegen = (m_BaseHealthRegen + combinedBoni) * combinedFactors;
         }
 
 
@@ -168,50 +186,69 @@ namespace EvershockGame.Code
         }
 
         //---------------------------------------------------------------------------
-        
+
+
         /// <summary>
-        ///Values above 0 increase Mana Regeneration; Values below 0 decrease Mana Regeneration.
-        ///Standard Factor is 1.0f; If factor is negative, Mana will be constantly drained.
+        /// Factors above 0 increase Mana Regeneration; Factors below 0 decrease Mana Regeneration;
         /// </summary>
-        public void AddManaRegenFactor(float factor)
+        public void AddManaRegenFactor(string name, float factor)
         {
-            m_ManaRegenFactors.Add(factor);
+            m_ManaRegenFactors.Add(name, factor);
 
             UpdateManaRegen();
         }
 
         //---------------------------------------------------------------------------
 
-        public void AddManaRegenBonus(float bonus)
+        /// <summary>
+        /// Remove Mana Regeneration Factors by name;
+        /// </summary>
+        public void RemoveManaRegenFactor(string name)
         {
-            m_ManaRegenBoni.Add(bonus);
+            m_ManaRegenFactors.Remove(name);
 
             UpdateManaRegen();
         }
 
         //---------------------------------------------------------------------------
 
-        //TODO_lukas: Create 'Remove Mana Regen' Factor/Bonus methods
+        /// <summary>
+        /// Values above 0 increase Mana Regeneration; Values below 0 decrease Mana Regeneration;
+        /// </summary>
+        public void AddManaRegenBonus(string name, float bonus)
+        {
+            m_ManaRegenBoni.Add(name, bonus);
 
-        void UpdateManaRegen()
+            UpdateManaRegen();
+        }
+
+        //---------------------------------------------------------------------------
+
+        /// <summary>
+        /// Remove Mana Regeneration Boni/Mali by name;
+        /// </summary>
+        public void RemoveManaRegenBonus(string name)
+        {
+            m_ManaRegenBoni.Remove(name);
+
+            UpdateManaRegen();
+        }
+
+        //---------------------------------------------------------------------------
+
+        void UpdateManaRegen() //If this becomes too big, it would be more efficient not to go through all values each time
         {
             float combinedFactors = 1.0f;
             float combinedBoni = 0.0f;
-
-            if (m_ManaRegenFactors.Count != 0)
+            
+            foreach (float factor in m_ManaRegenFactors.Values)
             {
-                for (int j = 0; j < m_ManaRegenFactors.Count; j++)
-                {
-                    combinedFactors += m_ManaRegenFactors[j];
-                }
+                combinedFactors += factor;
             }
 
-            if (m_ManaRegenBoni.Count != 0)
+            foreach (float bonus in m_ManaRegenBoni.Values)
             {
-                for (int i = 0; i < m_ManaRegenBoni.Count; i++)
-                {
-                    combinedBoni += m_ManaRegenBoni[i];
-                }
+                combinedBoni += bonus;
             }
 
             ManaRegen = combinedFactors * (m_BaseManaRegen + combinedBoni);
@@ -222,45 +259,37 @@ namespace EvershockGame.Code
                     Manipulate Movement
         --------------------------------------------------------------------------*/
 
-        public void AddMovementFactor (float factor)
+        public void AddMovementFactor(string name, float factor)
         {
-            m_MovementFactors.Add(factor);
+            m_MovementFactors.Add(name, factor);
 
             UpdateMovementSpeed();
         }
 
         //---------------------------------------------------------------------------
 
-        public void AddMovementBonus(float bonus)
+        public void AddMovementBonus(string name, float bonus)
         {
-            m_MovementBoni.Add(bonus);
+            m_MovementBoni.Add(name, bonus);
 
             UpdateMovementSpeed();
         }
 
         //---------------------------------------------------------------------------
 
-        //TODO_lukas: Create 'Remove MovementSpeed' Factor/Bonus methods
-
-        void UpdateMovementSpeed()
+        void UpdateMovementSpeed()  //If this becomes too big, it would be more efficient not to go through all values each time
         {
             float combinedFactors = 1.0f;
             float combinedBoni = 0.0f;
 
-            if (m_MovementFactors.Count != 0)
+            foreach (float factor in m_MovementFactors.Values)
             {
-                for (int j = 0; j < m_MovementFactors.Count; j++)
-                {
-                    combinedFactors += m_MovementFactors[j];
-                }
+                combinedFactors += factor;
             }
 
-            if (m_MovementBoni.Count != 0)
+            foreach (float bonus in m_MovementBoni.Values)
             {
-                for (int i = 0; i < m_MovementBoni.Count; i++)
-                {
-                    combinedBoni += m_MovementBoni[i];
-                }
+                combinedBoni += bonus;
             }
 
             MovementSpeed = combinedFactors * (m_BaseMovementSpeed + combinedBoni);
