@@ -1,75 +1,63 @@
-﻿using EntityComponent;
-using EntityComponent.Manager;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using EntityComponent;
+using EntityComponent.Manager;
 
-namespace EvershockGame.Code
+namespace EvershockGame.Code.Components
 {
-    [Serializable]
-    public class AttributesComponent : Component, IInputReceiver, ITickableComponent
+    public class PlayerAttributesComponent : AttributesComponent, IInputReceiver
+
+        //TODO_lukas:  Chekc all update functions
     {
-        //TODO_lukas: Split into several Attribute Components for Enemies / Players, etc.
-
-        enum EActorGameTypes
-        {
-            Player,
-            SimpleFiend,
-        }
-
         //Health
-        float m_MaxHealth;
-        float m_CurrentHealth;
         float m_BaseHealthRegen;
+        public float HealthRegen { get; private set; }
         Dictionary<string, float> m_HealthRegenFactors = new Dictionary<string, float>();
         Dictionary<string, float> m_HealthRegenBoni = new Dictionary<string, float>();
-
+        
         //Mana
         float m_MaxMana;
         float m_CurrentMana;
         float m_BaseManaRegen;
+        public float ManaRegen { get; private set; }
         Dictionary<string, float> m_ManaRegenFactors = new Dictionary<string, float>();
         Dictionary<string, float> m_ManaRegenBoni = new Dictionary<string, float>();
 
-        //MovementSpeed
-        float m_BaseMovementSpeed;
+        public float CurrentMana    //handle for UI
+        {
+            get { return m_CurrentMana; }
+            set { if (m_CurrentMana != value) { m_CurrentMana = value; OnPropertyChanged(m_CurrentMana); } }
+        }
+
+        //Movement
         Dictionary<string, float> m_MovementFactors = new Dictionary<string, float>();
         Dictionary<string, float> m_MovementBoni = new Dictionary<string, float>();
 
-        //public read-only handles (for UI)
-        public float CurrentHealth { 
-            get { return m_CurrentHealth; }
-            set { if (m_CurrentHealth != value) { m_CurrentHealth = value;  OnPropertyChanged(m_CurrentHealth); } } }
-        public float CurrentMana {
-            get { return m_CurrentMana; }
-            set { if (m_CurrentMana != value) { m_CurrentMana = value; OnPropertyChanged(m_CurrentMana); } } }
 
-        public float HealthRegen { get; private set; }
-        public float ManaRegen { get; private set; }
-        public float MovementSpeed { get; private set; }
+        /*--------------------------------------------------------------------------
+                    Constructor
+        --------------------------------------------------------------------------*/
 
-        //---------------------------------------------------------------------------
-
-        public AttributesComponent(Guid entity) : base(entity)
+        public PlayerAttributesComponent(Guid entity) : base (entity)
         {
-            m_MaxHealth = 100.0f;
-            m_BaseHealthRegen = 0.0f;
-            m_MaxMana = 0.0f;
-            m_BaseManaRegen = 0.0f;
-            m_BaseMovementSpeed = 100.0f;
+            m_MaxHealth = 500.0f;
+            m_BaseHealthRegen = 2.0f;
+            m_MaxMana = 250.0f;
+            m_BaseManaRegen = 1.0f;
+            m_BaseMovementSpeed = 125.0f;
 
-            CurrentHealth = 0; //m_MaxHealth;
-            CurrentMana = 0; // m_MaxMana;
-
-            
-            UpdateAttributes();
+            CurrentHealth = m_MaxHealth * 0.75f;
+            CurrentMana = m_MaxMana * 0.75f;
         }
 
 
         /*--------------------------------------------------------------------------
-                    Init
+                    Inits
         --------------------------------------------------------------------------*/
 
-        //TODO_lukas 
         public void Init(float max_health, float max_mana, float base_movement_speed, float base_health_regen, float base_mana_regen)
         {
             m_MaxHealth = max_health;
@@ -81,49 +69,24 @@ namespace EvershockGame.Code
             UpdateAttributes();
         }
 
-
         /*--------------------------------------------------------------------------
                     Manipulate Health
         --------------------------------------------------------------------------*/
-
-        public void TakeDamage(float damage_dealt)
-        {
-            CurrentHealth -= damage_dealt;
-
-            if (CurrentHealth <= 0)
-            {
-                //TODO_lukas: Despawn character
-            }
-        }
-
-        //---------------------------------------------------------------------------
-        
-        public void ReplenishHealth(float health_gain)
-        {
-            CurrentHealth += health_gain;
-
-            if (CurrentHealth > m_MaxHealth)
-                CurrentHealth = m_MaxHealth;
-        }
-
-        //---------------------------------------------------------------------------
 
         /// <summary>
         /// Factors above 0 increase Health Regeneration; Factors below 0 decrease Health Regeneration;
         /// </summary>
         public void AddHealthRegenFactor(string name, float factor)
         {
-            m_HealthRegenFactors.Add(name,factor);
+            m_HealthRegenFactors.Add(name, factor);
 
             UpdateHealthRegen();
         }
 
-        //---------------------------------------------------------------------------
-
         /// <summary>
         /// Remove Health Regeneration Factors by name;
         /// </summary>
-        public void RemoveHealthRegenFactor (string name)
+        public void RemoveHealthRegenFactor(string name)
         {
             m_HealthRegenFactors.Remove(name);
 
@@ -141,8 +104,6 @@ namespace EvershockGame.Code
 
             UpdateHealthRegen();
         }
-
-        //---------------------------------------------------------------------------
 
         /// <summary>
         /// Remove Health Regeneration Boni/Mali by name;
@@ -165,7 +126,7 @@ namespace EvershockGame.Code
             {
                 combinedFactors += factor;
             }
-            
+
             foreach (float bonus in m_HealthRegenBoni.Values)
             {
                 combinedBoni += bonus;
@@ -255,7 +216,7 @@ namespace EvershockGame.Code
         {
             float combinedFactors = 1.0f;
             float combinedBoni = 0.0f;
-            
+
             foreach (float factor in m_ManaRegenFactors.Values)
             {
                 combinedFactors += factor;
@@ -268,7 +229,6 @@ namespace EvershockGame.Code
 
             ManaRegen = combinedFactors * (m_BaseManaRegen + combinedBoni);
         }
-
 
         /*--------------------------------------------------------------------------
                     Manipulate Movement
@@ -315,7 +275,7 @@ namespace EvershockGame.Code
                     Update
         --------------------------------------------------------------------------*/
 
-        void UpdateAttributes()
+        new void UpdateAttributes()
         {
             if (m_MaxHealth > 0)
                 UpdateHealthRegen();
@@ -327,22 +287,12 @@ namespace EvershockGame.Code
                 UpdateMovementSpeed();
         }
 
-        //---------------------------------------------------------------------------
-
-        public void PreTick (float deltaTime) { }
-
-        //---------------------------------------------------------------------------
-
-        public void Tick(float deltaTime)
+        public override void Tick(float deltaTime)
         {
             ReplenishHealth(HealthRegen * deltaTime);
             ReplenishMana(ManaRegen * deltaTime);
         }
-
-        //---------------------------------------------------------------------------
-
-        public void PostTick(float deltaTime) { }
-
+        
 
         /*--------------------------------------------------------------------------
                     Input
@@ -356,15 +306,10 @@ namespace EvershockGame.Code
                    (actions[EGameAction.MOVE_RIGHT] > 0.0f);
         }
 
-        //---------------------------------------------------------------------------
-
         public void ReceiveInput(GameActionCollection actions, float deltaTime)
         {
 
         }
 
-        //---------------------------------------------------------------------------
-
-        public override void OnCleanup() { }
     }
 }

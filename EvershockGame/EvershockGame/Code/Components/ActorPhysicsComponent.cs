@@ -4,6 +4,7 @@ using EntityComponent.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
+using EvershockGame.Code.Components;
 
 namespace EvershockGame.Code
 {

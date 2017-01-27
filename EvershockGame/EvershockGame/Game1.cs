@@ -71,7 +71,7 @@ namespace EvershockGame
                 {
                     EntityFactory.Create<Spike>("Spike").Init(new Vector2(room.Bounds.Center.X * 64 + (i % 3) * 64, room.Bounds.Center.Y * 64 + 128 + (i / 3) * 64));
                 }
-                //EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));
+                EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));
             }
             
 
@@ -117,6 +117,7 @@ namespace EvershockGame
 
             CameraManager.Get().FuseCameras(cam1, cam2, width / 2);
 
+
             /*--------------------------------------------------------------------------
                         UI
             --------------------------------------------------------------------------*/
@@ -126,12 +127,13 @@ namespace EvershockGame
 
             TextControl control = EntityFactory.CreateUI<TextControl>("P1_Position");
             control.Properties.Font = debug_font;
+            control.Properties.TextAlignment = EHorizontalAlignment.Left;
             control.VerticalAlignment = EVerticalAlignment.Top;
             control.HorizontalAlignment = EHorizontalAlignment.Center;
             control.Bind(player.Transform, "Location", (value) =>
             {
                 Vector3 location = (Vector3)value;
-                control.Properties.Text = string.Format("X: {0}, Y: {1}", (int)location.X, (int)location.Y);
+                control.Properties.Text = string.Format("<White>X: {0}, Y: {1}</White>", (int)location.X, (int)location.Y);
             });
 
             TextControl HP_Player1 = EntityFactory.CreateUI<TextControl>("HP_Player1");
@@ -140,7 +142,7 @@ namespace EvershockGame
             HP_Player1.HorizontalAlignment = EHorizontalAlignment.Left;
             HP_Player1.Bind(player.Attributes, "CurrentHealth", (value) =>
             {
-                HP_Player1.Properties.Text = string.Format("HP: {0}", new string('X', (int)(float)value / 20));
+                HP_Player1.Properties.Text = string.Format("HP  <Red>{0}</Red>", new string('X', (int)(float)value / 20));
             });
 
             TextControl MP_Player1 = EntityFactory.CreateUI<TextControl>("MP_Player1");
@@ -150,7 +152,7 @@ namespace EvershockGame
             MP_Player1.HorizontalAlignment = EHorizontalAlignment.Left;
             MP_Player1.Bind(player.Attributes, "CurrentMana", (value) =>
             {
-                MP_Player1.Properties.Text = string.Format("MP: {0}", new string('x', (int)(float)value / 10));
+                MP_Player1.Properties.Text = string.Format("MP  <Cyan>{0}</Cyan>", new string('x', (int)(float)value / 10));
             });
 
             TextControl HP_Player2 = EntityFactory.CreateUI<TextControl>("HP_Player2");
@@ -158,9 +160,10 @@ namespace EvershockGame
             HP_Player2.GetComponent<UITransformComponent>().Size = new Point(50, 100);
             HP_Player2.VerticalAlignment = EVerticalAlignment.Bottom;
             HP_Player2.HorizontalAlignment = EHorizontalAlignment.Right;
+            HP_Player2.Properties.TextAlignment = EHorizontalAlignment.Right;
             HP_Player2.Bind(player2.Attributes, "CurrentHealth", (value) =>
             {
-                HP_Player2.Properties.Text = string.Format("{0} :HP", new string('X', (int)(float)value / 20));
+                HP_Player2.Properties.Text = string.Format("<Red>{0}</Red>  HP", new string('X', (int)(float)value / 20));
             });
 
             TextControl MP_Player2 = EntityFactory.CreateUI<TextControl>("MP_Player2");
@@ -168,9 +171,10 @@ namespace EvershockGame
             MP_Player2.GetComponent<UITransformComponent>().Size = new Point(50,50);
             MP_Player2.VerticalAlignment = EVerticalAlignment.Bottom;
             MP_Player2.HorizontalAlignment = EHorizontalAlignment.Right;
+            MP_Player2.Properties.TextAlignment = EHorizontalAlignment.Right;
             MP_Player2.Bind(player2.Attributes, "CurrentMana", (value) =>
             {
-                MP_Player2.Properties.Text = string.Format("{0} :MP", new string('x', (int)(float)value / 10));
+                MP_Player2.Properties.Text = string.Format("<Cyan>{0}</Cyan>  MP", new string('x', (int)(float)value / 10));
             });
         }
         
