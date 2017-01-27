@@ -15,6 +15,7 @@ namespace EvershockGame.Code
         public TransformComponent Transform { get { return GetComponent<TransformComponent>(); } }
         public InputComponent Input { get { return GetComponent<InputComponent>(); } }
         public MovementAnimationComponent Animation { get { return GetComponent<MovementAnimationComponent>(); } }
+        public AttributesComponent Attributes { get { return GetComponent<AttributesComponent>(); } }
 
         //---------------------------------------------------------------------------
 

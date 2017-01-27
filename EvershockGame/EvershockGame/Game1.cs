@@ -133,6 +133,15 @@ namespace EvershockGame
                 control.Properties.Text = string.Format("X: {0}, Y: {1}", (int)location.X, (int)location.Y);
             });
 
+            TextControl HP_Player1 = EntityFactory.CreateUI<TextControl>("HP_Player1");
+            HP_Player1.Properties.Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
+            HP_Player1.VerticalAlignment = EVerticalAlignment.Bottom;
+            HP_Player1.HorizontalAlignment = EHorizontalAlignment.Left;
+            HP_Player1.Bind(player.Attributes, "CurrentHealth", (value) =>
+            {
+                  HP_Player1.Properties.Text = string.Format("HP: 8={0}D", new string('=',(int)(float)value / 10));
+            });
+
             //ImageControl leftHP = EntityFactory.CreateUI<ImageControl>("HP");
             //leftHP.Image = AssetManager.Get().Find<Texture2D>(ESpriteAssets.ChestClosed1);
             //leftHP.VerticalAlignment = EVerticalAlignment.Top;
@@ -208,6 +217,8 @@ namespace EvershockGame
 
 
             //TODO: Shift to UI
+
+
 
             if ((Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl))) && !playerIndicatorP1.IsEnabled)
             {
