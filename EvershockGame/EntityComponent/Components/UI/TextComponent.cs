@@ -40,6 +40,8 @@ namespace EntityComponent.Components.UI
 
                     int offset = 0;
                     int width = 0;
+                    int height = (int)Font.MeasureString("X").Y + 5;
+                    int line = 0;
                     List<TextSegment> segments = ParseText();
                     foreach (TextSegment segment in segments)
                     {
@@ -51,6 +53,20 @@ namespace EntityComponent.Components.UI
                         switch (TextAlignment)
                         {
                             case EHorizontalAlignment.Left:
+                                int wrapIndex = 0;
+                                do
+                                {
+                                    int newWrapIndex = 0;
+                                    bool isWrapping = (Wrap(segment.Text.Substring(wrapIndex), bounds.Width - offset, out newWrapIndex));
+                                    batch.DrawString(Font, segment.Text.Substring(wrapIndex, newWrapIndex - wrapIndex), new Vector2(bounds.X + offset, bounds.Y + line * height), segment.Color);
+                                    wrapIndex = newWrapIndex;
+                                    if (isWrapping)
+                                    {
+                                        line++;
+                                        offset = 0;
+                                    }
+                                }
+                                while (wrapIndex < segment.Text.Length);
                                 batch.DrawString(Font, segment.Text, new Vector2(bounds.X + offset, bounds.Y), segment.Color);
                                 break;
                             case EHorizontalAlignment.Right:
@@ -64,6 +80,25 @@ namespace EntityComponent.Components.UI
                     }
                 }
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private bool Wrap(string text, int maxWidth, out int index)
+        {
+            int width = 0;
+            index = 0;
+            foreach(string word in text.Split(new char[] { ' ', '-' }, StringSplitOptions.None))
+            {
+                width += (int)Font.MeasureString(word).X;
+                if (width > maxWidth)
+                {
+                    return true;
+                }
+                index += word.Length;
+            }
+            index = text.Length;
+            return false;
         }
 
         //---------------------------------------------------------------------------
