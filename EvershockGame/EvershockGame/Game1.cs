@@ -71,7 +71,7 @@ namespace EvershockGame
                 {
                     EntityFactory.Create<Spike>("Spike").Init(new Vector2(room.Bounds.Center.X * 64 + (i % 3) * 64, room.Bounds.Center.Y * 64 + 128 + (i / 3) * 64));
                 }
-                EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));
+                //EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));
             }
             
 
@@ -122,59 +122,56 @@ namespace EvershockGame
             --------------------------------------------------------------------------*/
 
             UIManager.Get().Init(GraphicsDevice, width, height);
+            SpriteFont debug_font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
 
-            TextControl control = EntityFactory.CreateUI<TextControl>("Test");
-            control.Properties.Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
+            TextControl control = EntityFactory.CreateUI<TextControl>("P1_Position");
+            control.Properties.Font = debug_font;
             control.VerticalAlignment = EVerticalAlignment.Top;
             control.HorizontalAlignment = EHorizontalAlignment.Center;
-            control.Properties.TextAlignment = EHorizontalAlignment.Center;
             control.Bind(player.Transform, "Location", (value) =>
             {
                 Vector3 location = (Vector3)value;
-                control.Properties.Text = string.Format("X: <Red>{0}</Red>, Y: <Green>{1}</Green>", (int)location.X, (int)location.Y);
-            });
-
-            TextControl control2 = EntityFactory.CreateUI<TextControl>("Test2");
-            control2.Properties.Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
-            control2.VerticalAlignment = EVerticalAlignment.Top;
-            control2.HorizontalAlignment = EHorizontalAlignment.Left;
-            control2.Properties.TextAlignment = EHorizontalAlignment.Left;
-            control2.Bind(player.Transform, "Location", (value) =>
-            {
-                Vector3 location = (Vector3)value;
-                control2.Properties.Text = string.Format("<Orange>LOCATION: <Yellow>X: <Red>{0}</Red>, Y: <Green>{1}</Green></Yellow></Orange>", (int)location.X, (int)location.Y);
-            });
-
-            TextControl control3 = EntityFactory.CreateUI<TextControl>("Test3");
-            control3.Properties.Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
-            control3.VerticalAlignment = EVerticalAlignment.Top;
-            control3.HorizontalAlignment = EHorizontalAlignment.Right;
-            control3.Properties.TextAlignment = EHorizontalAlignment.Right;
-            control3.Bind(player.Transform, "Location", (value) =>
-            {
-                Vector3 location = (Vector3)value;
-                control3.Properties.Text = string.Format("X: <Red>{0}</Red>, Y: <Green>{1}</Green>", (int)location.X, (int)location.Y);
+                control.Properties.Text = string.Format("X: {0}, Y: {1}", (int)location.X, (int)location.Y);
             });
 
             TextControl HP_Player1 = EntityFactory.CreateUI<TextControl>("HP_Player1");
-            HP_Player1.Properties.Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
+            HP_Player1.Properties.Font = debug_font;
             HP_Player1.VerticalAlignment = EVerticalAlignment.Bottom;
             HP_Player1.HorizontalAlignment = EHorizontalAlignment.Left;
             HP_Player1.Bind(player.Attributes, "CurrentHealth", (value) =>
             {
-                  HP_Player1.Properties.Text = string.Format("HP: 8={0}D", new string('=',(int)(float)value / 10));
+                HP_Player1.Properties.Text = string.Format("HP: {0}", new string('X', (int)(float)value / 20));
             });
 
-            //ImageControl leftHP = EntityFactory.CreateUI<ImageControl>("HP");
-            //leftHP.Image = AssetManager.Get().Find<Texture2D>(ESpriteAssets.ChestClosed1);
-            //leftHP.VerticalAlignment = EVerticalAlignment.Top;
-            //leftHP.HorizontalAlignment = EHorizontalAlignment.Left;
-            //leftHP.Size = new Point(225, 100);
+            TextControl MP_Player1 = EntityFactory.CreateUI<TextControl>("MP_Player1");
+            MP_Player1.Properties.Font = debug_font;
+            MP_Player1.GetComponent<UITransformComponent>().Size = new Point (50,50);
+            MP_Player1.VerticalAlignment = EVerticalAlignment.Bottom;
+            MP_Player1.HorizontalAlignment = EHorizontalAlignment.Left;
+            MP_Player1.Bind(player.Attributes, "CurrentMana", (value) =>
+            {
+                MP_Player1.Properties.Text = string.Format("MP: {0}", new string('x', (int)(float)value / 10));
+            });
 
-            //ImageControl rightHP = EntityFactory.CreateUI<ImageControl>("HP");
-            //rightHP.VerticalAlignment = EVerticalAlignment.Top;
-            //rightHP.HorizontalAlignment = EHorizontalAlignment.Right;
-            //rightHP.Size = new Point(225, 100);
+            TextControl HP_Player2 = EntityFactory.CreateUI<TextControl>("HP_Player2");
+            HP_Player2.Properties.Font = debug_font;
+            HP_Player2.GetComponent<UITransformComponent>().Size = new Point(50, 100);
+            HP_Player2.VerticalAlignment = EVerticalAlignment.Bottom;
+            HP_Player2.HorizontalAlignment = EHorizontalAlignment.Right;
+            HP_Player2.Bind(player2.Attributes, "CurrentHealth", (value) =>
+            {
+                HP_Player2.Properties.Text = string.Format("{0} :HP", new string('X', (int)(float)value / 20));
+            });
+
+            TextControl MP_Player2 = EntityFactory.CreateUI<TextControl>("MP_Player2");
+            MP_Player2.Properties.Font = debug_font;
+            MP_Player2.GetComponent<UITransformComponent>().Size = new Point(50,50);
+            MP_Player2.VerticalAlignment = EVerticalAlignment.Bottom;
+            MP_Player2.HorizontalAlignment = EHorizontalAlignment.Right;
+            MP_Player2.Bind(player2.Attributes, "CurrentMana", (value) =>
+            {
+                MP_Player2.Properties.Text = string.Format("{0} :MP", new string('x', (int)(float)value / 10));
+            });
         }
         
         protected override void LoadContent()
@@ -239,26 +236,27 @@ namespace EvershockGame
             base.Update(gameTime);
 
 
-            //TODO: Shift to UI
+            //TODO_lukas Shift to UI
+            //if ((Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl))) && !playerIndicatorP1.IsEnabled)
+            //{
+            //    playerIndicatorP1.Enable();
+            //    playerIndicatorP2.Enable();
+            //}
 
-
-
-            if ((Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl))) && !playerIndicatorP1.IsEnabled)
-            {
-                playerIndicatorP1.Enable();
-                playerIndicatorP2.Enable();
-            }
-
-            if (Keyboard.GetState().IsKeyUp(Keys.LeftControl) && (Keyboard.GetState().IsKeyUp(Keys.RightControl)) && playerIndicatorP1.IsEnabled)
-            {
-                playerIndicatorP1.Disable();
-                playerIndicatorP2.Disable();
-            }
+            //if (Keyboard.GetState().IsKeyUp(Keys.LeftControl) && (Keyboard.GetState().IsKeyUp(Keys.RightControl)) && playerIndicatorP1.IsEnabled)
+            //{
+            //    playerIndicatorP1.Disable();
+            //    playerIndicatorP2.Disable();
+            //}
         }
         
         protected override void Draw(GameTime gameTime)
         {
             GameManager.Get().Render(GraphicsDevice, spriteBatch);
+
+            //spriteBatch.Begin();
+            //spriteBatch.DrawString(AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont), "Hello World!", new Vector2(10, 10), Color.White);
+            //spriteBatch.End();
 
             base.Draw(gameTime);
         }
