@@ -28,7 +28,7 @@ namespace EntityComponent.Components.UI
                 UITransformComponent transform = GetComponent<UITransformComponent>();
                 if (transform != null)
                 {
-                    batch.DrawString(Font, Text, new Vector2(transform.Bounds().X, transform.Bounds().Y), Color.White);
+                    batch.DrawString(Font, Text, new Vector2(transform.Bounds().X, transform.Bounds().Y), Color.Blue);
                 }
             }
         }

@@ -44,7 +44,9 @@
   <ItemGroup>
     <Compile Include="Code\Components\ActorPhysicsComponent.cs" />
     <Compile Include="Code\Components\AIComponent.cs" />
-    <Compile Include="Code\Components\AttributesComponent.cs" />
+    <Compile Include="Code\Components\AttributesComponents\AttributesComponent.cs" />
+    <Compile Include="Code\Components\AttributesComponents\PlayerAttributesComponent.cs" />
+    <Compile Include="Code\Components\AttributesComponents\SimpleFiendAttributesComponent.cs" />
     <Compile Include="Code\Components\MapComponent.cs" />
     <Compile Include="Code\Components\MovementAnimationComponent.cs" />
     <Compile Include="Code\Components\PickupComponents\CoinPickupComponent.cs" />

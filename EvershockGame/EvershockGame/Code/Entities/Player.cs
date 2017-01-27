@@ -1,6 +1,7 @@
 ﻿using EntityComponent;
 using EntityComponent.Components;
 using EntityComponent.Manager;
+using EvershockGame.Code.Components;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,7 +16,7 @@ namespace EvershockGame.Code
         public TransformComponent Transform { get { return GetComponent<TransformComponent>(); } }
         public InputComponent Input { get { return GetComponent<InputComponent>(); } }
         public MovementAnimationComponent Animation { get { return GetComponent<MovementAnimationComponent>(); } }
-        public AttributesComponent Attributes { get { return GetComponent<AttributesComponent>(); } }
+        public PlayerAttributesComponent Attributes { get { return GetComponent<PlayerAttributesComponent>(); } }
 
         //---------------------------------------------------------------------------
 
@@ -24,7 +25,7 @@ namespace EvershockGame.Code
             Index = (PlayerIndex)PlayerCount++;
 
             AddComponent<TransformComponent>().Init(new Vector3(Index == PlayerIndex.One ? 340 : 420, 400, 0));
-            AddComponent<AttributesComponent>().Init(500.0f, 250.0f, 125.0f, 2.0f, 1.0f);
+            AddComponent<PlayerAttributesComponent>().Init(500.0f, 250.0f, 125.0f, 2.0f, 1.0f);
 
             MovementAnimationComponent animation = AddComponent<MovementAnimationComponent>();
             if (Index == PlayerIndex.One)
