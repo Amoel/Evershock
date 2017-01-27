@@ -80,6 +80,7 @@ namespace EntityComponent.Manager
                 m_RegisteredProperties[component.GUID].Add(property, null);
             }
             m_RegisteredProperties[component.GUID][property] += callback;
+            callback?.Invoke(component.GetType().GetProperty(property).GetValue(component));
         }
 
         //---------------------------------------------------------------------------

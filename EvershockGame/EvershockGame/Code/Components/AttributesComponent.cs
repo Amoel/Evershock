@@ -29,11 +29,15 @@ namespace EvershockGame.Code
         Dictionary<string, float> m_MovementFactors = new Dictionary<string, float>();
         Dictionary<string, float> m_MovementBoni = new Dictionary<string, float>();
 
-        //public read-only handles
+        //public read-only handles (for UI)
+        public float CurrentHealth { 
+            get { return m_CurrentHealth; }
+            set { if (m_CurrentHealth != value) { m_CurrentHealth = value;  OnPropertyChanged(m_CurrentHealth); } } }
         public float HealthRegen { get; private set; }
         public float ManaRegen { get; private set; }
         public float MovementSpeed { get; private set; }
 
+        float CurrentMana { get { return m_CurrentMana; } set { } }
         //---------------------------------------------------------------------------
 
         public AttributesComponent(Guid entity) : base(entity)
@@ -44,8 +48,9 @@ namespace EvershockGame.Code
             m_BaseManaRegen = 0.0f;
             m_BaseMovementSpeed = 100.0f;
 
-            m_CurrentHealth = m_MaxHealth;
-            m_CurrentMana = m_MaxMana;
+            CurrentHealth = 0; //m_MaxHealth;
+            CurrentMana = 0; // m_MaxMana;
+
             
             UpdateAttributes();
         }
@@ -55,7 +60,7 @@ namespace EvershockGame.Code
                     Init
         --------------------------------------------------------------------------*/
 
-        public void Init(float max_health = 500, float max_mana = 0, float base_movement_speed = 100.0f, float base_health_regen = 0.0f, float base_mana_regen = 0.0f)
+        public void Init(float max_health, float max_mana, float base_movement_speed, float base_health_regen, float base_mana_regen)
         {
             m_MaxHealth = max_health;
             m_MaxMana = max_mana;
@@ -73,9 +78,9 @@ namespace EvershockGame.Code
 
         public void TakeDamage(float damage_dealt)
         {
-            m_CurrentHealth -= damage_dealt;
+            CurrentHealth -= damage_dealt;
 
-            if (m_CurrentHealth <= 0)
+            if (CurrentHealth <= 0)
             {
                 //TODO_lukas: Despawn character
             }
@@ -85,10 +90,10 @@ namespace EvershockGame.Code
         
         public void ReplenishHealth(float health_gain)
         {
-            m_CurrentHealth += health_gain;
+            CurrentHealth += health_gain;
 
-            if (m_CurrentHealth > m_MaxHealth)
-                m_CurrentHealth = m_MaxHealth;
+            if (CurrentHealth > m_MaxHealth)
+                CurrentHealth = m_MaxHealth;
         }
 
         //---------------------------------------------------------------------------
@@ -166,9 +171,9 @@ namespace EvershockGame.Code
 
         public bool UseMana(float mana_needed)
         {
-            if (m_CurrentMana >= mana_needed)
+            if (CurrentMana >= mana_needed)
             {
-                m_CurrentMana -= mana_needed;
+                CurrentMana -= mana_needed;
                 return true;
             }
             else
@@ -179,10 +184,10 @@ namespace EvershockGame.Code
 
         public void ReplenishMana(float mana_gain)
         {
-            m_CurrentMana += mana_gain;
+            CurrentMana += mana_gain;
 
-            if (m_CurrentMana > m_MaxMana)
-                m_CurrentMana = m_MaxMana;
+            if (CurrentMana > m_MaxMana)
+                CurrentMana = m_MaxMana;
         }
 
         //---------------------------------------------------------------------------

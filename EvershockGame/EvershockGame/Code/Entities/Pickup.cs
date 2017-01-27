@@ -12,7 +12,7 @@ namespace EvershockGame.Code
         //what does a Pickup Entity need?
         //most functionality comes from the PickupComponent
 
-        //TODO_lukas Put FX
+        //TODO_lukas Think about what needs to be done here
 
     }
 }
