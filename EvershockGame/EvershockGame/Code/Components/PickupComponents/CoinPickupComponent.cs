@@ -10,7 +10,7 @@ namespace EvershockGame.Code.Components
 
         //---------------------------------------------------------------------------
 
-        //TODO_lukas: Add functionality 
+        //TODO_lukas: Think about what Coins could be good for
 
         public void OnPickup(IEntity collector)
         {

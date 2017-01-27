@@ -9,8 +9,6 @@ using EntityComponent.Manager;
 namespace EvershockGame.Code.Components
 {
     public class PlayerAttributesComponent : AttributesComponent, IInputReceiver
-
-        //TODO_lukas:  Chekc all update functions
     {
         //Health
         float m_BaseHealthRegen;
@@ -49,14 +47,39 @@ namespace EvershockGame.Code.Components
             m_BaseManaRegen = 1.0f;
             m_BaseMovementSpeed = 125.0f;
 
-            CurrentHealth = m_MaxHealth * 0.75f;
-            CurrentMana = m_MaxMana * 0.75f;
+            CurrentHealth = m_MaxHealth * 0.5f;
+            CurrentMana = m_MaxMana * 0.5f;
+
+            UpdateAttributes();
         }
 
 
         /*--------------------------------------------------------------------------
                     Inits
         --------------------------------------------------------------------------*/
+
+        new public void Init(float max_health, float max_mana)
+        {
+            m_MaxHealth = max_health;
+            m_MaxMana = max_mana;
+        }
+
+        public void Init(float max_health, float current_health, float max_mana, float current_mana)
+        {
+            m_MaxHealth = max_health;
+            m_MaxMana = max_mana;
+            CurrentHealth = current_health;
+            CurrentMana = current_mana;
+        }
+
+        public void Init(float max_health, float max_mana, float base_movement_speed)
+        {
+            m_MaxHealth = max_health;
+            m_MaxMana = max_mana;
+            m_BaseMovementSpeed = base_movement_speed;
+
+            UpdateMovementSpeed();
+        }
 
         public void Init(float max_health, float max_mana, float base_movement_speed, float base_health_regen, float base_mana_regen)
         {
@@ -69,13 +92,12 @@ namespace EvershockGame.Code.Components
             UpdateAttributes();
         }
 
+
         /*--------------------------------------------------------------------------
                     Manipulate Health
         --------------------------------------------------------------------------*/
 
-        /// <summary>
-        /// Factors above 0 increase Health Regeneration; Factors below 0 decrease Health Regeneration;
-        /// </summary>
+        /// <summary> Factors above 0 increase Health Regeneration; Factors below 0 decrease Health Regeneration; </summary>
         public void AddHealthRegenFactor(string name, float factor)
         {
             m_HealthRegenFactors.Add(name, factor);
@@ -83,21 +105,18 @@ namespace EvershockGame.Code.Components
             UpdateHealthRegen();
         }
 
-        /// <summary>
-        /// Remove Health Regeneration Factors by name;
-        /// </summary>
+        /// <summary> Remove Health Regeneration Factors by name (of the object, which added it); </summary>
         public void RemoveHealthRegenFactor(string name)
         {
             m_HealthRegenFactors.Remove(name);
-
+            
             UpdateHealthRegen();
         }
 
         //---------------------------------------------------------------------------
 
-        /// <summary>
-        /// Values above 0 increase Health Regeneration; Values below 0 decrease Health Regeneration;
-        /// </summary>
+
+        /// <summary> Values above 0 increase Health Regeneration; Values below 0 decrease Health Regeneration; </summary>
         public void AddHealthRegenBonus(string name, float bonus)
         {
             m_HealthRegenBoni.Add(name, bonus);
@@ -105,9 +124,7 @@ namespace EvershockGame.Code.Components
             UpdateHealthRegen();
         }
 
-        /// <summary>
-        /// Remove Health Regeneration Boni/Mali by name;
-        /// </summary>
+        /// <summary> Remove Health Regeneration Boni/Mali by name (of the object, which added it); </summary>
         public void RemoveHealthRegenBonus(string name)
         {
             m_HealthRegenBoni.Remove(name);
@@ -140,6 +157,7 @@ namespace EvershockGame.Code.Components
                      Manipulate Mana
         --------------------------------------------------------------------------*/
 
+        /// <summary> Returns false, if there is not enough Mana for use; executes if there is enough </summary>
         public bool UseMana(float mana_needed)
         {
             if (CurrentMana >= mana_needed)
@@ -150,8 +168,6 @@ namespace EvershockGame.Code.Components
             else
                 return false;
         }
-
-        //---------------------------------------------------------------------------
 
         public void ReplenishMana(float mana_gain)
         {
@@ -164,9 +180,7 @@ namespace EvershockGame.Code.Components
         //---------------------------------------------------------------------------
 
 
-        /// <summary>
-        /// Factors above 0 increase Mana Regeneration; Factors below 0 decrease Mana Regeneration;
-        /// </summary>
+        /// <summary> Factors above 0 increase Mana Regeneration; Factors below 0 decrease Mana Regeneration; </summary>
         public void AddManaRegenFactor(string name, float factor)
         {
             m_ManaRegenFactors.Add(name, factor);
@@ -174,11 +188,7 @@ namespace EvershockGame.Code.Components
             UpdateManaRegen();
         }
 
-        //---------------------------------------------------------------------------
-
-        /// <summary>
-        /// Remove Mana Regeneration Factors by name;
-        /// </summary>
+        /// <summary> Remove Mana Regeneration Factors by name (of the object, which added it); </summary>
         public void RemoveManaRegenFactor(string name)
         {
             m_ManaRegenFactors.Remove(name);
@@ -188,9 +198,8 @@ namespace EvershockGame.Code.Components
 
         //---------------------------------------------------------------------------
 
-        /// <summary>
-        /// Values above 0 increase Mana Regeneration; Values below 0 decrease Mana Regeneration;
-        /// </summary>
+
+        /// <summary> Values above 0 increase Mana Regeneration; Values below 0 decrease Mana Regeneration; </summary>
         public void AddManaRegenBonus(string name, float bonus)
         {
             m_ManaRegenBoni.Add(name, bonus);
@@ -198,11 +207,7 @@ namespace EvershockGame.Code.Components
             UpdateManaRegen();
         }
 
-        //---------------------------------------------------------------------------
-
-        /// <summary>
-        /// Remove Mana Regeneration Boni/Mali by name;
-        /// </summary>
+        /// <summary> Remove Mana Regeneration Bonus/Malus by name (of the object, which added it); </summary>
         public void RemoveManaRegenBonus(string name)
         {
             m_ManaRegenBoni.Remove(name);
@@ -230,10 +235,12 @@ namespace EvershockGame.Code.Components
             ManaRegen = combinedFactors * (m_BaseManaRegen + combinedBoni);
         }
 
+
         /*--------------------------------------------------------------------------
                     Manipulate Movement
         --------------------------------------------------------------------------*/
 
+        /// <summary> Add Movement Factor by name (of the executing object); </summary>
         public void AddMovementFactor(string name, float factor)
         {
             m_MovementFactors.Add(name, factor);
@@ -241,11 +248,27 @@ namespace EvershockGame.Code.Components
             UpdateMovementSpeed();
         }
 
+        public void RemoveMovementFactor(string name)
+        {
+            m_MovementFactors.Remove(name);
+
+            UpdateMovementSpeed();
+        }
+
         //---------------------------------------------------------------------------
 
+
+        /// <summary> Add Movement Bonus/ Malus by name (of the executing object); </summary>
         public void AddMovementBonus(string name, float bonus)
         {
             m_MovementBoni.Add(name, bonus);
+
+            UpdateMovementSpeed();
+        }
+
+        public void RemoveMovementBonus(string name)
+        {
+            m_MovementBoni.Remove(name);
 
             UpdateMovementSpeed();
         }
@@ -275,16 +298,11 @@ namespace EvershockGame.Code.Components
                     Update
         --------------------------------------------------------------------------*/
 
-        new void UpdateAttributes()
+        void UpdateAttributes()
         {
-            if (m_MaxHealth > 0)
-                UpdateHealthRegen();
-
-            if (m_MaxMana > 0)
-                UpdateManaRegen();
-
-            if (m_BaseMovementSpeed > 0)
-                UpdateMovementSpeed();
+            UpdateHealthRegen();
+            UpdateManaRegen();
+            UpdateMovementSpeed();
         }
 
         public override void Tick(float deltaTime)

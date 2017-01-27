@@ -21,6 +21,7 @@ namespace EvershockGame.Code
         public Enemy(string name) : base(name)
         {
             AddComponent<TransformComponent>();
+            AddComponent<DespawnComponent>();
             AddComponent<AttributesComponent>();
             AddComponent<MovementAnimationComponent>();
             AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);

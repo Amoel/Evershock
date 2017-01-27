@@ -10,7 +10,7 @@ namespace EvershockGame.Code.Components
     {
         public SimpleFiendAttributesComponent (Guid entity) : base (entity)
         {
-            MovementSpeed = m_BaseMovementSpeed;
+            //Fill with stuff that only the Simple Fiend needs
         }
     }
 }
