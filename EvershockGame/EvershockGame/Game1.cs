@@ -127,10 +127,33 @@ namespace EvershockGame
             control.Properties.Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
             control.VerticalAlignment = EVerticalAlignment.Top;
             control.HorizontalAlignment = EHorizontalAlignment.Center;
+            control.Properties.TextAlignment = EHorizontalAlignment.Center;
             control.Bind(player.Transform, "Location", (value) =>
             {
                 Vector3 location = (Vector3)value;
-                control.Properties.Text = string.Format("X: {0}, Y: {1}", (int)location.X, (int)location.Y);
+                control.Properties.Text = string.Format("X: <Red>{0}</Red>, Y: <Green>{1}</Green>", (int)location.X, (int)location.Y);
+            });
+
+            TextControl control2 = EntityFactory.CreateUI<TextControl>("Test2");
+            control2.Properties.Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
+            control2.VerticalAlignment = EVerticalAlignment.Top;
+            control2.HorizontalAlignment = EHorizontalAlignment.Left;
+            control2.Properties.TextAlignment = EHorizontalAlignment.Left;
+            control2.Bind(player.Transform, "Location", (value) =>
+            {
+                Vector3 location = (Vector3)value;
+                control2.Properties.Text = string.Format("<Orange>LOCATION: <Yellow>X: <Red>{0}</Red>, Y: <Green>{1}</Green></Yellow></Orange>", (int)location.X, (int)location.Y);
+            });
+
+            TextControl control3 = EntityFactory.CreateUI<TextControl>("Test3");
+            control3.Properties.Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
+            control3.VerticalAlignment = EVerticalAlignment.Top;
+            control3.HorizontalAlignment = EHorizontalAlignment.Right;
+            control3.Properties.TextAlignment = EHorizontalAlignment.Right;
+            control3.Bind(player.Transform, "Location", (value) =>
+            {
+                Vector3 location = (Vector3)value;
+                control3.Properties.Text = string.Format("X: <Red>{0}</Red>, Y: <Green>{1}</Green>", (int)location.X, (int)location.Y);
             });
 
             TextControl HP_Player1 = EntityFactory.CreateUI<TextControl>("HP_Player1");
@@ -236,10 +259,6 @@ namespace EvershockGame
         protected override void Draw(GameTime gameTime)
         {
             GameManager.Get().Render(GraphicsDevice, spriteBatch);
-
-            spriteBatch.Begin();
-            spriteBatch.DrawString(AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont), "Hello World!", new Vector2(10, 10), Color.White);
-            spriteBatch.End();
 
             base.Draw(gameTime);
         }
