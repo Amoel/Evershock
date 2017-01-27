@@ -24,7 +24,7 @@ namespace EvershockGame.Code
             Index = (PlayerIndex)PlayerCount++;
 
             AddComponent<TransformComponent>().Init(new Vector3(Index == PlayerIndex.One ? 340 : 420, 400, 0));
-            AddComponent<AttributesComponent>().Init(750.0f, 100.0f, 125.0f, 3.0f, 1.0f);
+            AddComponent<AttributesComponent>().Init(500.0f, 250.0f, 125.0f, 2.0f, 1.0f);
 
             MovementAnimationComponent animation = AddComponent<MovementAnimationComponent>();
             if (Index == PlayerIndex.One)

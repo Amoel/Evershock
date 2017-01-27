@@ -10,6 +10,12 @@ namespace EvershockGame.Code
     {
         //TODO_lukas: Split into several Attribute Components for Enemies / Players, etc.
 
+        enum EActorGameTypes
+        {
+            Player,
+            SimpleFiend,
+        }
+
         //Health
         float m_MaxHealth;
         float m_CurrentHealth;
@@ -33,16 +39,19 @@ namespace EvershockGame.Code
         public float CurrentHealth { 
             get { return m_CurrentHealth; }
             set { if (m_CurrentHealth != value) { m_CurrentHealth = value;  OnPropertyChanged(m_CurrentHealth); } } }
+        public float CurrentMana {
+            get { return m_CurrentMana; }
+            set { if (m_CurrentMana != value) { m_CurrentMana = value; OnPropertyChanged(m_CurrentMana); } } }
+
         public float HealthRegen { get; private set; }
         public float ManaRegen { get; private set; }
         public float MovementSpeed { get; private set; }
 
-        float CurrentMana { get { return m_CurrentMana; } set { } }
         //---------------------------------------------------------------------------
 
         public AttributesComponent(Guid entity) : base(entity)
         {
-            m_MaxHealth = 500.0f;
+            m_MaxHealth = 100.0f;
             m_BaseHealthRegen = 0.0f;
             m_MaxMana = 0.0f;
             m_BaseManaRegen = 0.0f;
