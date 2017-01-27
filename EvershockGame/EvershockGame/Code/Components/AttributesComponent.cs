@@ -60,6 +60,7 @@ namespace EvershockGame.Code
                     Init
         --------------------------------------------------------------------------*/
 
+        //TODO_lukas 
         public void Init(float max_health, float max_mana, float base_movement_speed, float base_health_regen, float base_mana_regen)
         {
             m_MaxHealth = max_health;

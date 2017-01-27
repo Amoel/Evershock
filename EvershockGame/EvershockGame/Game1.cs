@@ -139,8 +139,7 @@ namespace EvershockGame
             HP_Player1.HorizontalAlignment = EHorizontalAlignment.Left;
             HP_Player1.Bind(player.Attributes, "CurrentHealth", (value) =>
             {
-                float HP = (float)value;
-                HP_Player1.Properties.Text = string.Format("HP: {0}", HP);
+                  HP_Player1.Properties.Text = string.Format("HP: 8={0}D", new string('=',(int)(float)value / 10));
             });
 
             //ImageControl leftHP = EntityFactory.CreateUI<ImageControl>("HP");
