@@ -95,6 +95,7 @@
     <Compile Include="Components\EngineComponent.cs" />
     <Compile Include="Components\InputComponent.cs" />
     <Compile Include="Components\LightingComponent.cs" />
+    <Compile Include="Components\ParticlePhysicsComponent.cs" />
     <Compile Include="Components\PhysicsComponent.cs" />
     <Compile Include="Components\ShadowComponent.cs" />
     <Compile Include="Components\SpriteComponent.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Manager\GameManager.cs" />
     <Compile Include="Manager\InputManager.cs" />
     <Compile Include="Manager\LightingManager.cs" />
+    <Compile Include="Manager\ParticleManager.cs" />
     <Compile Include="Manager\PhysicsManager.cs" />
     <Compile Include="Manager\SeedManager.cs" />
     <Compile Include="Manager\ShadowManager.cs" />
@@ -151,7 +153,9 @@
     <Compile Include="Stages\Room.cs" />
     <Compile Include="Stages\Stage.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Entities\Particles\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

@@ -24,6 +24,12 @@ namespace EvershockGame.Code.Components
         Dictionary<string, float> m_ManaRegenFactors = new Dictionary<string, float>();
         Dictionary<string, float> m_ManaRegenBoni = new Dictionary<string, float>();
 
+        public float MaxMana    //handle for UI
+        {
+            get { return m_MaxMana; }
+            set { if (m_MaxMana != value) { m_MaxMana = value; OnPropertyChanged(m_MaxMana); } }
+        }
+
         public float CurrentMana    //handle for UI
         {
             get { return m_CurrentMana; }

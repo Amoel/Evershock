@@ -15,6 +15,12 @@ namespace EvershockGame.Code.Components
         protected float m_BaseMovementSpeed;
         public float MovementSpeed { get; protected set; }
 
+        public float MaxHealth  //handle for UI
+        {
+            get { return m_MaxHealth; }
+            set { if (m_MaxHealth != value) { m_MaxHealth = value; OnPropertyChanged(m_MaxHealth); } }
+        }
+
         public float CurrentHealth  //handle for UI
         { 
             get { return m_CurrentHealth; }

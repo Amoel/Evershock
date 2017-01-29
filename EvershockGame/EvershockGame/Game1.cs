@@ -6,6 +6,7 @@ using EntityComponent.Factory;
 using EntityComponent.Manager;
 using EntityComponent.Stages;
 using EvershockGame.Code;
+using EvershockGame.Code.Entities.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -125,57 +126,100 @@ namespace EvershockGame
             UIManager.Get().Init(GraphicsDevice, width, height);
             SpriteFont debug_font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
 
-            TextControl control = EntityFactory.CreateUI<TextControl>("P1_Position");
-            control.Properties.Font = debug_font;
-            control.Properties.TextAlignment = EHorizontalAlignment.Left;
-            control.VerticalAlignment = EVerticalAlignment.Top;
-            control.HorizontalAlignment = EHorizontalAlignment.Center;
-            control.Bind(player.Transform, "Location", (value) =>
-            {
-                Vector3 location = (Vector3)value;
-                control.Properties.Text = string.Format("<White>X: {0}, Y: {1}</White>", (int)location.X, (int)location.Y);
-            });
+            //#region TextWrappingTest
+            //TextControl control = EntityFactory.CreateUI<TextControl>("P1_Position");
+            //control.Properties.Font = debug_font;
+            //control.Size = new Point(600, 170);
+            //control.Properties.TextAlignment = EHorizontalAlignment.Right;
+            //control.Properties.IsWrapping = true;
+            //control.VerticalAlignment = EVerticalAlignment.Bottom;
+            //control.HorizontalAlignment = EHorizontalAlignment.Center;
+            //control.Bind(player.Transform, "Location", (value) =>
+            //{
+            //    Vector3 location = (Vector3)value;
+            //    control.Properties.Text = string.Format("Hello World!\nThis is a test to check the <Orange>COLORING</Orange> and <Purple>WRAPPING</Purple> of long texts. It should also work with dynamic text, like <Cyan>location[x: <Red>{0}</Red>, y: <Red>{1}</Red>]</Cyan>", (int)location.X, (int)location.Y);
+            //});
 
-            TextControl HP_Player1 = EntityFactory.CreateUI<TextControl>("HP_Player1");
-            HP_Player1.Properties.Font = debug_font;
-            HP_Player1.VerticalAlignment = EVerticalAlignment.Bottom;
-            HP_Player1.HorizontalAlignment = EHorizontalAlignment.Left;
-            HP_Player1.Bind(player.Attributes, "CurrentHealth", (value) =>
-            {
-                HP_Player1.Properties.Text = string.Format("HP  <Red>{0}</Red>", new string('X', (int)(float)value / 20));
-            });
+            //TextControl control2 = EntityFactory.CreateUI<TextControl>("P1_Position");
+            //control2.Properties.Font = debug_font;
+            //control2.Size = new Point(600, 370);
+            //control2.Properties.TextAlignment = EHorizontalAlignment.Left;
+            //control2.Properties.IsWrapping = true;
+            //control2.VerticalAlignment = EVerticalAlignment.Bottom;
+            //control2.HorizontalAlignment = EHorizontalAlignment.Center;
+            //control2.Bind(player.Transform, "Location", (value) =>
+            //{
+            //    Vector3 location = (Vector3)value;
+            //    control2.Properties.Text = string.Format("Hello World!\nThis is a test to check the <Orange>COLORING</Orange> and <Purple>WRAPPING</Purple> of long texts. It should also work with dynamic text, like <Cyan>location[x: <Red>{0}</Red>, y: <Red>{1}</Red>]</Cyan>", (int)location.X, (int)location.Y);
+            //});
 
-            TextControl MP_Player1 = EntityFactory.CreateUI<TextControl>("MP_Player1");
-            MP_Player1.Properties.Font = debug_font;
-            MP_Player1.GetComponent<UITransformComponent>().Size = new Point (50,50);
-            MP_Player1.VerticalAlignment = EVerticalAlignment.Bottom;
-            MP_Player1.HorizontalAlignment = EHorizontalAlignment.Left;
-            MP_Player1.Bind(player.Attributes, "CurrentMana", (value) =>
-            {
-                MP_Player1.Properties.Text = string.Format("MP  <Cyan>{0}</Cyan>", new string('x', (int)(float)value / 10));
-            });
+            //TextControl control3 = EntityFactory.CreateUI<TextControl>("P1_Position");
+            //control3.Properties.Font = debug_font;
+            //control3.Size = new Point(600, 570);
+            //control3.Properties.TextAlignment = EHorizontalAlignment.Center;
+            //control3.Properties.IsWrapping = true;
+            //control3.VerticalAlignment = EVerticalAlignment.Bottom;
+            //control3.HorizontalAlignment = EHorizontalAlignment.Center;
+            //control3.Bind(player.Transform, "Location", (value) =>
+            //{
+            //    Vector3 location = (Vector3)value;
+            //    control3.Properties.Text = string.Format("Hello World!\nThis is a test to check the <Orange>COLORING</Orange> and <Purple>WRAPPING</Purple> of long texts. It should also work with dynamic text, like <Cyan>location[x: <Red>{0}</Red>, y: <Red>{1}</Red>]</Cyan>", (int)location.X, (int)location.Y);
+            //});
+            //#endregion
 
-            TextControl HP_Player2 = EntityFactory.CreateUI<TextControl>("HP_Player2");
-            HP_Player2.Properties.Font = debug_font;
-            HP_Player2.GetComponent<UITransformComponent>().Size = new Point(50, 100);
-            HP_Player2.VerticalAlignment = EVerticalAlignment.Bottom;
-            HP_Player2.HorizontalAlignment = EHorizontalAlignment.Right;
-            HP_Player2.Properties.TextAlignment = EHorizontalAlignment.Right;
-            HP_Player2.Bind(player2.Attributes, "CurrentHealth", (value) =>
-            {
-                HP_Player2.Properties.Text = string.Format("<Red>{0}</Red>  HP", new string('X', (int)(float)value / 20));
-            });
+            //TextControl HP_Player1 = EntityFactory.CreateUI<TextControl>("HP_Player1");
+            //HP_Player1.Properties.Font = debug_font;
+            //HP_Player1.Size = new Point(50, 100);
+            //HP_Player1.VerticalAlignment = EVerticalAlignment.Bottom;
+            //HP_Player1.HorizontalAlignment = EHorizontalAlignment.Left;
+            //HP_Player1.Bind(player.Attributes, "CurrentHealth", (value) =>
+            //{
+            //    HP_Player1.Properties.Text = string.Format("HP  <Red>{0}</Red>", new string('X', (int)(float)value / 20));
+            //});
 
-            TextControl MP_Player2 = EntityFactory.CreateUI<TextControl>("MP_Player2");
-            MP_Player2.Properties.Font = debug_font;
-            MP_Player2.GetComponent<UITransformComponent>().Size = new Point(50,50);
-            MP_Player2.VerticalAlignment = EVerticalAlignment.Bottom;
-            MP_Player2.HorizontalAlignment = EHorizontalAlignment.Right;
-            MP_Player2.Properties.TextAlignment = EHorizontalAlignment.Right;
-            MP_Player2.Bind(player2.Attributes, "CurrentMana", (value) =>
-            {
-                MP_Player2.Properties.Text = string.Format("<Cyan>{0}</Cyan>  MP", new string('x', (int)(float)value / 10));
-            });
+            //TextControl MP_Player1 = EntityFactory.CreateUI<TextControl>("MP_Player1");
+            //MP_Player1.Properties.Font = debug_font;
+            //MP_Player1.Size = new Point(50, 50);
+            //MP_Player1.VerticalAlignment = EVerticalAlignment.Bottom;
+            //MP_Player1.HorizontalAlignment = EHorizontalAlignment.Left;
+            //MP_Player1.Bind(player.Attributes, "CurrentMana", (value) =>
+            //{
+            //    MP_Player1.Properties.Text = string.Format("MP  <Cyan>{0}</Cyan>", new string('x', (int)(float)value / 10));
+            //});
+
+            //TextControl HP_Player2 = EntityFactory.CreateUI<TextControl>("HP_Player2");
+            //HP_Player2.Properties.Font = debug_font;
+            //HP_Player2.Size = new Point(50, 100);
+            //HP_Player2.VerticalAlignment = EVerticalAlignment.Bottom;
+            //HP_Player2.HorizontalAlignment = EHorizontalAlignment.Right;
+            //HP_Player2.Properties.TextAlignment = EHorizontalAlignment.Right;
+            //HP_Player2.Bind(player2.Attributes, "CurrentHealth", (value) =>
+            //{
+            //    HP_Player2.Properties.Text = string.Format("<Red>{0}</Red>  HP", new string('X', (int)(float)value / 20));
+            //});
+
+            //TextControl MP_Player2 = EntityFactory.CreateUI<TextControl>("MP_Player2");
+            //MP_Player2.Properties.Font = debug_font;
+            //MP_Player2.Size = new Point(50, 50);
+            //MP_Player2.VerticalAlignment = EVerticalAlignment.Bottom;
+            //MP_Player2.HorizontalAlignment = EHorizontalAlignment.Right;
+            //MP_Player2.Properties.TextAlignment = EHorizontalAlignment.Right;
+            //MP_Player2.Bind(player2.Attributes, "CurrentMana", (value) =>
+            //{
+            //    MP_Player2.Properties.Text = string.Format("<Cyan>{0}</Cyan>  MP", new string('x', (int)(float)value / 10));
+            //});
+
+            Healthbar bar1 = EntityFactory.CreateUI<Healthbar>("HealthbarPlayer1");
+            bar1.VerticalAlignment = EVerticalAlignment.Top;
+            bar1.HorizontalAlignment = EHorizontalAlignment.Left;
+            bar1.Margin = new Rectangle(15, 25, 0, 0);
+            bar1.Properties.BindPlayer(player, EHorizontalAlignment.Left);
+
+            Healthbar bar2 = EntityFactory.CreateUI<Healthbar>("HealthbarPlayer2");
+            bar2.VerticalAlignment = EVerticalAlignment.Top;
+            bar2.HorizontalAlignment = EHorizontalAlignment.Right;
+            bar2.Margin = new Rectangle(0, 25, 15, 0);
+            bar2.Properties.BindPlayer(player2, EHorizontalAlignment.Right);
         }
         
         protected override void LoadContent()

@@ -30,6 +30,7 @@ namespace EvershockGame.Code
     public enum ETilesetAssets
     {
         DungeonTileset1,
+        Hearts,
     }
 
     //---------------------------------------------------------------------------
@@ -88,6 +89,7 @@ namespace EvershockGame.Code
         private Dictionary<ETilesetAssets, string> m_TilesetMapping = new Dictionary<ETilesetAssets, string>()
         {
             { ETilesetAssets.DungeonTileset1, "Graphics/Tilesets/DungeonTileset" },
+            { ETilesetAssets.Hearts, "Graphics/Tilesets/Hearts" },
         };
 
         private Dictionary<Type, Dictionary<ETilesetAssets, dynamic>> m_TilesetAssets;

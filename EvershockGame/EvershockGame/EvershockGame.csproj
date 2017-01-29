@@ -54,14 +54,19 @@
     <Compile Include="Code\Components\PickupComponents\IPickupComponent.cs" />
     <Compile Include="Code\Components\PickupComponents\ManaPickupComponent.cs" />
     <Compile Include="Code\Components\PickupComponents\PickupComponent.cs" />
+    <Compile Include="Code\Components\SpawnerComponents\ParticleSpawnerComponent.cs" />
     <Compile Include="Code\Components\SpawnerComponents\PickupSpawnerComponent.cs" />
     <Compile Include="Code\Components\SpawnerComponents\SpawnerComponent.cs" />
+    <Compile Include="Code\Components\UIComponents\HealthbarComponent.cs" />
     <Compile Include="Code\Entities\Chest.cs" />
     <Compile Include="Code\Entities\Enemies\Enemy.cs" />
     <Compile Include="Code\Entities\Enemies\SimpleTestEnemy.cs" />
     <Compile Include="Code\Entities\Level\Spike.cs" />
+    <Compile Include="Code\Entities\Particle.cs" />
     <Compile Include="Code\Entities\Pickup.cs" />
     <Compile Include="Code\Entities\Player.cs" />
+    <Compile Include="Code\Entities\UI\Healthbar.cs" />
+    <Compile Include="Code\Factories\ParticleFactory.cs" />
     <Compile Include="Code\Factories\PickupFactory.cs" />
     <Compile Include="Code\GameTags.cs" />
     <Compile Include="Code\GameWindowSettings.cs" />
@@ -196,6 +201,9 @@
     <Content Include="Content\Graphics\Tilesets\DungeonTileset2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Tilesets\Hearts.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Tilesets\Spikes.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -271,7 +279,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Code\Entities\UI\" />
     <Folder Include="Content\Sounds\" />
   </ItemGroup>
   <ItemGroup>

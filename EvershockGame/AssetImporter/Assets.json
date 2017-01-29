@@ -158,5 +158,13 @@
     "IncludeInDebug": false,
     "IncludeInRelease": false,
     "AssetType": 16
+  },
+  {
+    "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Tilesets/Hearts.png",
+    "Name": "Hearts",
+    "Path": "Graphics/Tilesets/Hearts.png",
+    "IncludeInDebug": false,
+    "IncludeInRelease": false,
+    "AssetType": 2
   }
 ]

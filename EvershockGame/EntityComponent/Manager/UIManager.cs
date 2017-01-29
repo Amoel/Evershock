@@ -62,7 +62,7 @@ namespace EntityComponent.Manager
         {
             device.SetRenderTarget(m_Target);
             device.Clear(Color.Transparent);
-            batch.Begin();
+            batch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp);
             ComponentManager.Get().DrawUIComponents(batch);
             batch.End();
         }

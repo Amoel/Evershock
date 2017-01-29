@@ -21,6 +21,8 @@ namespace EvershockGame.Code
             Animation.AddSetting((int)Tag.MoveRight, new AnimationSetting(8, 2, 0, 7, true));
             Animation.Stop();
 
+            AddComponent<ShadowComponent>().Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.RedOrb), new Vector2(6.0f, 2.0f), new Vector2(0.0f, 10.0f));
+
             CircleColliderComponent collider = AddComponent<CircleColliderComponent>();
             collider.Init(22, BodyType.Dynamic);
         }
