@@ -204,30 +204,24 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
-        public void DrawComponents(SpriteBatch batch, CameraData data)
+        public void DrawComponents(SpriteBatch batch, CameraData data, float deltaTime)
         {
             foreach (SmartContainer<IDrawableComponent> container in m_DrawableComponents.Values)
             {
                 if (!((IComponent)container.Data).IsEnabled) continue;
-                container.Data.Draw(batch, data);
+                container.Data.Draw(batch, data, deltaTime);
             }
         }
 
         //---------------------------------------------------------------------------
 
-        public void DrawLights(SpriteBatch batch, CameraData data)
+        public void DrawLights(SpriteBatch batch, CameraData data, float deltaTime)
         {
             foreach (SmartContainer<ILightingComponent> container in m_LightingComponents.Values)
             {
                 if (!((IComponent)container.Data).IsEnabled) continue;
-                container.Data.DrawLight(batch, data);
+                container.Data.DrawLight(batch, data, deltaTime);
             }
-            //foreach (SmartContainer<ILightingComponent> container in m_LightingComponents.Values)
-            //{
-            //    if (!((IComponent)container.Data).IsEnabled) continue;
-                
-            //    container.Data.DrawArea(batch, data);
-            //}
         }
 
         //---------------------------------------------------------------------------

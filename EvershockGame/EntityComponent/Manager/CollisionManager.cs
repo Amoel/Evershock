@@ -77,7 +77,7 @@ namespace EntityComponent.Manager
 
             if (collider == null)
             {
-                return transform.Location.To2D();
+                return transform.Location.To2D() + force;
             }
             
             return collider.Step(force);

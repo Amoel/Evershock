@@ -10,6 +10,6 @@ namespace EntityComponent
 {
     public interface IDrawableComponent
     {
-        void Draw(SpriteBatch batch, CameraData data);
+        void Draw(SpriteBatch batch, CameraData data, float deltaTime);
     }
 }

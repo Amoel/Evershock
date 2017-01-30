@@ -100,12 +100,5 @@ namespace EntityComponent
                 default: return EDirection.None;
             }
         }
-
-        //---------------------------------------------------------------------------
-
-        public static string ToBinding(this object source, [CallerMemberName]string name = "")
-        {
-            return name;
-        }
     }
 }

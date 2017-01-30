@@ -43,7 +43,7 @@ namespace EntityComponent.Components.UI
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch, CameraData data)
+        public void Draw(SpriteBatch batch, CameraData data, float deltaTime)
         {
             if (Icon != null)
             {

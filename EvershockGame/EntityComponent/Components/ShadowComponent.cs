@@ -44,7 +44,7 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch, CameraData data)
+        public void Draw(SpriteBatch batch, CameraData data, float deltaTime)
         {
             TransformComponent transform = GetComponent<TransformComponent>();
             if (transform != null)

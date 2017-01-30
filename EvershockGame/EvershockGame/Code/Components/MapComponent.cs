@@ -39,7 +39,7 @@ namespace EvershockGame.Code
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch, CameraData data)
+        public void Draw(SpriteBatch batch, CameraData data, float deltaTime)
         {
             if (Map != null && m_Tileset != null)
             {

@@ -6,7 +6,9 @@ using EntityComponent.Factory;
 using EntityComponent.Manager;
 using EntityComponent.Stages;
 using EvershockGame.Code;
+using EvershockGame.Code.Components;
 using EvershockGame.Code.Entities.UI;
+using EvershockGame.Code.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -220,6 +222,10 @@ namespace EvershockGame
             bar2.HorizontalAlignment = EHorizontalAlignment.Right;
             bar2.Margin = new Rectangle(0, 25, 15, 0);
             bar2.Properties.BindPlayer(player2, EHorizontalAlignment.Right);
+            
+            //IEntity particleTest = EntityFactory.Create<Entity>("Test");
+            //particleTest.AddComponent<TransformComponent>().Init(new Vector3(1000, 1100, 10));
+            //particleTest.AddComponent<ParticleSpawnerComponent>();
         }
         
         protected override void LoadContent()
@@ -300,12 +306,7 @@ namespace EvershockGame
         
         protected override void Draw(GameTime gameTime)
         {
-            GameManager.Get().Render(GraphicsDevice, spriteBatch);
-
-            //spriteBatch.Begin();
-            //spriteBatch.DrawString(AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont), "Hello World!", new Vector2(10, 10), Color.White);
-            //spriteBatch.End();
-
+            GameManager.Get().Render(GraphicsDevice, spriteBatch, gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
             base.Draw(gameTime);
         }
     }

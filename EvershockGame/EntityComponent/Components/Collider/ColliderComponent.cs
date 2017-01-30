@@ -163,7 +163,7 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        public abstract void Draw(SpriteBatch batch, CameraData data);
+        public abstract void Draw(SpriteBatch batch, CameraData data, float deltaTime);
 
         //---------------------------------------------------------------------------
 

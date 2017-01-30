@@ -72,7 +72,7 @@ namespace EntityComponent.Components
         
         //---------------------------------------------------------------------------
 
-        public override void Draw(SpriteBatch batch, CameraData data)
+        public override void Draw(SpriteBatch batch, CameraData data, float deltaTime)
         {
             if (CollisionManager.Get().IsDebugViewActive)
             {

@@ -111,7 +111,7 @@ namespace EvershockGame.Code.Components
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch, CameraData data)
+        public void Draw(SpriteBatch batch, CameraData data, float deltaTime)
         {
             if (CollisionManager.Get().IsDebugViewActive)
             {

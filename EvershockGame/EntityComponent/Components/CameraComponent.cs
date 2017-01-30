@@ -211,7 +211,7 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        public RenderTarget2D Render(SpriteBatch batch)
+        public RenderTarget2D Render(SpriteBatch batch, float deltaTime)
         {
             TransformComponent transform = GetComponent<TransformComponent>();
             if (transform != null)
@@ -241,7 +241,7 @@ namespace EntityComponent.Components
                     }
                     batch.Begin(SpriteSortMode.FrontToBack, null, SamplerState.PointClamp);
                     DrawStage(batch, data);
-                    ComponentManager.Get().DrawComponents(batch, data);
+                    ComponentManager.Get().DrawComponents(batch, data, deltaTime);
                     batch.End();
 
                     if (IsLightingEnabled && m_LightingTarget != null && LightingEffect != null)
@@ -253,7 +253,7 @@ namespace EntityComponent.Components
                         LightingEffect.Parameters["verticalOffset"].SetValue(transform.Location.Y + m_Time * 100.0f);
                         LightingEffect.Parameters["time"].SetValue(m_Time / 5.0f);
 
-                        DrawShadowMask(batch, data);
+                        DrawLightMask(batch, data, deltaTime);
 
                         if (m_MainTarget != null)
                         {
@@ -275,14 +275,13 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
         
-        private void DrawShadowMask(SpriteBatch batch, CameraData data)
+        private void DrawLightMask(SpriteBatch batch, CameraData data, float deltaTime)
         {
             Device.SetRenderTarget(m_LightingTarget);
             Device.Clear(Color.Black);
             batch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
-            ComponentManager.Get().DrawLights(batch, data);
+            ComponentManager.Get().DrawLights(batch, data, deltaTime);
             batch.End();
-            //m_EffectWrapper.ApplyEffects(batch, m_LightingTarget, m_LightingTarget, new List<Effect>() { AssetManager.Get().Find<Effect>("Blur") });
         }
 
         //---------------------------------------------------------------------------

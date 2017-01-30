@@ -38,7 +38,7 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch, CameraData data)
+        public void Draw(SpriteBatch batch, CameraData data, float deltaTime)
         {
             if (Tileset != null && m_Map != null)
             {

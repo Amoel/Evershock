@@ -11,10 +11,30 @@ namespace EntityComponent.Components
         public static Texture2D DefaultTexture { get; set; }
 
         public Texture2D Texture { get; set; }
-        public Color Color { get; set; }
-        public float Opacity { get; set; }
         public Vector2 Offset { get; set; }
-        public Vector2 Scale { get; set; }
+
+        private Func<float, Color> m_ColorFunction;
+        public Color Color
+        {
+            get { return m_ColorFunction(m_Time); }
+            set { m_ColorFunction = (time) => { return value; }; }
+        }
+
+        private Func<float, float> m_OpacityFunction;
+        public float Opacity
+        {
+            get { return m_OpacityFunction(m_Time); }
+            set { m_OpacityFunction = (time) => { return value; }; }
+        }
+
+        private Func<float, Vector2> m_ScaleFunction;
+        public Vector2 Scale
+        {
+            get { return m_ScaleFunction(m_Time); }
+            set { m_ScaleFunction = (time) => { return value; }; }
+        }
+
+        private float m_Time = 0;
 
         //---------------------------------------------------------------------------
 
@@ -72,25 +92,62 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch, CameraData data)
+        public void Draw(SpriteBatch batch, CameraData data, float deltaTime)
         {
-            if (GetTex() != null)
+            m_Time += deltaTime;
+
+            Texture2D tex = GetTex();
+            if (tex != null)
             {
                 TransformComponent transform = GetComponent<TransformComponent>();
-                if (transform != null)
+                if (transform != null && Vector2.Distance(data.Center, transform.Location.To2D()) <= Math.Sqrt(Math.Pow(data.Width, 2) + Math.Pow(data.Height, 2)) / 2)
                 {
-                    Vector3 absoluteLocation = transform.AbsoluteLocation;                    
+                    Color color = m_ColorFunction(m_Time);
+                    float opacity = MathHelper.Clamp(m_OpacityFunction(m_Time), 0.0f, 1.0f);
+                    Vector2 scale = Vector2.Clamp(m_ScaleFunction(m_Time), Vector2.Zero, new Vector2(10, 10));
+                    
+                    Vector3 absoluteLocation = transform.AbsoluteLocation;
                     batch.Draw(
-                        GetTex(),
+                        tex,
                         absoluteLocation.ToLocal2D(data),
-                        GetTex().Bounds, 
-                        Color * Opacity, 
+                        tex.Bounds, 
+                        color * opacity, 
                         transform.Rotation, 
-                        new Vector2(GetTex().Width / 2 + Offset.X, GetTex().Height / 2 + Offset.Y), 
-                        Scale,
+                        new Vector2(tex.Width / 2 + Offset.X, tex.Height / 2 + Offset.Y), 
+                        scale,
                         SpriteEffects.None, 
                         Math.Max(0.0001f, absoluteLocation.Z / 1000.0f) + (absoluteLocation.Y + 10000.0f) / 100000.0f);
                 }
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void AddColorFunction(Func<float, Color> colorFunction)
+        {
+            if (colorFunction != null)
+            {
+                m_ColorFunction = colorFunction;
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void AddScaleFunction(Func<float, Vector2> scaleFunction)
+        {
+            if (scaleFunction != null)
+            {
+                m_ScaleFunction = scaleFunction;
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void AddOpacityFunction(Func<float, float> opacityFunction)
+        {
+            if (opacityFunction != null)
+            {
+                m_OpacityFunction = opacityFunction;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using EntityComponent.Components;
+﻿using EntityComponent;
+using EntityComponent.Components;
 using EntityComponent.Manager;
 using EvershockGame.Code.Factories;
 using Microsoft.Xna.Framework;
@@ -10,9 +11,34 @@ using System.Threading.Tasks;
 
 namespace EvershockGame.Code.Components
 {
-    public class ParticleSpawnerComponent : SpawnerComponent
+    public class ParticleSpawnerComponent : SpawnerComponent, ITickableComponent
     {
+        private float m_Time = 0;
+
+        //---------------------------------------------------------------------------
+
         public ParticleSpawnerComponent(Guid entity) : base(entity) { }
+
+        //---------------------------------------------------------------------------
+
+        public void PreTick(float deltaTime) { }
+
+        //---------------------------------------------------------------------------
+
+        public void PostTick(float deltaTime) { }
+
+        //---------------------------------------------------------------------------
+
+        public void Tick(float deltaTime)
+        {
+            Spawn(EParticles.Spark);
+            //m_Time += deltaTime;
+            //if (m_Time >= 1.0f)
+            //{
+            //    Spawn(EParticles.Spark);
+            //    m_Time -= 1.0f;
+            //}
+        }
 
         //---------------------------------------------------------------------------
 
@@ -35,8 +61,8 @@ namespace EvershockGame.Code.Components
             if (transform != null)
             {
                 float rot = (SeedManager.Get().NextRandF() * (float)Math.PI * 2.0f);
-                float dist = (SeedManager.Get().NextRandF() * 120.0f + 400.0f);
-                Vector3 force = new Vector3((float)Math.Sin(rot) * dist, (float)Math.Cos(rot) * dist, SeedManager.Get().NextRandF(30f, 46f));
+                float dist = (SeedManager.Get().NextRandF() * 4.0f + 2.0f);
+                Vector3 force = new Vector3((float)Math.Sin(rot) * dist + 10, (float)Math.Cos(rot) * dist, SeedManager.Get().NextRandF(30f, 46f));
                 ParticleFactory.Create(particle, transform.Location, force);
             }
 

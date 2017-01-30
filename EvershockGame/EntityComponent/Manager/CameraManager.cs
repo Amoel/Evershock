@@ -133,7 +133,7 @@ namespace EntityComponent.Manager
 
         //---------------------------------------------------------------------------
 
-        public void Render(SpriteBatch batch)
+        public void Render(SpriteBatch batch, float deltaTime)
         {
             if (m_Targets == null) m_Targets = new List<RenderTarget2D>();
             else m_Targets.Clear();
@@ -143,7 +143,7 @@ namespace EntityComponent.Manager
                 CameraComponent camera = ComponentManager.Get().Find<CameraComponent>(guid);
                 if (camera != null && camera.IsInitialized && EntityManager.Get().Find<Camera>(camera.Entity).IsEnabled)
                 {
-                    m_Targets.Add(camera.Render(batch));
+                    m_Targets.Add(camera.Render(batch, deltaTime));
                 }
             }
         }

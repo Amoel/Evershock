@@ -122,7 +122,7 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        private void ApplyGravity(float deltaTime)
+        protected void ApplyGravity(float deltaTime)
         {
             if (Weight > 0.0f)
             {
