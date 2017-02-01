@@ -14,12 +14,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
-
+using System.Diagnostics;
 
 namespace EvershockGame
 {
     public class Game1 : Game
     {
+        Stopwatch stopwatch = new Stopwatch();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -35,6 +36,8 @@ namespace EvershockGame
                 PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8,
             };
             Content.RootDirectory = "Content";
+            IsFixedTimeStep = false;
+
         }
 
         //---------------------------------------------------------------------------
@@ -58,6 +61,7 @@ namespace EvershockGame
                        Stage
             --------------------------------------------------------------------------*/
 
+            stopwatch.Start();
             Stage stage = new Stage(SeedManager.Get().NextSeed());
             StageManager.Get().Create(stage.CreateMap());
             StageManager.Get().Stage = stage;
@@ -76,7 +80,7 @@ namespace EvershockGame
                 }
                 EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));
             }
-            
+            Console.WriteLine("Elapsed Miliseconds since Stage Creation: " + stopwatch.ElapsedMilliseconds);
 
             stage.SaveStageAsImage(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"Map.png"));
 
@@ -97,7 +101,7 @@ namespace EvershockGame
             --------------------------------------------------------------------------*/
 
             CameraManager.Get().Init(width, height);
-
+            
             Camera cam1 = EntityFactory.Create<Camera>("Cam1");
             cam1.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>(ESpriteAssets.CameraBackground1), AssetManager.Get().Find<Effect>(EEffectAssets.DeferredLighting));
             cam1.Properties.Viewport = new Rectangle(0, 0, width / 2, height);
@@ -222,10 +226,10 @@ namespace EvershockGame
             bar2.HorizontalAlignment = EHorizontalAlignment.Right;
             bar2.Margin = new Rectangle(0, 25, 15, 0);
             bar2.Properties.BindPlayer(player2, EHorizontalAlignment.Right);
-            
-            //IEntity particleTest = EntityFactory.Create<Entity>("Test");
-            //particleTest.AddComponent<TransformComponent>().Init(new Vector3(1000, 1100, 10));
-            //particleTest.AddComponent<ParticleSpawnerComponent>();
+
+            IEntity particleTest = EntityFactory.Create<Entity>("Test");
+            particleTest.AddComponent<TransformComponent>().Init(new Vector3(1000, 1100, 10));
+            particleTest.AddComponent<ParticleSpawnerComponent>();
         }
         
         protected override void LoadContent()
@@ -258,37 +262,42 @@ namespace EvershockGame
         protected override void Update(GameTime gameTime)
         {
 #if DEBUG
-            if (Keyboard.GetState().IsKeyDown(Keys.F))
+            KeyboardState keyboardstate = Keyboard.GetState();
+
+            if (keyboardstate.GetPressedKeys().Length != 0);
             {
-                GameWindowSettings.ToggleFullscreen(graphics, Window);
+                if (keyboardstate.IsKeyDown(Keys.F))
+                {
+                    GameWindowSettings.ToggleFullscreen(graphics, Window);
+                }
+
+                if (keyboardstate.IsKeyDown(Keys.F9))
+                {
+                    UIManager.Get().IsUIDebugViewActive = true;
+                }
+                else if (keyboardstate.IsKeyDown(Keys.F10))
+                {
+                    UIManager.Get().IsUIDebugViewActive = false;
+                }
+                if (keyboardstate.IsKeyDown(Keys.F11))
+                {
+                    CollisionManager.Get().IsDebugViewActive = true;
+                }
+                else if (keyboardstate.IsKeyDown(Keys.F12))
+                {
+                    CollisionManager.Get().IsDebugViewActive = false;
+                }
+
+                if (keyboardstate.IsKeyDown(Keys.Escape))
+                {
+                    Exit();
+                }
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.F9))
-            {
-                UIManager.Get().IsUIDebugViewActive = true;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.F10))
-            {
-                UIManager.Get().IsUIDebugViewActive = false;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.F11))
-            {
-                CollisionManager.Get().IsDebugViewActive = true;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.F12))
-            {
-                CollisionManager.Get().IsDebugViewActive = false;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                Exit();
-            }
 #endif
             GameManager.Get().Tick(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
 
             base.Update(gameTime);
-
 
             //TODO_lukas Shift to UI
             //if ((Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl))) && !playerIndicatorP1.IsEnabled)
