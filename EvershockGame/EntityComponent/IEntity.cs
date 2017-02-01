@@ -13,7 +13,7 @@ namespace EntityComponent
 
         Guid Parent { get; }
         List<Guid> Children { get; }
-        List<Guid> Components { get; }
+        Dictionary<Guid, Type> Components { get; }
 
         bool IsEnabled { get; }
 
@@ -49,16 +49,7 @@ namespace EntityComponent
         void RemoveComponent<T>() where T : IComponent;
         T GetComponent<T>() where T : IComponent;
         bool HasComponent<T>() where T : IComponent;
-
-        void AddComponent(Guid guid);
-        void AddComponent(IComponent component);
-
-        void RemoveComponent(Guid guid);
-        void RemoveComponent(IComponent component);
-
-        bool HasComponent(Guid guid);
-        bool HasComponent(IComponent component);
-
+        
         List<IComponent> GetComponents();
         void ClearComponents();
 

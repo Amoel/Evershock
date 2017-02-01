@@ -129,6 +129,7 @@
     <Compile Include="Manager\CameraManager.cs" />
     <Compile Include="Manager\CollisionManager.cs" />
     <Compile Include="Manager\ComponentManager.cs" />
+    <Compile Include="Manager\ConsoleManager.cs" />
     <Compile Include="Manager\EntityManager.cs" />
     <Compile Include="Manager\GameManager.cs" />
     <Compile Include="Manager\InputManager.cs" />
@@ -139,6 +140,13 @@
     <Compile Include="Manager\ShadowManager.cs" />
     <Compile Include="Manager\StageManager.cs" />
     <Compile Include="Manager\UIManager.cs" />
+    <Compile Include="Particles\CircleParticleEmitter.cs" />
+    <Compile Include="Particles\IParticleEmitter.cs" />
+    <Compile Include="Particles\Particle.cs" />
+    <Compile Include="Particles\ParticleDesc.cs" />
+    <Compile Include="Particles\ParticleEmitter.cs" />
+    <Compile Include="Particles\ParticleSprite.cs" />
+    <Compile Include="Particles\PointParticleEmitter.cs" />
     <Compile Include="Pathfinding\CorridorGenerator.cs" />
     <Compile Include="Pathfinding\Pathfinder.cs" />
     <Compile Include="Pathfinding\PathNode.cs" />
@@ -153,9 +161,7 @@
     <Compile Include="Stages\Room.cs" />
     <Compile Include="Stages\Stage.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\Particles\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

@@ -21,6 +21,10 @@ namespace EntityComponent.Manager
             ComponentManager.Get().TickComponents(deltaTime);
             PhysicsManager.Get().Step(deltaTime);
             CameraManager.Get().Tick();
+
+#if DEBUG
+            ConsoleManager.Get().Tick();
+#endif
         }
 
         //---------------------------------------------------------------------------
@@ -35,6 +39,11 @@ namespace EntityComponent.Manager
             batch.Begin();
             CameraManager.Get().Draw(device, batch);
             UIManager.Get().Draw(batch);
+
+#if DEBUG
+            ConsoleManager.Get().Draw(batch, deltaTime);
+#endif
+
             batch.End();
         }
     }

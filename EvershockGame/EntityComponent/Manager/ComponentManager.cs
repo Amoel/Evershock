@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using EntityComponent.Components;
+using System.Reflection;
 
 namespace EntityComponent.Manager
 {

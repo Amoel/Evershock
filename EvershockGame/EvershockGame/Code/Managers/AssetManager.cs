@@ -31,6 +31,7 @@ namespace EvershockGame.Code
     {
         DungeonTileset1,
         Hearts,
+        Particles,
     }
 
     //---------------------------------------------------------------------------
@@ -90,6 +91,7 @@ namespace EvershockGame.Code
         {
             { ETilesetAssets.DungeonTileset1, "Graphics/Tilesets/DungeonTileset" },
             { ETilesetAssets.Hearts, "Graphics/Tilesets/Hearts" },
+            { ETilesetAssets.Particles, "Graphics/Tilesets/Particles" },
         };
 
         private Dictionary<Type, Dictionary<ETilesetAssets, dynamic>> m_TilesetAssets;

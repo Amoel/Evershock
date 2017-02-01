@@ -6,7 +6,7 @@ using System;
 namespace EvershockGame.Code.Components
 {
     [RequireComponent(typeof(TransformComponent))]
-    public class SpawnerComponent : Component, IComponent
+    public class SpawnerComponent : Component
     {
         protected Random m_Rand;
 

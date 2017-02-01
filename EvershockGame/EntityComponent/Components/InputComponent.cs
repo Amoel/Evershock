@@ -31,6 +31,9 @@ namespace EntityComponent.Components
 
         public void Tick(float deltaTime)
         {
+#if DEBUG
+            if (ConsoleManager.Get().IsVisible) return;
+#endif
             GameActionCollection actions = new GameActionCollection();
             foreach (EGameAction action in m_Mappings.Keys)
             {

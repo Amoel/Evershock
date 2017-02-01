@@ -4,6 +4,7 @@ using EntityComponent.Components.UI;
 using EntityComponent.Entities;
 using EntityComponent.Factory;
 using EntityComponent.Manager;
+using EntityComponent.Particles;
 using EntityComponent.Stages;
 using EvershockGame.Code;
 using EvershockGame.Code.Components;
@@ -222,10 +223,14 @@ namespace EvershockGame
             bar2.HorizontalAlignment = EHorizontalAlignment.Right;
             bar2.Margin = new Rectangle(0, 25, 15, 0);
             bar2.Properties.BindPlayer(player2, EHorizontalAlignment.Right);
-            
-            //IEntity particleTest = EntityFactory.Create<Entity>("Test");
-            //particleTest.AddComponent<TransformComponent>().Init(new Vector3(1000, 1100, 10));
-            //particleTest.AddComponent<ParticleSpawnerComponent>();
+
+            IEntity particleTest = EntityFactory.Create<Entity>("Test");
+            particleTest.AddComponent<TransformComponent>().Init(new Vector3(1000, 1100, 10));
+            particleTest.AddComponent<ParticleSpawnerComponent>();
+
+
+            ConsoleManager.Get().RegisterCommand("SpawnChestAtPosition", null, (Func<int, int, string>)Chest.SpawnChest);
+            ConsoleManager.Get().RegisterCommand("SpawnChestAtCamera", null, (Func<int, string>)Chest.SpawnChest);
         }
         
         protected override void LoadContent()
@@ -245,6 +250,7 @@ namespace EvershockGame
             CollisionManager.Get().PointTexture = pointTex;
             SpriteComponent.DefaultTexture = AssetManager.Get().Find<Texture2D>(ESpriteAssets.DefaultTexture);
 #endif
+            ConsoleManager.Get().Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
         }
 
         //---------------------------------------------------------------------------
@@ -254,7 +260,7 @@ namespace EvershockGame
         }
 
         //---------------------------------------------------------------------------
-
+        
         protected override void Update(GameTime gameTime)
         {
 #if DEBUG
@@ -303,10 +309,17 @@ namespace EvershockGame
             //    playerIndicatorP2.Disable();
             //}
         }
-        
+
+        Code.Misc.FrameCounter frameCount = new Code.Misc.FrameCounter();
         protected override void Draw(GameTime gameTime)
         {
+            frameCount.Update(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
+
             GameManager.Get().Render(GraphicsDevice, spriteBatch, gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
+            
+            spriteBatch.Begin();
+            spriteBatch.DrawString(AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont), string.Format("FPS: {0}", frameCount.AverageFramesPerSecond), Vector2.Zero, Color.Yellow);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

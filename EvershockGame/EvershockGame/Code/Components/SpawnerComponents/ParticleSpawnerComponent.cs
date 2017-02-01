@@ -1,8 +1,10 @@
 ﻿using EntityComponent;
 using EntityComponent.Components;
 using EntityComponent.Manager;
+using EntityComponent.Particles;
 using EvershockGame.Code.Factories;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +13,21 @@ using System.Threading.Tasks;
 
 namespace EvershockGame.Code.Components
 {
-    public class ParticleSpawnerComponent : SpawnerComponent, ITickableComponent
+    public class ParticleSpawnerComponent : SpawnerComponent, ITickableComponent, IDrawableComponent, ILightingComponent
     {
-        private float m_Time = 0;
+        public IParticleEmitter Emitter { get; private set; }
 
         //---------------------------------------------------------------------------
 
-        public ParticleSpawnerComponent(Guid entity) : base(entity) { }
+        public ParticleSpawnerComponent(Guid entity) : base(entity)
+        {
+            Emitter = new CircleParticleEmitter(new Vector3(1000, 1200, 500), 200)
+            {
+                SpawnRate = (time) => 100,
+                Sprite = AssetManager.Get().Find<Texture2D>(ESpriteAssets.DefaultTexture),
+                Light = AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight)
+            };
+        }
 
         //---------------------------------------------------------------------------
 
@@ -31,41 +41,30 @@ namespace EvershockGame.Code.Components
 
         public void Tick(float deltaTime)
         {
-            Spawn(EParticles.Spark);
-            //m_Time += deltaTime;
-            //if (m_Time >= 1.0f)
-            //{
-            //    Spawn(EParticles.Spark);
-            //    m_Time -= 1.0f;
-            //}
-        }
-
-        //---------------------------------------------------------------------------
-
-        public void Spawn()
-        {
-            int t_rnd = m_Rand.Next(5, 9);
-
-            for (int i = 0; i < t_rnd; i++)
+            if (Emitter != null)
             {
-                Spawn((EParticles)m_Rand.Next(0, Enum.GetValues(typeof(EParticles)).Length));
+                Emitter.Update(deltaTime);
             }
         }
 
         //---------------------------------------------------------------------------
 
-        public void Spawn(EParticles particle)
+        public void Draw(SpriteBatch batch, CameraData data, float deltaTime)
         {
-            TransformComponent transform = GetComponent<TransformComponent>();
-
-            if (transform != null)
+            if (Emitter != null)
             {
-                float rot = (SeedManager.Get().NextRandF() * (float)Math.PI * 2.0f);
-                float dist = (SeedManager.Get().NextRandF() * 4.0f + 2.0f);
-                Vector3 force = new Vector3((float)Math.Sin(rot) * dist + 10, (float)Math.Cos(rot) * dist, SeedManager.Get().NextRandF(30f, 46f));
-                ParticleFactory.Create(particle, transform.Location, force);
+                Emitter.Draw(batch, data, deltaTime);
             }
+        }
 
+        //---------------------------------------------------------------------------
+
+        public void DrawLight(SpriteBatch batch, CameraData data, float deltaTime)
+        {
+            if (Emitter != null)
+            {
+                Emitter.DrawLight(batch, data, deltaTime);
+            }
         }
     }
 }

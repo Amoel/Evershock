@@ -54,7 +54,7 @@ namespace EntityComponent.Components
             Body.BodyType = bodyType;
             Body.IgnoreGravity = true;
             Body.LinearDamping = dampening;
-            Body.Restitution = 1.0f;
+            //Body.Restitution = 1.0f;
 
             TransformComponent transform = GetComponent<TransformComponent>();
             if (transform != null)

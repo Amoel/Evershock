@@ -72,6 +72,7 @@
     <Compile Include="Code\GameWindowSettings.cs" />
     <Compile Include="Code\Managers\AssetManager.cs" />
     <Compile Include="Code\Managers\MapManager.cs" />
+    <Compile Include="Code\Misc\FrameCounter.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -202,6 +203,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Tilesets\Hearts.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Tilesets\Particles.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Tilesets\Spikes.png">
