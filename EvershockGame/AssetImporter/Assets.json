@@ -166,5 +166,13 @@
     "IncludeInDebug": false,
     "IncludeInRelease": false,
     "AssetType": 2
+  },
+  {
+    "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Tilesets/Particles.png",
+    "Name": "Particles",
+    "Path": "Graphics/Tilesets/Particles.png",
+    "IncludeInDebug": false,
+    "IncludeInRelease": false,
+    "AssetType": 2
   }
 ]

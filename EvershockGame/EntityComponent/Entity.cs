@@ -15,7 +15,7 @@ namespace EntityComponent
 
         public Guid Parent { get; private set; }
         public List<Guid> Children { get; private set; }
-        public List<Guid> Components { get; private set; }
+        public Dictionary<Guid, Type> Components { get; private set; }
 
         public bool IsEnabled { get; private set; }
 
@@ -29,7 +29,7 @@ namespace EntityComponent
             EntityManager.Get().Register(this);
 
             Children = new List<Guid>();
-            Components = new List<Guid>();
+            Components = new Dictionary<Guid, Type>();
 
             IsEnabled = true;
 
@@ -157,7 +157,7 @@ namespace EntityComponent
         public List<IEntity> GetChildren()
         {
             List<IEntity> children = new List<IEntity>();
-            foreach (Guid guid in Components)
+            foreach (Guid guid in Components.Keys)
             {
                 IEntity child = EntityManager.Get().Find(guid);
                 if (child != null)
@@ -180,7 +180,7 @@ namespace EntityComponent
                 T component = ComponentFactory.Create<T>(GUID);
                 if (component != null)
                 {
-                    Components.Add(component.GUID);
+                    Components.Add(component.GUID, typeof(T));
                 }
                 return component;
             }
@@ -202,7 +202,7 @@ namespace EntityComponent
         public T GetComponent<T>() where T : IComponent
         {
             T component = default(T);
-            foreach (Guid guid in Components)
+            foreach (Guid guid in Components.Keys)
             {
                 if ((component = ComponentManager.Get().Find<T>(guid)) != null) return component;
             }
@@ -211,63 +211,21 @@ namespace EntityComponent
 
         public bool HasComponent<T>() where T : IComponent
         {
-            foreach (Guid guid in Components)
+            foreach (Type type in Components.Values)
             {
-                if (ComponentManager.Get().Find<T>(guid) != null) return true;
+                if (typeof(T).IsAssignableFrom(type)) return true;
             }
-            return false;
-        }
-
-        public void AddComponent(Guid guid)
-        {
-            if (!HasComponent(guid))
-            {
-                Components.Add(guid);
-            }
-        }
-
-        public void AddComponent(IComponent component)
-        {
-            if (component != null && !HasComponent(component))
-            {
-                Components.Add(component.GUID);
-            }
-        }
-
-        public void RemoveComponent(Guid guid)
-        {
-            if (HasComponent(guid))
-            {
-                Components.Remove(guid);
-            }
-        }
-
-        public void RemoveComponent(IComponent component)
-        {
-            if (component != null && HasComponent(component))
-            {
-                Components.Remove(component.GUID);
-            }
-        }
-
-        public bool HasComponent(Guid guid)
-        {
-            return Components.Contains(guid);
-        }
-
-        public bool HasComponent(IComponent component)
-        {
-            if (component != null)
-            {
-                return Components.Contains(component.GUID);
-            }
+            //foreach (Guid guid in Components)
+            //{
+            //    if (ComponentManager.Get().Find<T>(guid) != null) return true;
+            //}
             return false;
         }
 
         public List<IComponent> GetComponents()
         {
             List<IComponent> components = new List<IComponent>();
-            foreach (Guid guid in Components)
+            foreach (Guid guid in Components.Keys)
             {
                 IComponent component = ComponentManager.Get().Find(guid);
                 if (component != null)
@@ -280,7 +238,7 @@ namespace EntityComponent
 
         public void ClearComponents()
         {
-            foreach (Guid guid in Components)
+            foreach (Guid guid in Components.Keys)
             {
                 ComponentManager.Get().Unregister(guid);
             }

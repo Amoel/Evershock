@@ -14,13 +14,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
-using System.Diagnostics;
 
 namespace EvershockGame
 {
     public class Game1 : Game
     {
-        Stopwatch stopwatch = new Stopwatch();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -36,8 +34,6 @@ namespace EvershockGame
                 PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8,
             };
             Content.RootDirectory = "Content";
-            IsFixedTimeStep = false;
-
         }
 
         //---------------------------------------------------------------------------
@@ -61,7 +57,6 @@ namespace EvershockGame
                        Stage
             --------------------------------------------------------------------------*/
 
-            stopwatch.Start();
             Stage stage = new Stage(SeedManager.Get().NextSeed());
             StageManager.Get().Create(stage.CreateMap());
             StageManager.Get().Stage = stage;
@@ -80,7 +75,7 @@ namespace EvershockGame
                 }
                 EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));
             }
-            Console.WriteLine("Elapsed Miliseconds since Stage Creation: " + stopwatch.ElapsedMilliseconds);
+            
 
             stage.SaveStageAsImage(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"Map.png"));
 
@@ -101,7 +96,7 @@ namespace EvershockGame
             --------------------------------------------------------------------------*/
 
             CameraManager.Get().Init(width, height);
-            
+
             Camera cam1 = EntityFactory.Create<Camera>("Cam1");
             cam1.Properties.Init(GraphicsDevice, width / 2, height, AssetManager.Get().Find<Texture2D>(ESpriteAssets.CameraBackground1), AssetManager.Get().Find<Effect>(EEffectAssets.DeferredLighting));
             cam1.Properties.Viewport = new Rectangle(0, 0, width / 2, height);
@@ -226,10 +221,14 @@ namespace EvershockGame
             bar2.HorizontalAlignment = EHorizontalAlignment.Right;
             bar2.Margin = new Rectangle(0, 25, 15, 0);
             bar2.Properties.BindPlayer(player2, EHorizontalAlignment.Right);
-
+            
             IEntity particleTest = EntityFactory.Create<Entity>("Test");
             particleTest.AddComponent<TransformComponent>().Init(new Vector3(1000, 1100, 10));
             particleTest.AddComponent<ParticleSpawnerComponent>();
+
+
+            ConsoleManager.Get().RegisterCommand("SpawnChestAtPosition", null, (Func<int, int, string>)Chest.SpawnChest);
+            ConsoleManager.Get().RegisterCommand("SpawnChestAtCamera", null, (Func<int, string>)Chest.SpawnChest);
         }
         
         protected override void LoadContent()
@@ -249,6 +248,7 @@ namespace EvershockGame
             CollisionManager.Get().PointTexture = pointTex;
             SpriteComponent.DefaultTexture = AssetManager.Get().Find<Texture2D>(ESpriteAssets.DefaultTexture);
 #endif
+            ConsoleManager.Get().Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
         }
 
         //---------------------------------------------------------------------------
@@ -267,31 +267,31 @@ namespace EvershockGame
             if (keyboardstate.GetPressedKeys().Length != 0);
             {
                 if (keyboardstate.IsKeyDown(Keys.F))
-                {
-                    GameWindowSettings.ToggleFullscreen(graphics, Window);
-                }
+            {
+                GameWindowSettings.ToggleFullscreen(graphics, Window);
+            }
 
                 if (keyboardstate.IsKeyDown(Keys.F9))
-                {
-                    UIManager.Get().IsUIDebugViewActive = true;
-                }
+            {
+                UIManager.Get().IsUIDebugViewActive = true;
+            }
                 else if (keyboardstate.IsKeyDown(Keys.F10))
-                {
-                    UIManager.Get().IsUIDebugViewActive = false;
-                }
+            {
+                UIManager.Get().IsUIDebugViewActive = false;
+            }
                 if (keyboardstate.IsKeyDown(Keys.F11))
-                {
-                    CollisionManager.Get().IsDebugViewActive = true;
-                }
+            {
+                CollisionManager.Get().IsDebugViewActive = true;
+            }
                 else if (keyboardstate.IsKeyDown(Keys.F12))
-                {
-                    CollisionManager.Get().IsDebugViewActive = false;
-                }
+            {
+                CollisionManager.Get().IsDebugViewActive = false;
+            }
 
                 if (keyboardstate.IsKeyDown(Keys.Escape))
-                {
-                    Exit();
-                }
+            {
+                Exit();
+            }
             }
 
 #endif
@@ -313,9 +313,16 @@ namespace EvershockGame
             //}
         }
         
+        Code.Misc.FrameCounter frameCount = new Code.Misc.FrameCounter();
         protected override void Draw(GameTime gameTime)
         {
+            frameCount.Update(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
+
             GameManager.Get().Render(GraphicsDevice, spriteBatch, gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
+            
+            spriteBatch.Begin();
+            spriteBatch.DrawString(AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont), string.Format("FPS: {0}", frameCount.AverageFramesPerSecond), Vector2.Zero, Color.Yellow);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

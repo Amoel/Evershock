@@ -1,9 +1,11 @@
 ﻿using EntityComponent;
 using EntityComponent.Components;
+using EntityComponent.Factory;
 using EntityComponent.Manager;
 using EvershockGame.Code.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace EvershockGame.Code
 {
@@ -42,8 +44,32 @@ namespace EvershockGame.Code
                     closed = false;
                 }
             };
-
             //AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>("CircleLight"));
+        }
+
+        //---------------------------------------------------------------------------
+
+        public static string SpawnChest(int x, int y)
+        {
+            EntityFactory.Create<Chest>("SpawnChest").Init(new Vector2(x, y));
+            return string.Format("Spawned chest at {0}/{1}", x, y);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public static string SpawnChest(int cameraIndex)
+        {
+            List<Camera> cams = EntityManager.Get().Find<Camera>();
+            if (cameraIndex >= 0 && cameraIndex < cams.Count)
+            {
+                TransformComponent transform = cams[cameraIndex].GetComponent<TransformComponent>();
+                if (transform != null)
+                {
+                    EntityFactory.Create<Chest>("SpawnChest").Init(transform.Location.To2D());
+                    return string.Format("Spawned chest at in the center of camera {0}", cameraIndex);
+                }
+            }
+            return "Could not spawn chest.";
         }
 
         //---------------------------------------------------------------------------
