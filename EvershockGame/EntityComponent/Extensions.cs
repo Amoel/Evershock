@@ -1,6 +1,8 @@
 ﻿using EntityComponent.Components;
+using EntityComponent.Particles;
 using EntityComponent.Stages;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,6 +101,13 @@ namespace EntityComponent
                 case EDirection.Down: return EDirection.Up;
                 default: return EDirection.None;
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public static ParticleSprite ToSprite(this Texture2D sprite, int width = 1, int height = 1)
+        {
+            return new ParticleSprite(sprite, width, height);
         }
     }
 }

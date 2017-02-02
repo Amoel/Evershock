@@ -48,8 +48,8 @@ namespace EntityComponent.Particles
                     LightSize = (time) => Vector2.One,
 
                     Inertia = (time) => 0.01f,
-                    Gravity = (time) => 0.05f,
-                    Restitution = (time) => 0.4f
+                    Gravity = (time) => 1.0f,
+                    Restitution = (time) => 0.6f
                 };
             }
         }

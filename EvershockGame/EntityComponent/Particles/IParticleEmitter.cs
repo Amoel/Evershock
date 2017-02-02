@@ -25,6 +25,7 @@ namespace EntityComponent.Particles
 
         Func<float, int> SpawnRate { get; set; }
         ParticleDesc Description { get; set; }
+        Vector3 Center { get; set; }
 
         //---------------------------------------------------------------------------
 

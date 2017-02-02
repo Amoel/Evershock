@@ -10,10 +10,6 @@ namespace EntityComponent.Particles
 {
     public class PointParticleEmitter : ParticleEmitter
     {
-        public Vector3 Center { get; set; }
-
-        //---------------------------------------------------------------------------
-
         public PointParticleEmitter(Vector3 center, ParticleDesc desc = null) : base(EEmitterType.Point, desc)
         {
             Center = center;

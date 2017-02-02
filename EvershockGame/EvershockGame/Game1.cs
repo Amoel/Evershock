@@ -224,10 +224,24 @@ namespace EvershockGame
             bar2.Margin = new Rectangle(0, 25, 15, 0);
             bar2.Properties.BindPlayer(player2, EHorizontalAlignment.Right);
 
-            IEntity particleTest = EntityFactory.Create<Entity>("Test");
-            particleTest.AddComponent<TransformComponent>().Init(new Vector3(1000, 1100, 10));
-            particleTest.AddComponent<ParticleSpawnerComponent>();
+            ParticleDesc fireDesc = ParticleDesc.Default;
+            fireDesc.ParticleColor = (time) => Color.Lerp(Color.Orange, Color.Red, time);
+            fireDesc.ParticleOpacity = (time) => time < 0.5f ? 1.0f : (1.0f - time) * 2.0f;
+            fireDesc.ParticleSize = (time) => new Vector2((1.5f - time) * 4, (1.5f - time) * 6);
+            fireDesc.LightColor = (time) => Color.Lerp(Color.Orange, Color.Red, time);
+            fireDesc.LightOpacity = (time) => time < 0.5f ? 1.0f : (1.0f - time) * 2.0f;
+            fireDesc.LightSize = (time) => new Vector2((1.5f - time) * 0.05f, (1.5f - time) * 0.05f);
+            fireDesc.Gravity = (time) => -0.3f;
+            fireDesc.LifeTime = 0.5f;
+            fireDesc.HasShadow = false;
 
+            for (int x = 0; x < 8; x++)
+            {
+                IEntity particleTest1 = EntityFactory.Create<Entity>("Test1");
+                particleTest1.AddComponent<TransformComponent>().Init(new Vector3(1314 + x * 256, 1292, 100));
+                particleTest1.AddComponent<ParticleSpawnerComponent>().Emitter.Description = fireDesc;
+                particleTest1.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), new Vector2(0, 6), new Vector2(1, 1), Color.Orange, 0.6f);
+            }
 
             ConsoleManager.Get().RegisterCommand("SpawnChestAtPosition", null, (Func<int, int, string>)Chest.SpawnChest);
             ConsoleManager.Get().RegisterCommand("SpawnChestAtCamera", null, (Func<int, string>)Chest.SpawnChest);

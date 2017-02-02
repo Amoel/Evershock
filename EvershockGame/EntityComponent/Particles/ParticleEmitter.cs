@@ -12,6 +12,8 @@ namespace EntityComponent.Particles
 {
     public abstract class ParticleEmitter : IParticleEmitter
     {
+        public Vector3 Center { get; set; }
+
         public EEmitterType Type { get; private set; }
         public float Time { get; private set; }
         private float m_SpawnTime;
@@ -48,8 +50,8 @@ namespace EntityComponent.Particles
             set { m_ParticleVelocityRandomness = MathHelper.Clamp(value, 0.0f, 1.0f); }
         }
 
-        public Texture2D Sprite { get; set; }
-        public Texture2D Light { get; set; }
+        public ParticleSprite Sprite { get; set; }
+        public ParticleSprite Light { get; set; }
 
         private List<Particle> m_Particles;
 
@@ -100,16 +102,16 @@ namespace EntityComponent.Particles
                     float relativeLifeTime = particle.RelativeLifeTime;
 
                     Vector2 location = particle.Location.ToLocal2D(data);
-                    Vector2 size = Description.ParticleSize(relativeLifeTime) * new Vector2(Sprite.Width, Sprite.Height);
+                    Vector2 size = Description.ParticleSize(relativeLifeTime) * new Vector2(Sprite.GetFrame(0).Width, Sprite.GetFrame(0).Height);
 
                     if (Description.HasShadow)
                     {
                         Vector2 shadowLocation = particle.Location.ToLocal2DShadow(data);
                         Vector2 shadowSize = size;
                         batch.Draw(
-                        Sprite,
+                        Sprite.Sprite,
                         new Rectangle((int)(shadowLocation.X - shadowSize.X / 2), (int)(shadowLocation.Y - shadowSize.Y / 2), (int)shadowSize.X, (int)shadowSize.Y),
-                        Sprite.Bounds,
+                        Sprite.GetFrame(0),
                         Color.Black * (0.5f - MathHelper.Clamp(particle.Location.Z / 400.0f, 0.0f, 0.5f)) * Description.ParticleOpacity(relativeLifeTime),
                         0,
                         Vector2.Zero,
@@ -118,9 +120,9 @@ namespace EntityComponent.Particles
                     }
 
                     batch.Draw(
-                        Sprite,
+                        Sprite.Sprite,
                         new Rectangle((int)(location.X - size.X / 2), (int)(location.Y - size.Y / 2), (int)size.X, (int)size.Y),
-                        Sprite.Bounds,
+                        Sprite.GetFrame(0),
                         Description.ParticleColor(relativeLifeTime) * Description.ParticleOpacity(relativeLifeTime),
                         0,
                         Vector2.Zero,
@@ -141,12 +143,12 @@ namespace EntityComponent.Particles
                     float relativeLifeTime = particle.RelativeLifeTime;
 
                     Vector2 location = particle.Location.ToLocal2D(data);
-                    Vector2 size = Description.LightSize(relativeLifeTime) * new Vector2(Light.Width, Light.Height);
+                    Vector2 size = Description.LightSize(relativeLifeTime) * new Vector2(Light.GetFrame(0).Width, Light.GetFrame(0).Height);
 
                     batch.Draw(
-                        Light,
+                        Light.Sprite,
                         new Rectangle((int)(location.X - size.X / 2), (int)(location.Y - size.Y / 2), (int)size.X, (int)size.Y),
-                        Light.Bounds,
+                        Light.GetFrame(0),
                         Description.LightColor(relativeLifeTime) * Description.LightOpacity(relativeLifeTime),
                         0,
                         Vector2.Zero,

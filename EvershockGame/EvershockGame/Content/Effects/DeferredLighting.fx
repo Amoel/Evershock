@@ -46,10 +46,10 @@ float4 PixelShaderLight(float4 pos : SV_POSITION, float4 color1 : COLOR0, float2
 	
 	float4 newColor = color * lightIntensity;
 
-	//float noiseValue = noise(float3(coords.x * 5.0f + horizontalOffset / 100.0f, coords.y * 5.0f + verticalOffset / 100.0f, time));
-	//float fog = 1.0f - ((1.0f - lightIntensity) * noiseValue);
+	/*float noiseValue = noise(float3(coords.x * 5.0f + horizontalOffset / 100.0f, coords.y * 5.0f + verticalOffset / 100.0f, time));
+	float fog = 1.0f - ((1.0f - lightIntensity) * noiseValue);
 	
-	//newColor *= fog;
+	newColor *= fog;*/
 		
 	if (isAmbientOcclusionEnabled) newColor *= max(0.3f, shadowColor.a);
 	return newColor;

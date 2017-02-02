@@ -21,11 +21,11 @@ namespace EvershockGame.Code.Components
 
         public ParticleSpawnerComponent(Guid entity) : base(entity)
         {
-            Emitter = new CircleParticleEmitter(new Vector3(1000, 1200, 500), 200)
+            Emitter = new PointParticleEmitter(Vector3.Zero)
             {
-                SpawnRate = (time) => 100,
-                Sprite = AssetManager.Get().Find<Texture2D>(ESpriteAssets.DefaultTexture),
-                Light = AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight)
+                SpawnRate = (time) => 60,
+                Sprite = AssetManager.Get().Find<Texture2D>(ETilesetAssets.Particles).ToSprite(9, 1),
+                Light = AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight).ToSprite()
             };
         }
 
@@ -43,6 +43,11 @@ namespace EvershockGame.Code.Components
         {
             if (Emitter != null)
             {
+                TransformComponent transform = GetComponent<TransformComponent>();
+                if (transform != null)
+                {
+                    Emitter.Center = transform.Location;
+                }
                 Emitter.Update(deltaTime);
             }
         }

@@ -10,7 +10,6 @@ namespace EntityComponent.Particles
 {
     public class CircleParticleEmitter : ParticleEmitter
     {
-        public Vector3 Center { get; set; }
         public float Radius { get; set; }
 
         //---------------------------------------------------------------------------
