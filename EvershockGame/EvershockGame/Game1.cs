@@ -4,7 +4,6 @@ using EntityComponent.Components.UI;
 using EntityComponent.Entities;
 using EntityComponent.Factory;
 using EntityComponent.Manager;
-using EntityComponent.Particles;
 using EntityComponent.Stages;
 using EvershockGame.Code;
 using EvershockGame.Code.Components;
@@ -15,7 +14,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
-
 
 namespace EvershockGame
 {
@@ -274,41 +272,46 @@ namespace EvershockGame
         }
 
         //---------------------------------------------------------------------------
-        
+
         protected override void Update(GameTime gameTime)
         {
 #if DEBUG
-            if (Keyboard.GetState().IsKeyDown(Keys.F))
+            KeyboardState keyboardstate = Keyboard.GetState();
+
+            if (keyboardstate.GetPressedKeys().Length != 0);
+            {
+                if (keyboardstate.IsKeyDown(Keys.F))
             {
                 GameWindowSettings.ToggleFullscreen(graphics, Window);
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.F9))
+                if (keyboardstate.IsKeyDown(Keys.F9))
             {
                 UIManager.Get().IsUIDebugViewActive = true;
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.F10))
+                else if (keyboardstate.IsKeyDown(Keys.F10))
             {
                 UIManager.Get().IsUIDebugViewActive = false;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.F11))
+                if (keyboardstate.IsKeyDown(Keys.F11))
             {
                 CollisionManager.Get().IsDebugViewActive = true;
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.F12))
+                else if (keyboardstate.IsKeyDown(Keys.F12))
             {
                 CollisionManager.Get().IsDebugViewActive = false;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                if (keyboardstate.IsKeyDown(Keys.Escape))
             {
                 Exit();
             }
+            }
+
 #endif
             GameManager.Get().Tick(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
 
             base.Update(gameTime);
-
 
             //TODO_lukas Shift to UI
             //if ((Keyboard.GetState().IsKeyDown(Keys.LeftControl) || (Keyboard.GetState().IsKeyDown(Keys.RightControl))) && !playerIndicatorP1.IsEnabled)
@@ -323,7 +326,7 @@ namespace EvershockGame
             //    playerIndicatorP2.Disable();
             //}
         }
-
+        
         Code.Misc.FrameCounter frameCount = new Code.Misc.FrameCounter();
         protected override void Draw(GameTime gameTime)
         {
