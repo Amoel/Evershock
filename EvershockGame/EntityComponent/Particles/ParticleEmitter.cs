@@ -50,8 +50,8 @@ namespace EntityComponent.Particles
             set { m_ParticleVelocityRandomness = MathHelper.Clamp(value, 0.0f, 1.0f); }
         }
 
-        public ParticleSprite Sprite { get; set; }
-        public ParticleSprite Light { get; set; }
+        public Sprite Sprite { get; set; }
+        public Sprite Light { get; set; }
 
         private List<Particle> m_Particles;
 
@@ -95,23 +95,23 @@ namespace EntityComponent.Particles
 
         public void Draw(SpriteBatch batch, CameraData data, float deltaTime)
         {
-            if (Description != null && Sprite != null)
+            if (Description != null && IsValidDistance(data))
             {
                 foreach (Particle particle in m_Particles)
                 {
                     float relativeLifeTime = particle.RelativeLifeTime;
 
                     Vector2 location = particle.Location.ToLocal2D(data);
-                    Vector2 size = Description.ParticleSize(relativeLifeTime) * new Vector2(Sprite.GetFrame(0).Width, Sprite.GetFrame(0).Height);
+                    Vector2 size = Description.ParticleSize(relativeLifeTime) * new Vector2(Sprite.Bounds.Width, Sprite.Bounds.Height);
 
                     if (Description.HasShadow)
                     {
                         Vector2 shadowLocation = particle.Location.ToLocal2DShadow(data);
                         Vector2 shadowSize = size;
                         batch.Draw(
-                        Sprite.Sprite,
+                        Sprite.Texture,
                         new Rectangle((int)(shadowLocation.X - shadowSize.X / 2), (int)(shadowLocation.Y - shadowSize.Y / 2), (int)shadowSize.X, (int)shadowSize.Y),
-                        Sprite.GetFrame(0),
+                        Sprite.Bounds,
                         Color.Black * (0.5f - MathHelper.Clamp(particle.Location.Z / 400.0f, 0.0f, 0.5f)) * Description.ParticleOpacity(relativeLifeTime),
                         0,
                         Vector2.Zero,
@@ -120,9 +120,9 @@ namespace EntityComponent.Particles
                     }
 
                     batch.Draw(
-                        Sprite.Sprite,
+                        Sprite.Texture,
                         new Rectangle((int)(location.X - size.X / 2), (int)(location.Y - size.Y / 2), (int)size.X, (int)size.Y),
-                        Sprite.GetFrame(0),
+                        Sprite.Bounds,
                         Description.ParticleColor(relativeLifeTime) * Description.ParticleOpacity(relativeLifeTime),
                         0,
                         Vector2.Zero,
@@ -136,19 +136,19 @@ namespace EntityComponent.Particles
 
         public void DrawLight(SpriteBatch batch, CameraData data, float deltaTime)
         {
-            if (Description != null && Light != null)
+            if (Description != null && IsValidDistance(data))
             {
                 foreach (Particle particle in m_Particles)
                 {
                     float relativeLifeTime = particle.RelativeLifeTime;
 
                     Vector2 location = particle.Location.ToLocal2D(data);
-                    Vector2 size = Description.LightSize(relativeLifeTime) * new Vector2(Light.GetFrame(0).Width, Light.GetFrame(0).Height);
+                    Vector2 size = Description.LightSize(relativeLifeTime) * new Vector2(Light.Bounds.Width, Light.Bounds.Height);
 
                     batch.Draw(
-                        Light.Sprite,
+                        Light.Texture,
                         new Rectangle((int)(location.X - size.X / 2), (int)(location.Y - size.Y / 2), (int)size.X, (int)size.Y),
-                        Light.GetFrame(0),
+                        Light.Bounds,
                         Description.LightColor(relativeLifeTime) * Description.LightOpacity(relativeLifeTime),
                         0,
                         Vector2.Zero,
@@ -182,6 +182,13 @@ namespace EntityComponent.Particles
             {
                 SpawnRate = spawnRate;
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private bool IsValidDistance(CameraData data)
+        {
+            return Vector2.Distance(data.Center, Center.To2D()) <= Math.Sqrt(Math.Pow(data.Width, 2) + Math.Pow(data.Height, 2)) / 2;
         }
     }
 }

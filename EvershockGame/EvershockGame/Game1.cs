@@ -5,6 +5,7 @@ using EntityComponent.Entities;
 using EntityComponent.Factory;
 using EntityComponent.Manager;
 using EntityComponent.Stages;
+using EntityComponent.Particles;
 using EvershockGame.Code;
 using EvershockGame.Code.Components;
 using EvershockGame.Code.Entities.UI;
@@ -74,6 +75,14 @@ namespace EvershockGame
                     EntityFactory.Create<Spike>("Spike").Init(new Vector2(room.Bounds.Center.X * 64 + (i % 3) * 64, room.Bounds.Center.Y * 64 + 128 + (i / 3) * 64));
                 }
                 EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));
+
+                for (int x = 0; x < room.Bounds.Width; x += 3)
+                {
+                    IEntity torch = EntityFactory.Create<Entity>("Torch");
+                    torch.AddComponent<TransformComponent>().Init(new Vector3(room.Bounds.X * 64 + x * 64 + 32, room.Bounds.Y * 64 + 32, 110));
+                    torch.AddComponent<ParticleSpawnerComponent>().Emitter.Description = ParticleDesc.Fire;
+                    torch.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), new Vector2(0, 6), new Vector2(1, 1), Color.Orange, 0.6f);
+                }
             }
             
 
@@ -222,24 +231,13 @@ namespace EvershockGame
             bar2.Margin = new Rectangle(0, 25, 15, 0);
             bar2.Properties.BindPlayer(player2, EHorizontalAlignment.Right);
 
-            ParticleDesc fireDesc = ParticleDesc.Default;
-            fireDesc.ParticleColor = (time) => Color.Lerp(Color.Orange, Color.Red, time);
-            fireDesc.ParticleOpacity = (time) => time < 0.5f ? 1.0f : (1.0f - time) * 2.0f;
-            fireDesc.ParticleSize = (time) => new Vector2((1.5f - time) * 4, (1.5f - time) * 6);
-            fireDesc.LightColor = (time) => Color.Lerp(Color.Orange, Color.Red, time);
-            fireDesc.LightOpacity = (time) => time < 0.5f ? 1.0f : (1.0f - time) * 2.0f;
-            fireDesc.LightSize = (time) => new Vector2((1.5f - time) * 0.05f, (1.5f - time) * 0.05f);
-            fireDesc.Gravity = (time) => -0.3f;
-            fireDesc.LifeTime = 0.5f;
-            fireDesc.HasShadow = false;
-
-            for (int x = 0; x < 8; x++)
-            {
-                IEntity particleTest1 = EntityFactory.Create<Entity>("Test1");
-                particleTest1.AddComponent<TransformComponent>().Init(new Vector3(1314 + x * 256, 1292, 100));
-                particleTest1.AddComponent<ParticleSpawnerComponent>().Emitter.Description = fireDesc;
-                particleTest1.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), new Vector2(0, 6), new Vector2(1, 1), Color.Orange, 0.6f);
-            }
+            //for (int x = 0; x < 8; x++)
+            //{
+            //    IEntity torch = EntityFactory.Create<Entity>("Torch");
+            //    torch.AddComponent<TransformComponent>().Init(new Vector3(1314 + x * 256, 1292, 100));
+            //    torch.AddComponent<ParticleSpawnerComponent>().Emitter.Description = ParticleDesc.Fire;
+            //    torch.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), new Vector2(0, 6), new Vector2(1, 1), Color.Orange, 0.6f);
+            //}
 
             ConsoleManager.Get().RegisterCommand("SpawnChestAtPosition", null, (Func<int, int, string>)Chest.SpawnChest);
             ConsoleManager.Get().RegisterCommand("SpawnChestAtCamera", null, (Func<int, string>)Chest.SpawnChest);
@@ -260,7 +258,7 @@ namespace EvershockGame
             Texture2D pointTex = new Texture2D(GraphicsDevice, 1, 1);
             pointTex.SetData(new Color[] { Color.White });
             CollisionManager.Get().PointTexture = pointTex;
-            SpriteComponent.DefaultTexture = AssetManager.Get().Find<Texture2D>(ESpriteAssets.DefaultTexture);
+            SpriteComponent.DefaultSprite = AssetManager.Get().Find<Texture2D>(ESpriteAssets.DefaultTexture);
 #endif
             ConsoleManager.Get().Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
         }

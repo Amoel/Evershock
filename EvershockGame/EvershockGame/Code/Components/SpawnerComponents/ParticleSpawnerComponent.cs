@@ -24,8 +24,8 @@ namespace EvershockGame.Code.Components
             Emitter = new PointParticleEmitter(Vector3.Zero)
             {
                 SpawnRate = (time) => 60,
-                Sprite = AssetManager.Get().Find<Texture2D>(ETilesetAssets.Particles).ToSprite(9, 1),
-                Light = AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight).ToSprite()
+                Sprite = new Sprite(AssetManager.Get().Find<Texture2D>(ETilesetAssets.Particles), 9, 1, 0),
+                Light = new Sprite(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight))
             };
         }
 

@@ -102,12 +102,5 @@ namespace EntityComponent
                 default: return EDirection.None;
             }
         }
-
-        //---------------------------------------------------------------------------
-
-        public static ParticleSprite ToSprite(this Texture2D sprite, int width = 1, int height = 1)
-        {
-            return new ParticleSprite(sprite, width, height);
-        }
     }
 }

@@ -28,6 +28,8 @@ namespace EntityComponent.Particles
         public Func<float, float>    Gravity { get; set; }
         public Func<float, float>    Restitution { get; set; }
 
+        public RandomnessDesc        Random { get; private set; }
+
         //---------------------------------------------------------------------------
 
         public static ParticleDesc Default
@@ -53,5 +55,42 @@ namespace EntityComponent.Particles
                 };
             }
         }
+
+        //---------------------------------------------------------------------------
+
+        public static ParticleDesc Fire
+        {
+            get
+            {
+                return new ParticleDesc()
+                {
+                    LifeTime = 0.5f,
+                    HasShadow = false,
+
+                    ParticleColor = (time) => Color.Lerp(Color.Orange, Color.Red, time),
+                    ParticleOpacity = (time) => time < 0.5f ? 1.0f : (1.0f - time) * 2.0f,
+                    ParticleSize = (time) => new Vector2((1.5f - time) * 4, (1.5f - time) * 6),
+
+                    LightColor = (time) => Color.Lerp(Color.Orange, Color.Red, time),
+                    LightOpacity = (time) => time < 0.5f ? 1.0f : (1.0f - time) * 2.0f,
+                    LightSize = (time) => new Vector2((1.5f - time) * 0.05f, (1.5f - time) * 0.05f),
+
+                    Inertia = (time) => 0.01f,
+                    Gravity = (time) => -0.3f,
+                    Restitution = (time) => 0.0f
+                };
+            }
+        }
+    }
+
+    //---------------------------------------------------------------------------
+
+    public struct RandomnessDesc
+    {
+        public float LifeTime { get; set; }
+
+        public float Inertia { get; set; }
+        public float Gravity { get; set; }
+        public float Restitution { get; set; }
     }
 }

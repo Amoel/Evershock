@@ -1,4 +1,5 @@
-﻿using EntityComponent.Components;
+﻿using EntityComponent;
+using EntityComponent.Components;
 using EntityComponent.Factory;
 using EntityComponent.Manager;
 using EvershockGame.Code.Components;
@@ -44,23 +45,23 @@ namespace EvershockGame.Code.Factories
             {
                 case EPickups.HEALTH:
                     pickupComponent = pickup.AddComponent<HealthPickupComponent>();
-                    sprite.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.RedOrb), Vector2.Zero, new Vector2(2, 2));
-                    shadow.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.RedOrb), new Vector2(2, 2), new Vector2(0, 3));
-                    light.Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), Vector2.Zero, Vector2.One, Color.Red, 1.0f);
+                    sprite.Init(new Sprite(AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items), 14, 30, 1, 1), Vector2.Zero, Vector2.One * 2);
+                    shadow.Init(new Sprite(AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items), 14, 30, 1, 1), Vector2.One * 2, new Vector2(0, 3));
+                    light.Init(new Sprite(AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items), 14, 30, 1, 1), Vector2.Zero, Vector2.One * 2, Color.Orange, 0.5f);
                     break;
                 
                 case EPickups.MANA:
                     pickupComponent = pickup.AddComponent<ManaPickupComponent>();
-                    sprite.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.BlueOrb), Vector2.Zero, new Vector2(2, 2));
-                    shadow.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.BlueOrb), new Vector2(2, 2), new Vector2(0, 3));
-                    light.Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), Vector2.Zero, Vector2.One, Color.Blue, 1.0f);
+                    sprite.Init(new Sprite(AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items), 14, 30, 6, 0), Vector2.Zero, Vector2.One * 2);
+                    shadow.Init(new Sprite(AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items), 14, 30, 6, 0), Vector2.One * 2, new Vector2(0, 3));
+                    light.Init(new Sprite(AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items), 14, 30, 6, 0), Vector2.Zero, Vector2.One * 2, Color.Purple, 0.5f);
                     break;
 
                 case EPickups.COIN:
                     pickupComponent = pickup.AddComponent<CoinPickupComponent>();
-                    sprite.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.YellowOrb), Vector2.Zero, new Vector2(2, 2));
-                    shadow.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.YellowOrb), new Vector2(2, 2), new Vector2(0, 3));
-                    light.Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), Vector2.Zero, Vector2.One, Color.Yellow, 1.0f);
+                    sprite.Init(new Sprite(AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items), 14, 30, 0, 1), Vector2.Zero, Vector2.One * 2);
+                    shadow.Init(new Sprite(AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items), 14, 30, 0, 1), Vector2.One * 2, new Vector2(0, 3));
+                    light.Init(new Sprite(AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items), 14, 30, 0, 1), Vector2.Zero, Vector2.One * 2, Color.Red, 0.5f);
                     break;
 
                 default:

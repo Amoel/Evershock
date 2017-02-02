@@ -11,9 +11,9 @@ namespace EntityComponent.Components
     [RequireComponent(typeof(TransformComponent))]
     public class LightingComponent : Component, ILightingComponent
     {
-        public static Texture2D DefaultTexture { get; set; }
+        public static Sprite DefaultSprite { get; set; }
 
-        public Texture2D Texture { get; set; }
+        public Sprite Sprite { get; set; }
         public Vector2 Offset { get; set; }
         
         private Func<float, Color> m_ColorFunction;
@@ -48,23 +48,23 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        public void Init(Texture2D texture)
+        public void Init(Sprite sprite)
         {
-            Init(texture, Vector2.Zero, Vector2.One, Color.White, 1.0f);
+            Init(sprite, Vector2.Zero, Vector2.One, Color.White, 1.0f);
         }
 
         //---------------------------------------------------------------------------
 
-        public void Init(Texture2D texture, Color color)
+        public void Init(Sprite sprite, Color color)
         {
-            Init(texture, Vector2.Zero, Vector2.One, color, 1.0f);
+            Init(sprite, Vector2.Zero, Vector2.One, color, 1.0f);
         }
 
         //---------------------------------------------------------------------------
 
-        public void Init(Texture2D texture, Vector2 offset)
+        public void Init(Sprite sprite, Vector2 offset)
         {
-            Init(texture, offset, Vector2.One, Color.White, 1.0f);
+            Init(sprite, offset, Vector2.One, Color.White, 1.0f);
         }
 
         //---------------------------------------------------------------------------
@@ -76,16 +76,16 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        public void Init(Texture2D texture, Vector2 offset, Color color)
+        public void Init(Sprite sprite, Vector2 offset, Color color)
         {
-            Init(texture, offset, Vector2.One, color, 1.0f);
+            Init(sprite, offset, Vector2.One, color, 1.0f);
         }
 
         //---------------------------------------------------------------------------
 
-        public void Init(Texture2D texture, Vector2 offset, Vector2 scale, Color color, float brightness)
+        public void Init(Sprite sprite, Vector2 offset, Vector2 scale, Color color, float brightness)
         {
-            Texture = texture;
+            Sprite = sprite;
             Offset = offset;
             Scale = scale;
             Color = color;
@@ -94,10 +94,10 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        private Texture2D GetTex()
+        private Sprite GetSprite()
         {
-            if (Texture != null) return Texture;
-            return DefaultTexture;
+            if (!Sprite.IsEmpty) return Sprite;
+            return DefaultSprite;
         }
 
         //---------------------------------------------------------------------------
@@ -106,8 +106,8 @@ namespace EntityComponent.Components
         {
             m_Time += deltaTime;
 
-            Texture2D tex = GetTex();
-            if (tex != null)
+            Sprite sprite = GetSprite();
+            if (!sprite.IsEmpty)
             {
                 TransformComponent transform = GetComponent<TransformComponent>();
                 if (transform != null)
@@ -117,12 +117,12 @@ namespace EntityComponent.Components
                     Vector2 scale = Vector2.Clamp(m_ScaleFunction(m_Time), Vector2.Zero, new Vector2(10, 10));
 
                     batch.Draw(
-                        tex,
+                        sprite.Texture,
                         transform.Location.ToLocal2D(data),
-                        tex.Bounds,
+                        sprite.Bounds,
                         color * brightness,
                         transform.Rotation,
-                        new Vector2(tex.Width / 2 + Offset.X, tex.Height / 2 + Offset.Y),
+                        new Vector2(sprite.Bounds.Width / 2 + Offset.X, sprite.Bounds.Height / 2 + Offset.Y),
                         scale,
                         SpriteEffects.None,
                         0);
