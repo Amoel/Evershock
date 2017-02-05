@@ -13,6 +13,8 @@ namespace EvershockGame.Code.Components
     {
         public bool IsCollectable { get; private set; }
 
+        protected bool m_IsCollected;
+
         //---------------------------------------------------------------------------
 
         public PickupComponent(Guid entity) : base(entity)
@@ -40,6 +42,28 @@ namespace EvershockGame.Code.Components
                     if (physics.HasTouchedFloor)
                     {
                         IsCollectable = true;
+                    }
+                }
+            }
+            if (m_IsCollected)
+            {
+                LightingComponent light = GetComponent<LightingComponent>();
+                if (light != null)
+                {
+                    light.Scale *= 1.2f;
+                    light.Brightness -= 0.05f;
+                }
+                SpriteComponent sprite = GetComponent<SpriteComponent>();
+                if (sprite != null)
+                {
+                    sprite.Opacity -= 0.05f;
+                    if (sprite.Opacity <= 0.0f)
+                    {
+                        DespawnComponent despawn = GetComponent<DespawnComponent>();
+                        if (despawn != null)
+                        {
+                            despawn.Trigger();
+                        }
                     }
                 }
             }

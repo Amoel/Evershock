@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AssetImporter"
         mc:Ignorable="d"
-        Title="AssetImporter" Height="400" Width="850" Icon="Resources/AssetImporterIcon.png">
+        Title="AssetImporter" Height="600" Width="850" Icon="Resources/AssetImporterIcon.png">
     
     <Grid>
         <Grid.ColumnDefinitions>

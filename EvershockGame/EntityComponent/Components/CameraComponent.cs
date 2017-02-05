@@ -286,40 +286,6 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
-        private void DrawShadows(SpriteBatch batch, CameraData data)
-        {
-            Device.SetRenderTarget(m_ShadowTarget);
-            Device.Clear(Color.Transparent);
-            batch.Begin();
-
-            Texture2D tileset = CollisionManager.Get().PointTexture;// AssetManager.Get().Find<Texture2D>("BasicTileset");
-            if (tileset != null)
-            {
-                TransformComponent transform = GetComponent<TransformComponent>();
-                if (transform != null)
-                {
-                    Vector2 location = new Vector2(Width / 2 - data.Center.X, Height / 2 - data.Center.Y);
-                    
-                    for (int x = -1; x <= Width / 64 + 2; x++)
-                    {
-                        for (int y = -1; y <= Height / 64 + 2; y++)
-                        {
-                            int xPos = (x + (int)(data.Center.X - Width / 2) / 64);
-                            int yPos = (y + (int)(data.Center.Y - Height / 2) / 64);
-
-                            Rectangle layer = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.First);
-                            Rectangle layerTop = StageManager.Get().GetTextureBounds(xPos, yPos, ELayerMode.Third);
-                            if (layer.Width > 0 && layer.Height > 0 && (layerTop.Width == 0 || layerTop.Height == 0)) batch.Draw(tileset, new Rectangle((int)location.X + xPos * 64, (int)location.Y + yPos * 64, 64, 64), layer, Color.White);
-                        }
-                    }
-                }
-            }
-
-            batch.End();
-        }
-
-        //---------------------------------------------------------------------------
-
         private void DrawStage(SpriteBatch batch, CameraData data)
         {
             if (Tileset != null)
@@ -354,11 +320,11 @@ namespace EntityComponent.Components
 
         public void Draw(SpriteBatch batch)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Q))
+            if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
                 batch.Draw(m_LightingTarget, Viewport, Color.White);
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.E))
+            else if (Keyboard.GetState().IsKeyDown(Keys.F2))
             {
                 batch.Draw(m_ShadowTarget, Viewport, Color.White);
             }

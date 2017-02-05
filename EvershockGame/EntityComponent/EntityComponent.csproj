@@ -94,9 +94,11 @@
     <Compile Include="Components\DespawnComponent.cs" />
     <Compile Include="Components\EngineComponent.cs" />
     <Compile Include="Components\InputComponent.cs" />
+    <Compile Include="Components\InventoryComponent.cs" />
     <Compile Include="Components\LightingComponent.cs" />
     <Compile Include="Components\ParticlePhysicsComponent.cs" />
     <Compile Include="Components\PhysicsComponent.cs" />
+    <Compile Include="Components\ProjectileComponent.cs" />
     <Compile Include="Components\ShadowComponent.cs" />
     <Compile Include="Components\SpriteComponent.cs" />
     <Compile Include="Components\TransformComponent.cs" />
@@ -122,6 +124,8 @@
     <Compile Include="IEntity.cs" />
     <Compile Include="IInputReceiver.cs" />
     <Compile Include="ILightingComponent.cs" />
+    <Compile Include="Items\ItemDesc.cs" />
+    <Compile Include="Items\ItemPool.cs" />
     <Compile Include="ITickableComponent.cs" />
     <Compile Include="IDrawableUIComponent.cs" />
     <Compile Include="Manager\AreaManager.cs" />
@@ -133,6 +137,7 @@
     <Compile Include="Manager\EntityManager.cs" />
     <Compile Include="Manager\GameManager.cs" />
     <Compile Include="Manager\InputManager.cs" />
+    <Compile Include="Manager\ItemManager.cs" />
     <Compile Include="Manager\LightingManager.cs" />
     <Compile Include="Manager\ParticleManager.cs" />
     <Compile Include="Manager\PhysicsManager.cs" />

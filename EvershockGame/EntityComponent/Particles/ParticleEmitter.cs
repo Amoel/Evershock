@@ -22,34 +22,6 @@ namespace EntityComponent.Particles
 
         public ParticleDesc Description { get; set; }
 
-        private float m_ParticleLifeTimeRandomness;
-        public float ParticleLifeTimeRandomness
-        {
-            get { return m_ParticleLifeTimeRandomness; }
-            set { m_ParticleLifeTimeRandomness = MathHelper.Clamp(value, 0.0f, 1.0f); }
-        }
-
-        private float m_ParticleOpacityRandomness;
-        public float ParticleOpacityRandomness
-        {
-            get { return m_ParticleOpacityRandomness; }
-            set { m_ParticleOpacityRandomness = MathHelper.Clamp(value, 0.0f, 1.0f); }
-        }
-
-        private float m_ParticleSizeRandomness;
-        public float ParticleSizeRandomness
-        {
-            get { return m_ParticleSizeRandomness; }
-            set { m_ParticleSizeRandomness = MathHelper.Clamp(value, 0.0f, 1.0f); }
-        }
-
-        private float m_ParticleVelocityRandomness;
-        public float ParticleVelocityRandomness
-        {
-            get { return m_ParticleVelocityRandomness; }
-            set { m_ParticleVelocityRandomness = MathHelper.Clamp(value, 0.0f, 1.0f); }
-        }
-
         public Sprite Sprite { get; set; }
         public Sprite Light { get; set; }
 
@@ -72,23 +44,26 @@ namespace EntityComponent.Particles
 
         public void Update(float deltaTime)
         {
-            Time += deltaTime;
-            m_SpawnTime += deltaTime;
-            
-            int currentSpawnRate = SpawnRate(Time);
-            if (currentSpawnRate > 0)
+            if (IsValidDistance())
             {
-                int count = (int)(m_SpawnTime * currentSpawnRate);
+                Time += deltaTime;
+                m_SpawnTime += deltaTime;
 
-                for (int i = 0; i < count; i++)
+                int currentSpawnRate = SpawnRate(Time);
+                if (currentSpawnRate > 0)
                 {
-                    SpawnParticle(NextLocation(), NextVelocity());
-                }
+                    int count = (int)(m_SpawnTime * currentSpawnRate);
 
-                float delta = 1.0f / currentSpawnRate;
-                m_SpawnTime %= delta;
+                    for (int i = 0; i < count; i++)
+                    {
+                        SpawnParticle(NextLocation(), NextVelocity());
+                    }
+
+                    float delta = 1.0f / currentSpawnRate;
+                    m_SpawnTime %= delta;
+                }
+                m_Particles.RemoveAll(particle => particle.Update(deltaTime, Description));
             }
-            m_Particles.RemoveAll(particle => particle.Update(deltaTime, Description));
         }
 
         //---------------------------------------------------------------------------
@@ -127,7 +102,7 @@ namespace EntityComponent.Particles
                         0,
                         Vector2.Zero,
                         SpriteEffects.None,
-                        Math.Max(0.0001f, particle.Location.Z / 1000.0f) + (particle.Location.Y + 10000.0f) / 100000.0f);
+                        (particle.Location.Y + 10000.0f) / 100000.0f);
                 }
             }
         }
@@ -184,6 +159,22 @@ namespace EntityComponent.Particles
             }
         }
 
+        //---------------------------------------------------------------------------
+
+        private bool IsValidDistance()
+        {
+            foreach (Camera cam in EntityManager.Get().Find<Camera>())
+            {
+                TransformComponent transform = cam.GetComponent<TransformComponent>();
+                CameraComponent camera = cam.GetComponent<CameraComponent>();
+                if (transform != null && camera != null)
+                {
+                    if (Vector2.Distance(transform.Location.To2D(), Center.To2D()) <= Math.Sqrt(Math.Pow(camera.Width, 2) + Math.Pow(camera.Height, 2)) / 2) return true;
+                }
+            }
+            return false;
+        }
+        
         //---------------------------------------------------------------------------
 
         private bool IsValidDistance(CameraData data)

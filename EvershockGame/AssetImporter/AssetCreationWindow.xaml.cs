@@ -56,7 +56,7 @@ namespace AssetImporter
 
         //---------------------------------------------------------------------------
 
-        private void OnSearchClicked(object sender, EventArgs e)
+        private void OnSearchSourceClicked(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.InitialDirectory = AssetManager.Get().RootPath;
@@ -64,8 +64,23 @@ namespace AssetImporter
 
             if (File.Exists(dialog.FileName))
             {
-                RelativePath.Text = dialog.FileName.Substring(AssetManager.Get().RootPath.Length + 1).Replace('\\', '/');
+                SourcePath.Text = dialog.FileName.Replace('\\', '/');
                 Preview = dialog.FileName;
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void OnSearchTargetClicked(object sender, EventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.InitialDirectory = AssetManager.Get().RootPath;
+            dialog.FileName = System.IO.Path.GetFileName(SourcePath.Text);
+            dialog.ShowDialog(this);
+
+            if (dialog.FileName != null && dialog.FileName.StartsWith(AssetManager.Get().RootPath))
+            {
+                TargetPath.Text = dialog.FileName.Substring(AssetManager.Get().RootPath.Length + 1).Replace('\\', '/');
             }
         }
 
@@ -80,7 +95,7 @@ namespace AssetImporter
 
         private void OnAddClicked(object sender, EventArgs e)
         {
-            AssetManager.Get().Add(AssetName.Text, RelativePath.Text, (EAssetType)AssetTypeBox.SelectedItem);
+            AssetManager.Get().Add(AssetName.Text, SourcePath.Text, TargetPath.Text, (EAssetType)AssetTypeBox.SelectedItem);
             Close();
         }
 

@@ -164,8 +164,8 @@ namespace EntityComponent.Components
 
         public virtual void ReceiveInput(GameActionCollection actions, float deltaTime)
         {
-            float xMovement = (actions[EGameAction.MOVE_RIGHT] - actions[EGameAction.MOVE_LEFT]) * deltaTime * 500;
-            float yMovement = (actions[EGameAction.MOVE_DOWN] - actions[EGameAction.MOVE_UP]) * deltaTime * 500;
+            float xMovement = (actions[EGameAction.MOVE_RIGHT].Value - actions[EGameAction.MOVE_LEFT].Value) * deltaTime * 500;
+            float yMovement = (actions[EGameAction.MOVE_DOWN].Value - actions[EGameAction.MOVE_UP].Value) * deltaTime * 500;
 
             Vector3 movement = new Vector3(xMovement, yMovement, 0);
             if (movement.Length() > 0.01f) ApplyForce(new Vector3(xMovement, yMovement, 0));

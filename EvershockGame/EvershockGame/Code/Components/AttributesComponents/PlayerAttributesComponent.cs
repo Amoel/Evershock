@@ -322,14 +322,6 @@ namespace EvershockGame.Code.Components
                     Input
         --------------------------------------------------------------------------*/
 
-        bool IsMovementInput(GameActionCollection actions)
-        {
-            return (actions[EGameAction.MOVE_DOWN] > 0.0f) ||
-                   (actions[EGameAction.MOVE_UP] > 0.0f) ||
-                   (actions[EGameAction.MOVE_LEFT] > 0.0f) ||
-                   (actions[EGameAction.MOVE_RIGHT] > 0.0f);
-        }
-
         public void ReceiveInput(GameActionCollection actions, float deltaTime)
         {
 

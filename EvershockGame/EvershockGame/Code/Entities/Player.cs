@@ -1,5 +1,6 @@
 ﻿using EntityComponent;
 using EntityComponent.Components;
+using EntityComponent.Items;
 using EntityComponent.Manager;
 using EvershockGame.Code.Components;
 using FarseerPhysics.Dynamics;
@@ -26,6 +27,7 @@ namespace EvershockGame.Code
 
             AddComponent<TransformComponent>().Init(new Vector3(Index == PlayerIndex.One ? 340 : 420, 400, 0));
             AddComponent<PlayerAttributesComponent>().Init(500.0f, 250.0f, 125.0f, 2.0f, 1.0f);
+            AddComponent<InventoryComponent>();
 
             MovementAnimationComponent animation = AddComponent<MovementAnimationComponent>();
             if (Index == PlayerIndex.One)
@@ -52,20 +54,25 @@ namespace EvershockGame.Code
             InputComponent input = AddComponent<InputComponent>();
             if (input != null)
             {
+                input.Init(Index);
                 input.ClearActions();
                 switch (Index)
                 {
                     case PlayerIndex.One:
-                        input.MapAction(EGameAction.MOVE_LEFT, EInput.KEYBOARD_LEFT);
-                        input.MapAction(EGameAction.MOVE_RIGHT, EInput.KEYBOARD_RIGHT);
-                        input.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_UP);
-                        input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_DOWN);
+                        input.MapAction(EGameAction.MOVE_LEFT, EInput.KEYBOARD_LEFT, EInput.GAMEPAD_THUMBSTICK_LEFT_LEFT);
+                        input.MapAction(EGameAction.MOVE_RIGHT, EInput.KEYBOARD_RIGHT, EInput.GAMEPAD_THUMBSTICK_LEFT_RIGHT);
+                        input.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_UP, EInput.GAMEPAD_THUMBSTICK_LEFT_UP);
+                        input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_DOWN, EInput.GAMEPAD_THUMBSTICK_LEFT_DOWN);
+                        input.MapAction(EGameAction.INVENTORY_NEXT_ITEM, EInput.KEYBOARD_E, EInput.GAMEPAD_BUMPER_RIGHT);
+                        input.MapAction(EGameAction.INVENTORY_PREVIOUS_ITEM, EInput.KEYBOARD_Q, EInput.GAMEPAD_BUMPER_LEFT);
                         break;
                     case PlayerIndex.Two:
-                        input.MapAction(EGameAction.MOVE_LEFT, EInput.KEYBOARD_A);
-                        input.MapAction(EGameAction.MOVE_RIGHT, EInput.KEYBOARD_D);
-                        input.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_W);
-                        input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_S);
+                        input.MapAction(EGameAction.MOVE_LEFT, EInput.KEYBOARD_A, EInput.GAMEPAD_THUMBSTICK_LEFT_LEFT);
+                        input.MapAction(EGameAction.MOVE_RIGHT, EInput.KEYBOARD_D, EInput.GAMEPAD_THUMBSTICK_LEFT_RIGHT);
+                        input.MapAction(EGameAction.MOVE_UP, EInput.KEYBOARD_W, EInput.GAMEPAD_THUMBSTICK_LEFT_UP);
+                        input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_S, EInput.GAMEPAD_THUMBSTICK_LEFT_DOWN);
+                        input.MapAction(EGameAction.INVENTORY_NEXT_ITEM, EInput.KEYBOARD_E, EInput.GAMEPAD_BUMPER_RIGHT);
+                        input.MapAction(EGameAction.INVENTORY_PREVIOUS_ITEM, EInput.KEYBOARD_Q, EInput.GAMEPAD_BUMPER_LEFT);
                         break;
                 }
             }

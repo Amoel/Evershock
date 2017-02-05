@@ -51,6 +51,9 @@ namespace EntityComponent.Manager
         KEYBOARD_A,
         KEYBOARD_S,
         KEYBOARD_D,
+
+        KEYBOARD_Q,
+        KEYBOARD_E
     }
 
     //---------------------------------------------------------------------------
@@ -67,6 +70,9 @@ namespace EntityComponent.Manager
         MENU_LEFT,
         MENU_RIGHT,
         MENU_BACK,
+
+        INVENTORY_NEXT_ITEM,
+        INVENTORY_PREVIOUS_ITEM,
 
         ADD_HEALTH,
         REDUCE_HEALTH,
@@ -94,6 +100,9 @@ namespace EntityComponent.Manager
             { EInput.KEYBOARD_A, Keys.A },
             { EInput.KEYBOARD_S, Keys.S },
             { EInput.KEYBOARD_D, Keys.D },
+
+            { EInput.KEYBOARD_Q, Keys.Q },
+            { EInput.KEYBOARD_E, Keys.E },
         };
 
         //---------------------------------------------------------------------------
@@ -117,29 +126,18 @@ namespace EntityComponent.Manager
                 case EInput.GAMEPAD_BUMPER_LEFT:
                     return GamePad.GetState(playerIndex).Buttons.LeftShoulder == ButtonState.Pressed ? 1.0f : 0.0f;
                 case EInput.GAMEPAD_BUMPER_RIGHT:
-                    return GamePad.GetState(playerIndex).Buttons.LeftShoulder == ButtonState.Pressed ? 1.0f : 0.0f;
+                    return GamePad.GetState(playerIndex).Buttons.RightShoulder == ButtonState.Pressed ? 1.0f : 0.0f;
                 case EInput.GAMEPAD_THUMBSTICK_LEFT:
                     return GamePad.GetState(playerIndex).Buttons.LeftStick == ButtonState.Pressed ? 1.0f : 0.0f;
 
-#if DEBUG
-                case EInput.GAMEPAD_THUMBSTICK_LEFT_LEFT:
-                    return Keyboard.GetState().IsKeyDown(Keys.Left) ? 1.0f : 0.0f;
-                case EInput.GAMEPAD_THUMBSTICK_LEFT_RIGHT:
-                    return Keyboard.GetState().IsKeyDown(Keys.Right) ? 1.0f : 0.0f;
-                case EInput.GAMEPAD_THUMBSTICK_LEFT_UP:
-                    return Keyboard.GetState().IsKeyDown(Keys.Up) ? 1.0f : 0.0f;
-                case EInput.GAMEPAD_THUMBSTICK_LEFT_DOWN:
-                    return Keyboard.GetState().IsKeyDown(Keys.Down) ? 1.0f : 0.0f;
-#else
                 case EInput.GAMEPAD_THUMBSTICK_LEFT_LEFT:
                     return MathHelper.Clamp(-GamePad.GetState(playerIndex).ThumbSticks.Left.X, 0.0f, 1.0f);
                 case EInput.GAMEPAD_THUMBSTICK_LEFT_RIGHT:
                     return MathHelper.Clamp(GamePad.GetState(playerIndex).ThumbSticks.Left.X, 0.0f, 1.0f);
                 case EInput.GAMEPAD_THUMBSTICK_LEFT_UP:
-                    return MathHelper.Clamp(-GamePad.GetState(playerIndex).ThumbSticks.Left.Y, 0.0f, 1.0f);
-                case EInput.GAMEPAD_THUMBSTICK_LEFT_DOWN:
                     return MathHelper.Clamp(GamePad.GetState(playerIndex).ThumbSticks.Left.Y, 0.0f, 1.0f);
-#endif
+                case EInput.GAMEPAD_THUMBSTICK_LEFT_DOWN:
+                    return MathHelper.Clamp(-GamePad.GetState(playerIndex).ThumbSticks.Left.Y, 0.0f, 1.0f);
 
                 case EInput.GAMEPAD_THUMBSTICK_RIGHT:
                     return GamePad.GetState(playerIndex).Buttons.RightStick == ButtonState.Pressed ? 1.0f : 0.0f;

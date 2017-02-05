@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Windows;
+using System.Text.RegularExpressions;
 
 namespace AssetImporter
 {
@@ -70,6 +71,24 @@ namespace AssetImporter
 
         //---------------------------------------------------------------------------
 
+        public bool AddFile(string source, string destination)
+        {
+            try
+            {
+                if (!source.Equals(destination)) File.Copy(source, Path.Combine(RootPath, destination));
+
+                string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\", "EvershockGame/EvershockGame.csproj"));
+                var project = new Microsoft.Build.Evaluation.Project(@path);
+                project.AddItem("Content", string.Format(@"Content\{0}", destination.Replace('/', '\\')), new List<KeyValuePair<string, string>> { new KeyValuePair<string, string>("CopyToOutputDirectory", "PreserveNewest") });
+                project.Save();
+                return true;
+            }
+            catch (Exception e) { }
+            return false;
+        }
+
+        //---------------------------------------------------------------------------
+
         public void RegisterTab(AssetTab tab)
         {
             if (!m_Tabs.Contains(tab))
@@ -97,12 +116,15 @@ namespace AssetImporter
 
         //---------------------------------------------------------------------------
 
-        public void Add(string name, string path, EAssetType assetType)
+        public void Add(string name, string sourcePath, string targetPath, EAssetType assetType)
         {
-            string absolutePath = Path.Combine(RootPath, path);
-            if (File.Exists(absolutePath))
+            if (AddFile(sourcePath, targetPath))
             {
-                Assets.Add(new Asset(name, path, assetType));
+                string absolutePath = Path.Combine(RootPath, targetPath);
+                if (File.Exists(absolutePath))
+                {
+                    Assets.Add(new Asset(name, targetPath, assetType));
+                }
             }
         }
 

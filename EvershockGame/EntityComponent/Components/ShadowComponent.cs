@@ -47,7 +47,7 @@ namespace EntityComponent.Components
         public void Draw(SpriteBatch batch, CameraData data, float deltaTime)
         {
             TransformComponent transform = GetComponent<TransformComponent>();
-            if (transform != null)
+            if (transform != null && IsValidDistance(data, transform.Location))
             {
                 batch.Draw(
                     Shadow.Texture,
@@ -60,6 +60,13 @@ namespace EntityComponent.Components
                     SpriteEffects.None,
                     0.0001f);
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private bool IsValidDistance(CameraData data, Vector3 center)
+        {
+            return Vector2.Distance(data.Center, center.To2D()) <= Math.Sqrt(Math.Pow(data.Width, 2) + Math.Pow(data.Height, 2)) / 2;
         }
 
         //---------------------------------------------------------------------------

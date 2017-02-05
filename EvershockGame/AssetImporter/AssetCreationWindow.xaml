@@ -7,7 +7,7 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:alias="clr-namespace:AssetImporter"
         mc:Ignorable="d"
-        Title="AssetCreationWindow" Height="150" Width="420" Icon="Resources/AssetImporterIcon.png" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+        Title="AssetCreationWindow" Height="170" Width="420" Icon="Resources/AssetImporterIcon.png" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
 
     <Window.Resources>
         <ObjectDataProvider x:Key="AssetTypeValues" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
@@ -34,28 +34,40 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="24"/>
                     <RowDefinition Height="24"/>
+                    <RowDefinition Height="24"/>
                     <RowDefinition Height="26"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="44"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" VerticalAlignment="Center" Margin="6,0,0,0"/>
-                <TextBox Name="AssetName" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="3,0,4,0" TextChanged="OnNameChanged"/>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Path" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Name" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                <TextBox Name="AssetName" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="3,0,4,0" TextChanged="OnNameChanged"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Source" VerticalAlignment="Center" Margin="6,0,0,0"/>
                 <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,4,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Name="RelativePath" Grid.Column="0" VerticalAlignment="Center" Margin="3,0,3,0"/>
-                    <Button Grid.Column="1" Width="18" Height="18" VerticalAlignment="Center" Click="OnSearchClicked">
+                    <TextBox Name="SourcePath" Grid.Column="0" VerticalAlignment="Center" Margin="3,0,3,0" IsReadOnly="True"/>
+                    <Button Grid.Column="1" Width="18" Height="18" VerticalAlignment="Center" Click="OnSearchSourceClicked">
                         <Image Source="Resources/SearchIcon.png"/>
                     </Button>
                 </Grid>
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Type" VerticalAlignment="Center" Margin="6,0,0,0"/>
-                <ComboBox Name="AssetTypeBox" Grid.Row="2" Grid.Column="1" Margin="3,3,4,1" ItemsSource="{Binding Source={StaticResource AssetTypeValues}}" SelectedIndex="1"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Target" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                <Grid Grid.Row="1" Grid.Column="1" Margin="0,0,4,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Name="TargetPath" Grid.Column="0" VerticalAlignment="Center" Margin="3,0,3,0" IsReadOnly="True"/>
+                    <Button Grid.Column="1" Width="18" Height="18" VerticalAlignment="Center" Click="OnSearchTargetClicked">
+                        <Image Source="Resources/SearchIcon.png"/>
+                    </Button>
+                </Grid>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Type" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                <ComboBox Name="AssetTypeBox" Grid.Row="3" Grid.Column="1" Margin="3,3,4,1" ItemsSource="{Binding Source={StaticResource AssetTypeValues}}" SelectedIndex="1"/>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="Cancel" Margin="0,4,4,4" Padding="3,0,3,0" Click="OnCancelClicked"/>

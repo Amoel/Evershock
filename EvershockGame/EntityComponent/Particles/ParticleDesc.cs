@@ -81,6 +81,32 @@ namespace EntityComponent.Particles
                 };
             }
         }
+
+        //---------------------------------------------------------------------------
+
+        public static ParticleDesc Stars
+        {
+            get
+            {
+                return new ParticleDesc()
+                {
+                    LifeTime = 1.0f,
+                    HasShadow = false,
+
+                    ParticleColor = (time) => Color.White,
+                    ParticleOpacity = (time) => (float)Math.Sin(time * Math.PI),
+                    ParticleSize = (time) => Vector2.One * 2,
+
+                    LightColor = (time) => Color.White,
+                    LightOpacity = (time) => (float)Math.Sin(time * Math.PI),
+                    LightSize = (time) => Vector2.One * 4,
+
+                    Inertia = (time) => 1.0f,
+                    Gravity = (time) => 0.0f,
+                    Restitution = (time) => 0.0f
+                };
+            }
+        }
     }
 
     //---------------------------------------------------------------------------

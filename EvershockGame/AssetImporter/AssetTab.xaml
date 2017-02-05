@@ -8,13 +8,16 @@
              d:DesignHeight="300" d:DesignWidth="600">
 
     <UserControl.Resources>
-        
     </UserControl.Resources>
     
     <Grid Name="BaseGrid">
         <Grid.Resources>
             <local:BoolToColorConverter x:Key="BoolToColorConverter"/>
-            <CollectionViewSource x:Key="FilteredAssets" Source="{Binding Assets}" Filter="OnFilter" />
+            <CollectionViewSource x:Key="FilteredAssets" Source="{Binding Assets}" Filter="OnFilter">
+                <!--<CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="AssetType"/>
+                </CollectionViewSource.GroupDescriptions>-->
+            </CollectionViewSource>
         </Grid.Resources>
         <DataGrid 
                         Name="Container" 
@@ -31,6 +34,7 @@
             <DataGrid.CellStyle>
                 <Style TargetType="{x:Type DataGridCell}">
                     <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Height" Value="18"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding HasUnsavedChanges}" Value="True">
                             <Setter Property="Background" Value="#E0FF8F"/>

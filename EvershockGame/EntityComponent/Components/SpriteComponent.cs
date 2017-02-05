@@ -95,28 +95,28 @@ namespace EntityComponent.Components
         public void Draw(SpriteBatch batch, CameraData data, float deltaTime)
         {
             m_Time += deltaTime;
-
-            Sprite sprite = GetSprite();
+            
+                Sprite sprite = GetSprite();
             if (!sprite.IsEmpty)
             {
                 TransformComponent transform = GetComponent<TransformComponent>();
-                if (transform != null && Vector2.Distance(data.Center, transform.Location.To2D()) <= Math.Sqrt(Math.Pow(data.Width, 2) + Math.Pow(data.Height, 2)) / 2)
+                if (transform != null && IsValidDistance(data, transform.Location))
                 {
                     Color color = m_ColorFunction(m_Time);
                     float opacity = MathHelper.Clamp(m_OpacityFunction(m_Time), 0.0f, 1.0f);
                     Vector2 scale = Vector2.Clamp(m_ScaleFunction(m_Time), Vector2.Zero, new Vector2(10, 10));
-                    
+
                     Vector3 absoluteLocation = transform.AbsoluteLocation;
                     batch.Draw(
                         sprite.Texture,
                         absoluteLocation.ToLocal2D(data),
-                        sprite.Bounds, 
-                        color * opacity, 
-                        transform.Rotation, 
-                        new Vector2(sprite.Bounds.Width / 2 + Offset.X, sprite.Bounds.Height / 2 + Offset.Y), 
+                        sprite.Bounds,
+                        color * opacity,
+                        transform.Rotation,
+                        new Vector2(sprite.Bounds.Width / 2 + Offset.X, sprite.Bounds.Height / 2 + Offset.Y),
                         scale,
-                        SpriteEffects.None, 
-                        Math.Max(0.0001f, absoluteLocation.Z / 1000.0f) + (absoluteLocation.Y + 10000.0f) / 100000.0f);
+                        SpriteEffects.None,
+                        (absoluteLocation.Y + 10000.0f) / 100000.0f); // + Math.Max(0.0001f, absoluteLocation.Z / 1000.0f)
                 }
             }
         }
@@ -149,6 +149,13 @@ namespace EntityComponent.Components
             {
                 m_OpacityFunction = opacityFunction;
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private bool IsValidDistance(CameraData data, Vector3 center)
+        {
+            return Vector2.Distance(data.Center, center.To2D()) <= Math.Sqrt(Math.Pow(data.Width, 2) + Math.Pow(data.Height, 2)) / 2;
         }
 
         //---------------------------------------------------------------------------

@@ -110,11 +110,11 @@ namespace EntityComponent.Components
             if (!sprite.IsEmpty)
             {
                 TransformComponent transform = GetComponent<TransformComponent>();
-                if (transform != null)
+                if (transform != null && IsValidDistance(data, transform.Location))
                 {
                     Color color = m_ColorFunction(m_Time);
                     float brightness = MathHelper.Clamp(m_BrightnessFunction(m_Time), 0.0f, 1.0f);
-                    Vector2 scale = Vector2.Clamp(m_ScaleFunction(m_Time), Vector2.Zero, new Vector2(10, 10));
+                    Vector2 scale = Vector2.Clamp(m_ScaleFunction(m_Time), Vector2.Zero, new Vector2(100, 100));
 
                     batch.Draw(
                         sprite.Texture,
@@ -158,6 +158,13 @@ namespace EntityComponent.Components
             {
                 m_BrightnessFunction = brightnessFunction;
             }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private bool IsValidDistance(CameraData data, Vector3 center)
+        {
+            return Vector2.Distance(data.Center, center.To2D()) <= Math.Sqrt(Math.Pow(data.Width, 2) + Math.Pow(data.Height, 2)) / 2;
         }
 
         //---------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 ﻿using EntityComponent;
 using EntityComponent.Components;
 using EntityComponent.Components.UI;
+using EntityComponent.Items;
 using EntityComponent.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -112,6 +113,25 @@ namespace EvershockGame.Code.Components
                     }
                     float manaSegment = (m_Mana % m_Factor) / m_Factor;
                     batch.Draw(m_Hearts, new Rectangle(m_Alignment == EHorizontalAlignment.Left ? bounds.X + manaCount * 32 : bounds.X + bounds.Width - (manaCount + 1) * 32, bounds.Y + 64, (int)(manaSegment * 32.0f), 28), new Rectangle(64, 0, (int)(manaSegment * 64), 56), Color.White * 0.4f);
+
+                    InventoryComponent inventory = m_Player.GetComponent<InventoryComponent>();
+                    if (inventory != null)
+                    {
+                        for (int i = 0; i < inventory.Size; i++)
+                        {
+                            if (i == inventory.ActiveIndex)
+                            {
+                                Texture2D tex = CollisionManager.Get().PointTexture;
+                                batch.Draw(tex, new Rectangle(m_Alignment == EHorizontalAlignment.Left ? bounds.X : bounds.X + bounds.Width - 50, bounds.Y + 120 + i * 52, 50, 50), tex.Bounds, Color.White * 0.3f);
+                            }
+                            InventorySlot slot = inventory[i];
+                            if (slot != null && slot.Item.IsValid)
+                            {
+                                batch.Draw(slot.Item.Sprite.Texture, new Rectangle(m_Alignment == EHorizontalAlignment.Left ? bounds.X : bounds.X + bounds.Width - 50, bounds.Y + 120 + i * 52, 50, 50), slot.Item.Sprite.Bounds, Color.White);
+                                batch.DrawString(m_Font, slot.Count.ToString(), new Vector2(m_Alignment == EHorizontalAlignment.Left ? bounds.X : bounds.X + bounds.Width - 50, bounds.Y + 120 + i * 52), Color.White);
+                            }
+                        }
+                    }
                 }
             }
         }

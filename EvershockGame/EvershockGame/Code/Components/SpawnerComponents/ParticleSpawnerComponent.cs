@@ -15,7 +15,7 @@ namespace EvershockGame.Code.Components
 {
     public class ParticleSpawnerComponent : SpawnerComponent, ITickableComponent, IDrawableComponent, ILightingComponent
     {
-        public IParticleEmitter Emitter { get; private set; }
+        public IParticleEmitter Emitter { get; set; }
 
         //---------------------------------------------------------------------------
 

@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
+using EntityComponent.Items;
 
 namespace EvershockGame
 {
@@ -55,6 +56,26 @@ namespace EvershockGame
             SeedManager.Get().ResetBaseSeed(1234);
 
             /*--------------------------------------------------------------------------
+                       Items
+            --------------------------------------------------------------------------*/
+
+            Texture2D itemTexture = AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items);
+            ItemManager.Get().RegisterItem(new ItemDesc("Potion", EItemType.HealthPotion, EItemRarity.Common, new Sprite(itemTexture, 14, 30, 7, 2), true));
+            ItemManager.Get().RegisterItem(new ItemDesc("Axe", EItemType.Axe, EItemRarity.Epic, new Sprite(itemTexture, 14, 30, 9, 7), false));
+            ItemManager.Get().RegisterItem(new ItemDesc("Small key", EItemType.SmallKey, EItemRarity.Rare, new Sprite(itemTexture, 14, 30, 7, 16), true));
+
+            /*--------------------------------------------------------------------------
+                       ItemPools
+            --------------------------------------------------------------------------*/
+
+            ItemPool smallChestPool = new ItemPool(EItemPool.SmallChest);
+            smallChestPool.Add(EItemType.HealthPotion, 7);
+            smallChestPool.Add(EItemType.SmallKey, 2);
+            smallChestPool.Add(EItemType.Axe, 1);
+
+            ItemManager.Get().RegisterItemPool(smallChestPool);
+
+            /*--------------------------------------------------------------------------
                        Stage
             --------------------------------------------------------------------------*/
 
@@ -85,7 +106,6 @@ namespace EvershockGame
                 }
             }
             
-
             stage.SaveStageAsImage(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"Map.png"));
 
             /*--------------------------------------------------------------------------
@@ -112,7 +132,7 @@ namespace EvershockGame
             cam1.Properties.BloomExtractEffect = AssetManager.Get().Find<Effect>(EEffectAssets.BloomExtract);
             cam1.Properties.BloomCombineEffect = AssetManager.Get().Find<Effect>(EEffectAssets.BloomCombine);
             cam1.Properties.BlurEffect = AssetManager.Get().Find<Effect>(EEffectAssets.Blur);
-            cam1.Properties.Tileset = AssetManager.Get().Find<Texture2D>(ETilesetAssets.DungeonTileset1);
+            cam1.Properties.Tileset = AssetManager.Get().Find<Texture2D>(ETilesetAssets.DungeonTileset2);
             cam1.Properties.AddTarget(player);
             //cam1.Properties.IsAmbientOcclusionEnabled = true;
 
@@ -122,7 +142,7 @@ namespace EvershockGame
             cam2.Properties.BloomExtractEffect = AssetManager.Get().Find<Effect>(EEffectAssets.BloomExtract);
             cam2.Properties.BloomCombineEffect = AssetManager.Get().Find<Effect>(EEffectAssets.BloomCombine);
             cam2.Properties.BlurEffect = AssetManager.Get().Find<Effect>(EEffectAssets.Blur);
-            cam2.Properties.Tileset = AssetManager.Get().Find<Texture2D>(ETilesetAssets.DungeonTileset1);
+            cam2.Properties.Tileset = AssetManager.Get().Find<Texture2D>(ETilesetAssets.DungeonTileset2);
             cam2.Properties.AddTarget(player2);
             //cam2.Properties.IsAmbientOcclusionEnabled = true;
 
@@ -219,6 +239,8 @@ namespace EvershockGame
             //    MP_Player2.Properties.Text = string.Format("<Cyan>{0}</Cyan>  MP", new string('x', (int)(float)value / 10));
             //});
 
+
+
             Healthbar bar1 = EntityFactory.CreateUI<Healthbar>("HealthbarPlayer1");
             bar1.VerticalAlignment = EVerticalAlignment.Top;
             bar1.HorizontalAlignment = EHorizontalAlignment.Left;
@@ -230,14 +252,6 @@ namespace EvershockGame
             bar2.HorizontalAlignment = EHorizontalAlignment.Right;
             bar2.Margin = new Rectangle(0, 25, 15, 0);
             bar2.Properties.BindPlayer(player2, EHorizontalAlignment.Right);
-
-            //for (int x = 0; x < 8; x++)
-            //{
-            //    IEntity torch = EntityFactory.Create<Entity>("Torch");
-            //    torch.AddComponent<TransformComponent>().Init(new Vector3(1314 + x * 256, 1292, 100));
-            //    torch.AddComponent<ParticleSpawnerComponent>().Emitter.Description = ParticleDesc.Fire;
-            //    torch.AddComponent<LightingComponent>().Init(AssetManager.Get().Find<Texture2D>(ELightAssets.CircleLight), new Vector2(0, 6), new Vector2(1, 1), Color.Orange, 0.6f);
-            //}
 
             ConsoleManager.Get().RegisterCommand("SpawnChestAtPosition", null, (Func<int, int, string>)Chest.SpawnChest);
             ConsoleManager.Get().RegisterCommand("SpawnChestAtCamera", null, (Func<int, string>)Chest.SpawnChest);
@@ -251,10 +265,6 @@ namespace EvershockGame
             AssetManager.Get().LoadAll();
 
 #if DEBUG
-            // Load debug content
-            //CollisionManager.Get().RectTexture = Content.Load<Texture2D>("Graphics/Debug/RectTextureDebug");
-            //CollisionManager.Get().CircleTexture = Content.Load<Texture2D>("Graphics/Debug/CircleTextureDebug");
-
             Texture2D pointTex = new Texture2D(GraphicsDevice, 1, 1);
             pointTex.SetData(new Color[] { Color.White });
             CollisionManager.Get().PointTexture = pointTex;

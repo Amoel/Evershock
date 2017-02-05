@@ -8,6 +8,7 @@ namespace EntityComponent.Components
     [Serializable]
     public class InputComponent : Component, ITickableComponent
     {
+        private GameActionCollection m_Actions;
         private Dictionary<EGameAction, EInput[]> m_Mappings;
         private PlayerIndex m_PlayerIndex;
 
@@ -15,8 +16,16 @@ namespace EntityComponent.Components
 
         public InputComponent(Guid entity) : base(entity)
         {
+            m_Actions = new GameActionCollection();
             m_Mappings = new Dictionary<EGameAction, EInput[]>();
             m_PlayerIndex = PlayerIndex.One;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void Init(PlayerIndex playerIndex)
+        {
+            m_PlayerIndex = playerIndex;
         }
 
         //---------------------------------------------------------------------------
@@ -34,10 +43,9 @@ namespace EntityComponent.Components
 #if DEBUG
             if (ConsoleManager.Get().IsVisible) return;
 #endif
-            GameActionCollection actions = new GameActionCollection();
             foreach (EGameAction action in m_Mappings.Keys)
             {
-                actions.Actions.Add(action, GetValue(action));
+                m_Actions.Update(action, GetValue(action));
             }
 
             foreach (IComponent component in GetComponents())
@@ -46,7 +54,7 @@ namespace EntityComponent.Components
 
                 if (component is IInputReceiver)
                 {
-                    (component as IInputReceiver).ReceiveInput(actions, deltaTime);
+                    (component as IInputReceiver).ReceiveInput(m_Actions, deltaTime);
                 }
             }
         }

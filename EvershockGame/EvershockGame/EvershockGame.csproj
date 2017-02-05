@@ -52,6 +52,7 @@
     <Compile Include="Code\Components\PickupComponents\CoinPickupComponent.cs" />
     <Compile Include="Code\Components\PickupComponents\HealthPickupComponent.cs" />
     <Compile Include="Code\Components\PickupComponents\IPickupComponent.cs" />
+    <Compile Include="Code\Components\PickupComponents\ItemPickupComponent.cs" />
     <Compile Include="Code\Components\PickupComponents\ManaPickupComponent.cs" />
     <Compile Include="Code\Components\PickupComponents\PickupComponent.cs" />
     <Compile Include="Code\Components\SpawnerComponents\ParticleSpawnerComponent.cs" />

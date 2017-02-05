@@ -182,5 +182,13 @@
     "IncludeInDebug": false,
     "IncludeInRelease": false,
     "AssetType": 2
+  },
+  {
+    "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Tilesets/DungeonTileset2.png",
+    "Name": "DungeonTileset2",
+    "Path": "Graphics/Tilesets/DungeonTileset2.png",
+    "IncludeInDebug": false,
+    "IncludeInRelease": false,
+    "AssetType": 2
   }
 ]

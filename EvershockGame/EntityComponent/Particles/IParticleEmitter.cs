@@ -27,6 +27,9 @@ namespace EntityComponent.Particles
         ParticleDesc Description { get; set; }
         Vector3 Center { get; set; }
 
+        Sprite Sprite { get; set; }
+        Sprite Light { get; set; }
+
         //---------------------------------------------------------------------------
 
         void Update(float deltaTime);
