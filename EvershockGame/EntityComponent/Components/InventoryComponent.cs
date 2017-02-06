@@ -96,6 +96,21 @@ namespace EntityComponent.Components
 
         //---------------------------------------------------------------------------
 
+        public void TryDrop(int index, int count)
+        {
+            InventorySlot slot = m_Items[index];
+            if (slot != null)
+            {
+                slot.Drop(count);
+                if (slot.Count == 0)
+                {
+                    m_Items[index] = null;
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
         public void TryUse(EItemType type)
         {
             int index = GetFirstSlot(type);
@@ -109,6 +124,21 @@ namespace EntityComponent.Components
                     {
                         m_Items[index] = null;
                     }
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void TryUse(int index)
+        {
+            InventorySlot slot = m_Items[index];
+            if (slot != null)
+            {
+                slot.Use();
+                if (slot.Count == 0)
+                {
+                    m_Items[index] = null;
                 }
             }
         }
@@ -145,6 +175,14 @@ namespace EntityComponent.Components
             else if (actions[EGameAction.INVENTORY_NEXT_ITEM].IsPressed)
             {
                 SelectNext();
+            }
+            else if (actions[EGameAction.INVENTORY_USE_ITEM].IsPressed)
+            {
+                TryUse(ActiveIndex);
+            }
+            else if (actions[EGameAction.INVENTORY_DROP_ITEM].IsPressed)
+            {
+                TryDrop(ActiveIndex, 1);
             }
         }
 

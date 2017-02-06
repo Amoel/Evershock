@@ -76,6 +76,8 @@ namespace EntityComponent.Manager
 
         ADD_HEALTH,
         REDUCE_HEALTH,
+        INVENTORY_USE_ITEM,
+        INVENTORY_DROP_ITEM,
 
         TAKE_SCREENSHOT
     }

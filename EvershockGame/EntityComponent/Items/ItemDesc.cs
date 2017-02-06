@@ -24,6 +24,13 @@ namespace EntityComponent.Items
         Legendary
     }
 
+    public enum EItemCategory
+    {
+        Usable,
+        MeleeWeapon,
+        RangeWeapon
+    }
+
     //---------------------------------------------------------------------------
 
     public struct ItemDesc
@@ -34,6 +41,7 @@ namespace EntityComponent.Items
         public string Name { get; private set; }
         public EItemType Type { get; private set; }
         public EItemRarity Rarity { get; private set; }
+        public EItemCategory Category { get; private set; }
 
         public Sprite Sprite { get; private set; }
         public bool IsStackable { get; private set; }

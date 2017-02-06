@@ -65,6 +65,8 @@ namespace EvershockGame.Code
                         input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_DOWN, EInput.GAMEPAD_THUMBSTICK_LEFT_DOWN);
                         input.MapAction(EGameAction.INVENTORY_NEXT_ITEM, EInput.KEYBOARD_E, EInput.GAMEPAD_BUMPER_RIGHT);
                         input.MapAction(EGameAction.INVENTORY_PREVIOUS_ITEM, EInput.KEYBOARD_Q, EInput.GAMEPAD_BUMPER_LEFT);
+                        input.MapAction(EGameAction.INVENTORY_USE_ITEM, EInput.GAMEPAD_X);
+                        input.MapAction(EGameAction.INVENTORY_DROP_ITEM, EInput.GAMEPAD_Y);
                         break;
                     case PlayerIndex.Two:
                         input.MapAction(EGameAction.MOVE_LEFT, EInput.KEYBOARD_A, EInput.GAMEPAD_THUMBSTICK_LEFT_LEFT);
@@ -73,6 +75,8 @@ namespace EvershockGame.Code
                         input.MapAction(EGameAction.MOVE_DOWN, EInput.KEYBOARD_S, EInput.GAMEPAD_THUMBSTICK_LEFT_DOWN);
                         input.MapAction(EGameAction.INVENTORY_NEXT_ITEM, EInput.KEYBOARD_E, EInput.GAMEPAD_BUMPER_RIGHT);
                         input.MapAction(EGameAction.INVENTORY_PREVIOUS_ITEM, EInput.KEYBOARD_Q, EInput.GAMEPAD_BUMPER_LEFT);
+                        input.MapAction(EGameAction.INVENTORY_USE_ITEM, EInput.GAMEPAD_X);
+                        input.MapAction(EGameAction.INVENTORY_DROP_ITEM, EInput.GAMEPAD_Y);
                         break;
                 }
             }

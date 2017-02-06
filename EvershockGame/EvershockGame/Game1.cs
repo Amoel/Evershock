@@ -59,6 +59,8 @@ namespace EvershockGame
                        Items
             --------------------------------------------------------------------------*/
 
+            ItemManager.Get().LoadItems();
+
             Texture2D itemTexture = AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items);
             ItemManager.Get().RegisterItem(new ItemDesc("Potion", EItemType.HealthPotion, EItemRarity.Common, new Sprite(itemTexture, 14, 30, 7, 2), true));
             ItemManager.Get().RegisterItem(new ItemDesc("Axe", EItemType.Axe, EItemRarity.Epic, new Sprite(itemTexture, 14, 30, 9, 7), false));
@@ -253,8 +255,11 @@ namespace EvershockGame
             bar2.Margin = new Rectangle(0, 25, 15, 0);
             bar2.Properties.BindPlayer(player2, EHorizontalAlignment.Right);
 
+#if DEBUG
             ConsoleManager.Get().RegisterCommand("SpawnChestAtPosition", null, (Func<int, int, string>)Chest.SpawnChest);
             ConsoleManager.Get().RegisterCommand("SpawnChestAtCamera", null, (Func<int, string>)Chest.SpawnChest);
+            ConsoleManager.Get().RegisterCommand("SpawnPickup", null, (Func<string, int, Pickup>)PickupFactory.Create);
+#endif
         }
         
         protected override void LoadContent()

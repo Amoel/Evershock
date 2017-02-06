@@ -122,16 +122,6 @@ namespace TilesetViewer
 
         //---------------------------------------------------------------------------
 
-        public void UpdateTiles()
-        {
-            //foreach (Tile tile in m_Tiles)
-            //{
-            //    tile.UpdateImage();
-            //}
-        }
-
-        //---------------------------------------------------------------------------
-
         private void SetHighlight(Point point, bool isHovering)
         {
             if (isHovering)
@@ -212,38 +202,13 @@ namespace TilesetViewer
             var pos = e.GetPosition(TilesCanvas);
             m_LastClicked = pos;
             m_LastMoved = m_LastClicked;
-
-            //switch (EditManager.Get().Mode)
-            //{
-            //    case EEditMode.Tiles:
-            //        if (e.LeftButton == MouseButtonState.Pressed)
-            //        {
-            //            PasteTiles(m_LastClicked);
-            //        }
-            //        break;
-            //    case EEditMode.Blocker:
-            //        if (e.LeftButton == MouseButtonState.Pressed)
-            //        {
-            //            SetBlocker(pos, false);
-            //        }
-            //        else if(e.RightButton == MouseButtonState.Pressed)
-            //        {
-            //            SetBlocker(pos, true);
-            //        }
-            //        break;
-            //}
-            
             m_Dragging = true;
-            //TilesCanvas.CaptureMouse();
         }
 
         //---------------------------------------------------------------------------
 
         private void OnMouseUp(object sender, MouseEventArgs e)
         {
-            m_Dragging = false;
-            //TilesCanvas.ReleaseMouseCapture();
-
             UndoManager.Get().StopUndo();
         }
 
@@ -252,8 +217,6 @@ namespace TilesetViewer
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
             var pos = e.GetPosition(TilesCanvas);
-            //SetHighlight(pos, IsMouseOver);
-
             if (e.RightButton == MouseButtonState.Pressed)
             {
                 UpdateOffset(e.GetPosition(TilesCanvas).X - m_LastMoved.X, e.GetPosition(TilesCanvas).Y - m_LastMoved.Y);

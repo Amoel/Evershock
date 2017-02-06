@@ -3,7 +3,9 @@ using Managers;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +31,20 @@ namespace EntityComponent.Manager
         {
             m_ItemPools = new Dictionary<EItemPool, ItemPool>();
             m_Items = new Dictionary<EItemType, ItemDesc>();
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void LoadItems()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "EvershockGame.EvershockGame.Items.json";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                string result = reader.ReadToEnd();
+            }
         }
 
         //---------------------------------------------------------------------------

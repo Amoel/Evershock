@@ -8,6 +8,7 @@ using EvershockGame.Code.Components;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace EvershockGame.Code.Factories
@@ -128,5 +129,24 @@ namespace EvershockGame.Code.Factories
             pickup.AddComponent<DespawnComponent>();
             return pickup;
         }
+
+        //---------------------------------------------------------------------------
+
+#if DEBUG
+        public static Pickup Create(string name, int cameraIndex)
+        {
+            EPickups pickupType;
+            if (Enum.TryParse(name, out pickupType))
+            {
+                List<Camera> cams = EntityManager.Get().Find<Camera>();
+                if (cams.Count > cameraIndex)
+                {
+                    Vector3 location = cams[cameraIndex].Transform.Location;
+                    return Create(pickupType, location, new Vector3(0, 0, 50));
+                }
+            }
+            return null;
+        }
+#endif
     }
 }
