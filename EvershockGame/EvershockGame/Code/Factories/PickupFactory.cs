@@ -1,9 +1,9 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
-using EntityComponent.Factory;
-using EntityComponent.Items;
-using EntityComponent.Manager;
-using EntityComponent.Particles;
+﻿using EvershockGame;
+using EvershockGame.Components;
+using EvershockGame.Factory;
+using EvershockGame.Items;
+using EvershockGame.Manager;
+using EvershockGame.Particles;
 using EvershockGame.Code.Components;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;

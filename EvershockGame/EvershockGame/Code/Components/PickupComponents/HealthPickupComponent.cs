@@ -1,5 +1,5 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
+﻿using EvershockGame;
+using EvershockGame.Components;
 using System;
 
 namespace EvershockGame.Code.Components

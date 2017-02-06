@@ -1,6 +1,6 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
-using EntityComponent.Manager;
+﻿using EvershockGame;
+using EvershockGame.Components;
+using EvershockGame.Manager;
 using System;
 
 namespace EvershockGame.Code.Components

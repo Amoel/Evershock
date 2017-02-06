@@ -1,7 +1,7 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
-using EntityComponent.Manager;
-using EntityComponent.Pathfinding;
+﻿using EvershockGame;
+using EvershockGame.Components;
+using EvershockGame.Manager;
+using EvershockGame.Pathfinding;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

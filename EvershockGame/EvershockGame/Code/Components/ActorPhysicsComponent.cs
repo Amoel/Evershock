@@ -1,6 +1,6 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
-using EntityComponent.Manager;
+﻿using EvershockGame;
+using EvershockGame.Components;
+using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -38,34 +38,16 @@ namespace EvershockGame.Code
             
             if (attributes != null)
             {
-                float xMovement = (actions[EGameAction.MOVE_RIGHT].Value - actions[EGameAction.MOVE_LEFT].Value) * deltaTime * attributes.MovementSpeed* 200;
-                float yMovement = (actions[EGameAction.MOVE_DOWN].Value - actions[EGameAction.MOVE_UP].Value) * deltaTime * attributes.MovementSpeed * 200;
+                float xMovement = (actions[EGameAction.MOVE_RIGHT].Value - actions[EGameAction.MOVE_LEFT].Value);// * deltaTime * attributes.MovementSpeed* 20;
+                float yMovement = (actions[EGameAction.MOVE_DOWN].Value - actions[EGameAction.MOVE_UP].Value);// * deltaTime * attributes.MovementSpeed * 20;
                 
                 Vector3 movement = new Vector3(xMovement, yMovement, 0);
                 if (movement.Length() > 0.01f)
                 {
-                    ApplyForce(new Vector3(xMovement, yMovement, 0));
+                    //ApplyForce(new Vector3(xMovement, yMovement, 0), true);
+                    ApplyAbsoluteForce(Vector3.Normalize(new Vector3(xMovement, yMovement, 0)) * deltaTime * attributes.MovementSpeed * 200.0f);
                 }
             }
-
-//#if DEBUG
-//            if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
-//            {
-//                ColliderComponent collider = GetComponent<ColliderComponent>();
-//                if (collider != null)
-//                {
-//                    collider.SetCollisionState(false);
-//                }
-//            }
-//            else
-//            {
-//                ColliderComponent collider = GetComponent<ColliderComponent>();
-//                if (collider != null)
-//                {
-//                    collider.SetCollisionState(true);
-//                }
-//            }
-//#endif
         }
     }
 }

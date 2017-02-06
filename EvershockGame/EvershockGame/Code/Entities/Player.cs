@@ -1,7 +1,7 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
-using EntityComponent.Items;
-using EntityComponent.Manager;
+﻿using EvershockGame;
+using EvershockGame.Components;
+using EvershockGame.Items;
+using EvershockGame.Manager;
 using EvershockGame.Code.Components;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
@@ -43,7 +43,7 @@ namespace EvershockGame.Code
 
             AddComponent<ShadowComponent>().Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.RedOrb), new Vector2(6.0f, 2.0f), new Vector2(0.0f, 10.0f));
 
-            AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
+            AddComponent<ActorPhysicsComponent>().Init(0.8f, 1.0f, 0.0f);
 
             CircleColliderComponent collider = AddComponent<CircleColliderComponent>();
             collider.Init(44, BodyType.Dynamic);

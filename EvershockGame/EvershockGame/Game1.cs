@@ -1,11 +1,11 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
-using EntityComponent.Components.UI;
-using EntityComponent.Entities;
-using EntityComponent.Factory;
-using EntityComponent.Manager;
-using EntityComponent.Stages;
-using EntityComponent.Particles;
+﻿using EvershockGame;
+using EvershockGame.Components;
+using EvershockGame.Components.UI;
+using EvershockGame.Entities;
+using EvershockGame.Factory;
+using EvershockGame.Manager;
+using EvershockGame.Stages;
+using EvershockGame.Particles;
 using EvershockGame.Code;
 using EvershockGame.Code.Components;
 using EvershockGame.Code.Entities.UI;
@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
-using EntityComponent.Items;
+using EvershockGame.Items;
 
 namespace EvershockGame
 {
@@ -60,22 +60,7 @@ namespace EvershockGame
             --------------------------------------------------------------------------*/
 
             ItemManager.Get().LoadItems();
-
-            Texture2D itemTexture = AssetManager.Get().Find<Texture2D>(ETilesetAssets.Items);
-            ItemManager.Get().RegisterItem(new ItemDesc("Potion", EItemType.HealthPotion, EItemRarity.Common, new Sprite(itemTexture, 14, 30, 7, 2), true));
-            ItemManager.Get().RegisterItem(new ItemDesc("Axe", EItemType.Axe, EItemRarity.Epic, new Sprite(itemTexture, 14, 30, 9, 7), false));
-            ItemManager.Get().RegisterItem(new ItemDesc("Small key", EItemType.SmallKey, EItemRarity.Rare, new Sprite(itemTexture, 14, 30, 7, 16), true));
-
-            /*--------------------------------------------------------------------------
-                       ItemPools
-            --------------------------------------------------------------------------*/
-
-            ItemPool smallChestPool = new ItemPool(EItemPool.SmallChest);
-            smallChestPool.Add(EItemType.HealthPotion, 7);
-            smallChestPool.Add(EItemType.SmallKey, 2);
-            smallChestPool.Add(EItemType.Axe, 1);
-
-            ItemManager.Get().RegisterItemPool(smallChestPool);
+            ItemManager.Get().LoadItemPools();
 
             /*--------------------------------------------------------------------------
                        Stage
@@ -91,11 +76,7 @@ namespace EvershockGame
                 for (int i = 0; i < max; i++)
                 {
                     Vector2 position = new Vector2(room.Bounds.Center.X * 64 + (float)Math.Sin((i / (max / 2.0f)) * Math.PI) * 300, room.Bounds.Center.Y * 64 + (float)Math.Cos((i / (max / 2.0f)) * Math.PI) * 300);
-                    EntityFactory.Create<Chest>("hallo").Init(position);
-                }
-                for (int i = 0; i < 9; i++)
-                {
-                    EntityFactory.Create<Spike>("Spike").Init(new Vector2(room.Bounds.Center.X * 64 + (i % 3) * 64, room.Bounds.Center.Y * 64 + 128 + (i / 3) * 64));
+                    EntityFactory.Create<Chest>("Chest").Init(position);
                 }
                 EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));
 

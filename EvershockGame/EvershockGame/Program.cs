@@ -1,4 +1,4 @@
-﻿using EntityComponent.Manager;
+﻿using EvershockGame.Manager;
 using System;
 
 namespace EvershockGame

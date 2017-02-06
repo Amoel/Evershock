@@ -1,6 +1,6 @@
-﻿using EntityComponent.Components;
-using EntityComponent.Items;
-using EntityComponent.Manager;
+﻿using EvershockGame.Components;
+using EvershockGame.Items;
+using EvershockGame.Manager;
 using EvershockGame.Code.Factories;
 using Microsoft.Xna.Framework;
 using System;

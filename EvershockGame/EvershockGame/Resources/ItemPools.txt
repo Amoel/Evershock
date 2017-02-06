@@ -1,0 +1,10 @@
+[
+  {
+    "Type": "SmallChest",
+    "Types": {
+      "HealthPotion": 7.0,
+      "SmallKey": 2.0,
+      "Axe": 1.0
+    }
+  }
+]

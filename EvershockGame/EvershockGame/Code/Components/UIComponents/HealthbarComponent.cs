@@ -1,8 +1,8 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
-using EntityComponent.Components.UI;
-using EntityComponent.Items;
-using EntityComponent.Manager;
+﻿using EvershockGame;
+using EvershockGame.Components;
+using EvershockGame.Components.UI;
+using EvershockGame.Items;
+using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -125,7 +125,7 @@ namespace EvershockGame.Code.Components
                                 batch.Draw(tex, new Rectangle(m_Alignment == EHorizontalAlignment.Left ? bounds.X : bounds.X + bounds.Width - 50, bounds.Y + 120 + i * 52, 50, 50), tex.Bounds, Color.White * 0.3f);
                             }
                             InventorySlot slot = inventory[i];
-                            if (slot != null && slot.Item.IsValid)
+                            if (slot != null && !slot.Item.IsEmpty)
                             {
                                 batch.Draw(slot.Item.Sprite.Texture, new Rectangle(m_Alignment == EHorizontalAlignment.Left ? bounds.X : bounds.X + bounds.Width - 50, bounds.Y + 120 + i * 52, 50, 50), slot.Item.Sprite.Bounds, Color.White);
                                 batch.DrawString(m_Font, slot.Count.ToString(), new Vector2(m_Alignment == EHorizontalAlignment.Left ? bounds.X : bounds.X + bounds.Width - 50, bounds.Y + 120 + i * 52), Color.White);

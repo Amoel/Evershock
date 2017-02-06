@@ -1,0 +1,29 @@
+[
+  {
+    "Name": "Potion",
+    "Type": "HealthPotion",
+    "Rarity": "Common",
+    "Category": "Usable",
+    "SpriteX": 7,
+    "SpriteY": 2,
+    "IsStackable": true
+  },
+  {
+    "Name": "Axe",
+    "Type": "Axe",
+    "Rarity": "Epic",
+    "Category": "Usable",
+    "SpriteX": 9,
+    "SpriteY": 7,
+    "IsStackable": false
+  },
+  {
+    "Name": "Small key",
+    "Type": "SmallKey",
+    "Rarity": "Rare",
+    "Category": "Usable",
+    "SpriteX": 7,
+    "SpriteY": 16,
+    "IsStackable": true
+  }
+]

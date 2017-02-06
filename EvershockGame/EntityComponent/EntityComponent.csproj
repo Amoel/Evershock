@@ -79,97 +79,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Camera\Camera.cs" />
-    <Compile Include="Camera\CameraTarget.cs" />
-    <Compile Include="Component.cs" />
-    <Compile Include="Components\AnimationComponent.cs" />
-    <Compile Include="Components\AreaSpriteComponent.cs" />
-    <Compile Include="Components\CameraComponent.cs" />
-    <Compile Include="Components\Collider\AreaColliderComponent.cs" />
-    <Compile Include="Components\Collider\CircleColliderComponent.cs" />
-    <Compile Include="Components\Collider\ColliderComponent.cs" />
-    <Compile Include="Components\Collider\MultiPathColliderComponent.cs" />
-    <Compile Include="Components\Collider\RectColliderComponent.cs" />
-    <Compile Include="Components\Collider\WallColliderComponent.cs" />
-    <Compile Include="Components\DespawnComponent.cs" />
-    <Compile Include="Components\EngineComponent.cs" />
-    <Compile Include="Components\InputComponent.cs" />
-    <Compile Include="Components\InventoryComponent.cs" />
-    <Compile Include="Components\LightingComponent.cs" />
-    <Compile Include="Components\ParticlePhysicsComponent.cs" />
-    <Compile Include="Components\PhysicsComponent.cs" />
-    <Compile Include="Components\ProjectileComponent.cs" />
-    <Compile Include="Components\ShadowComponent.cs" />
-    <Compile Include="Components\SpriteComponent.cs" />
-    <Compile Include="Components\TransformComponent.cs" />
-    <Compile Include="Components\UI\ButtonComponent.cs" />
-    <Compile Include="Components\UI\ImageComponent.cs" />
-    <Compile Include="Components\UI\TextComponent.cs" />
-    <Compile Include="Components\UI\UITransformComponent.cs" />
-    <Compile Include="DuplicateKeyComparer.cs" />
-    <Compile Include="Entities\Area.cs" />
-    <Compile Include="Entities\UI\AreaControl.cs" />
-    <Compile Include="Entities\UI\ButtonControl.cs" />
-    <Compile Include="Entities\UI\ImageControl.cs" />
-    <Compile Include="Entities\UI\TextControl.cs" />
-    <Compile Include="Entities\UI\UIEntity.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Factory\ComponentFactory.cs" />
-    <Compile Include="Factory\EntityFactory.cs" />
-    <Compile Include="GameActionCollection.cs" />
-    <Compile Include="ICameraComponent.cs" />
-    <Compile Include="IComponent.cs" />
-    <Compile Include="IDrawableComponent.cs" />
-    <Compile Include="IEntity.cs" />
-    <Compile Include="IInputReceiver.cs" />
-    <Compile Include="ILightingComponent.cs" />
-    <Compile Include="Items\ItemDesc.cs" />
-    <Compile Include="Items\ItemPool.cs" />
-    <Compile Include="ITickableComponent.cs" />
-    <Compile Include="IDrawableUIComponent.cs" />
-    <Compile Include="Manager\AreaManager.cs" />
-    <Compile Include="Manager\AssertManager.cs" />
-    <Compile Include="Manager\CameraManager.cs" />
-    <Compile Include="Manager\CollisionManager.cs" />
-    <Compile Include="Manager\ComponentManager.cs" />
-    <Compile Include="Manager\ConsoleManager.cs" />
-    <Compile Include="Manager\EntityManager.cs" />
-    <Compile Include="Manager\GameManager.cs" />
-    <Compile Include="Manager\InputManager.cs" />
-    <Compile Include="Manager\ItemManager.cs" />
-    <Compile Include="Manager\LightingManager.cs" />
-    <Compile Include="Manager\ParticleManager.cs" />
-    <Compile Include="Manager\PhysicsManager.cs" />
-    <Compile Include="Manager\SeedManager.cs" />
-    <Compile Include="Manager\ShadowManager.cs" />
-    <Compile Include="Manager\StageManager.cs" />
-    <Compile Include="Manager\UIManager.cs" />
-    <Compile Include="Particles\CircleParticleEmitter.cs" />
-    <Compile Include="Particles\IParticleEmitter.cs" />
-    <Compile Include="Particles\Particle.cs" />
-    <Compile Include="Particles\ParticleDesc.cs" />
-    <Compile Include="Particles\ParticleEmitter.cs" />
-    <Compile Include="Particles\PointParticleEmitter.cs" />
-    <Compile Include="Pathfinding\CorridorGenerator.cs" />
-    <Compile Include="Pathfinding\Pathfinder.cs" />
-    <Compile Include="Pathfinding\PathNode.cs" />
-    <Compile Include="Physics\ICollider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="RequireComponentAttribute.cs" />
-    <Compile Include="SmartContainer.cs" />
-    <Compile Include="Sprite.cs" />
-    <Compile Include="Stages\Chunk.cs" />
-    <Compile Include="Stages\Corner.cs" />
-    <Compile Include="Stages\Corridor.cs" />
-    <Compile Include="Stages\Exit.cs" />
-    <Compile Include="Stages\Room.cs" />
-    <Compile Include="Stages\Stage.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -178,7 +93,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Resources\Items.json" />
   </ItemGroup>
   <ItemGroup>

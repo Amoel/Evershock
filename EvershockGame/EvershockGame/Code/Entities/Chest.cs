@@ -1,7 +1,7 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
-using EntityComponent.Factory;
-using EntityComponent.Manager;
+﻿using EvershockGame;
+using EvershockGame.Components;
+using EvershockGame.Factory;
+using EvershockGame.Manager;
 using EvershockGame.Code.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

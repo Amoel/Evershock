@@ -1,4 +1,4 @@
-﻿using EntityComponent;
+﻿using EvershockGame;
 using EvershockGame.Code.Factories;
 
 namespace EvershockGame.Code

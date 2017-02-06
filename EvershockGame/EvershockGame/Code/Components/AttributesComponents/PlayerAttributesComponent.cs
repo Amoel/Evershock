@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EntityComponent;
-using EntityComponent.Manager;
+using EvershockGame;
+using EvershockGame.Manager;
 
 namespace EvershockGame.Code.Components
 {

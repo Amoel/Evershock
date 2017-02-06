@@ -1,7 +1,7 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
-using EntityComponent.Items;
-using EntityComponent.Particles;
+﻿using EvershockGame;
+using EvershockGame.Components;
+using EvershockGame.Items;
+using EvershockGame.Particles;
 using System;
 using System.Collections.Generic;
 using System.Linq;

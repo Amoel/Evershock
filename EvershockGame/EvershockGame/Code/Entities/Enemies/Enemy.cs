@@ -1,5 +1,5 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
+﻿using EvershockGame;
+using EvershockGame.Components;
 using EvershockGame.Code.Components;
 using System;
 using System.Collections.Generic;

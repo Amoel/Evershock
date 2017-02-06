@@ -1,8 +1,8 @@
-﻿using EntityComponent;
-using EntityComponent.Manager;
+﻿using EvershockGame;
+using EvershockGame.Manager;
 using System;
 using System.Collections.Generic;
-using EntityComponent.Components;
+using EvershockGame.Components;
 
 namespace EvershockGame.Code.Components
 {

@@ -1,5 +1,5 @@
-﻿using EntityComponent;
-using EntityComponent.Components;
+﻿using EvershockGame;
+using EvershockGame.Components;
 using Level;
 using Managers;
 using Microsoft.Xna.Framework;
