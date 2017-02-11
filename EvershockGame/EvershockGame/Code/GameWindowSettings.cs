@@ -13,14 +13,6 @@ namespace EvershockGame.Code
 
     public static class GameWindowSettings
     {
-        //public static Dictionary<EWindowSettings, byte> WindowSettings = new Dictionary<EWindowSettings, byte>()
-        //{
-        //    {EWindowSettings.Default,0},
-        //    {EWindowSettings.Windowed,1},
-        //    {EWindowSettings.Fullscreen,2},
-        //    {EWindowSettings.BorderlessFullscreen,3}
-        //};
-
         static int m_displayWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
         static int m_displayHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
         static int m_WindowWidth;

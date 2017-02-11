@@ -1,15 +1,10 @@
-﻿using EvershockGame;
-using EvershockGame.Components;
+﻿using EvershockGame.Components;
 using EvershockGame.Components.UI;
 using EvershockGame.Items;
 using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvershockGame.Code.Components
 {

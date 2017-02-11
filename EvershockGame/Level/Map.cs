@@ -140,7 +140,7 @@ namespace Level
             }
             catch (Exception e)
             {
-
+                
             }
         }
 
@@ -159,9 +159,9 @@ namespace Level
                     }
                 }
             }
-            catch (Exception e)
+            catch (FileNotFoundException e)
             {
-
+                System.Console.Error.WriteLine(e.Message);
             }
             return map;
         }
