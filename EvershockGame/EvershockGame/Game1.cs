@@ -16,7 +16,6 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
 using EvershockGame.Items;
-using System.Collections.Generic;
 
 namespace EvershockGame
 {
@@ -187,7 +186,7 @@ namespace EvershockGame
         protected override void Update(GameTime gameTime)
         {
             newKeyboardState = Keyboard.GetState();
-            
+
             if (newKeyboardState.GetPressedKeys().Length != 0)
             {
                 if (newKeyboardState.IsKeyDown(Keys.F) && oldKeyboardState.IsKeyUp(Keys.F))
@@ -206,14 +205,14 @@ namespace EvershockGame
 
                 if (newKeyboardState.IsKeyDown(Keys.Escape))
                     Exit();
-            }
 #endif
+            }
 
-            oldKeyboardState = newKeyboardState;
+                oldKeyboardState = newKeyboardState;
 
-            GameManager.Get().Tick(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
+                GameManager.Get().Tick(gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
 
-            base.Update(gameTime);
+                base.Update(gameTime);
         }
         
         Code.Misc.FrameCounter frameCount = new Code.Misc.FrameCounter();
