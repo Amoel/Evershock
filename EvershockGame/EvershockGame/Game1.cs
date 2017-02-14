@@ -140,17 +140,26 @@ namespace EvershockGame
             UIManager.Get().Init(GraphicsDevice, width, height);
             SpriteFont debug_font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
 
-            Healthbar bar1 = EntityFactory.CreateUI<Healthbar>("HealthbarPlayer1");
-            bar1.VerticalAlignment = EVerticalAlignment.Top;
-            bar1.HorizontalAlignment = EHorizontalAlignment.Left;
-            bar1.Margin = new Rectangle(15, 25, 0, 0);
-            bar1.Properties.BindPlayer(player, EHorizontalAlignment.Left);
+            UIEntity healthbar1 = EntityFactory.CreateUI<UIEntity>("HealthbarPlayer1");
+            HealthbarComponent healthbarcomponent1 = healthbar1.AddComponent<HealthbarComponent>();
+            healthbar1.VerticalAlignment = EVerticalAlignment.Top;
+            healthbar1.HorizontalAlignment = EHorizontalAlignment.Left;
+            healthbar1.Margin = new Rectangle(15, 25, 0, 0);
+            healthbarcomponent1.BindPlayer(player, EHorizontalAlignment.Left);
 
-            Healthbar bar2 = EntityFactory.CreateUI<Healthbar>("HealthbarPlayer2");
-            bar2.VerticalAlignment = EVerticalAlignment.Top;
-            bar2.HorizontalAlignment = EHorizontalAlignment.Right;
-            bar2.Margin = new Rectangle(0, 25, 15, 0);
-            bar2.Properties.BindPlayer(player2, EHorizontalAlignment.Right);
+            UIEntity healthbar2 = EntityFactory.CreateUI<UIEntity>("HealthbarPlayer2");
+            HealthbarComponent healthbarcomponent2 = healthbar2.AddComponent<HealthbarComponent>();
+            healthbar2.VerticalAlignment = EVerticalAlignment.Top;
+            healthbar2.HorizontalAlignment = EHorizontalAlignment.Right;
+            healthbar2.Margin = new Rectangle(0, 25, 15, 0);
+            healthbarcomponent2.BindPlayer(player2, EHorizontalAlignment.Right);
+
+            UIEntity coins = EntityFactory.CreateUI<UIEntity>("CollectedCoins");
+            CoinCollectionComponent coincollectioncomponent = coins.AddComponent<CoinCollectionComponent>();
+            coins.VerticalAlignment = EVerticalAlignment.Top;
+            coins.HorizontalAlignment = EHorizontalAlignment.Center;
+            coins.Margin = new Rectangle(0, 25, 0, 0);
+            coincollectioncomponent.Bind(player, player2);
 
 #if DEBUG
             ConsoleManager.Get().RegisterCommand("SpawnChestAtPosition", null, (Func<int, int, string>)Chest.SpawnChest);

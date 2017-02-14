@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EvershockGame;
-using EvershockGame.Manager;
 
 namespace EvershockGame.Code.Components
 {
@@ -36,6 +31,16 @@ namespace EvershockGame.Code.Components
             set { if (m_CurrentMana != value) { m_CurrentMana = value; OnPropertyChanged(m_CurrentMana); } }
         }
 
+        //Coins
+        short m_CurrentCoins;
+        short m_MaxCoins;
+
+        public short CurrentCoins  //handle for UI
+        {
+            get { return m_CurrentCoins; }
+            set { if (m_CurrentCoins != value) { m_CurrentCoins = value; OnPropertyChanged(m_CurrentCoins); } }
+        }
+
         //Movement
         Dictionary<string, float> m_MovementFactors = new Dictionary<string, float>();
         Dictionary<string, float> m_MovementBoni = new Dictionary<string, float>();
@@ -55,6 +60,8 @@ namespace EvershockGame.Code.Components
 
             CurrentHealth = m_MaxHealth * 0.5f;
             CurrentMana = m_MaxMana * 0.5f;
+
+            m_MaxCoins = 999;
 
             UpdateAttributes();
         }
@@ -239,6 +246,51 @@ namespace EvershockGame.Code.Components
             }
 
             ManaRegen = combinedFactors * (m_BaseManaRegen + combinedBoni);
+        }
+
+
+        /*--------------------------------------------------------------------------
+                    Manipulate Coins
+        --------------------------------------------------------------------------*/
+
+        public void AddCoins()
+        {
+            if (m_CurrentCoins < m_MaxCoins)
+                CurrentCoins += 1;
+        }
+
+        public void AddCoins(Int16 amount)
+        {
+            if (m_CurrentCoins + amount > m_MaxCoins)
+                CurrentCoins = m_MaxCoins;
+            else
+                CurrentCoins += amount;
+
+        }
+
+        //---------------------------------------------------------------------------
+
+        public bool SpendCoins()
+        {
+            if (m_CurrentCoins == 0)
+                return false;
+            else
+            {
+                CurrentCoins -= 1;
+                return true;
+            }
+                
+        }
+
+        public bool SpendCoins(Int16 amount)
+        {
+            if (m_CurrentCoins - amount < 0)
+                return false;
+            else
+            {
+                CurrentCoins -= amount;
+                return true;
+            }
         }
 
 
