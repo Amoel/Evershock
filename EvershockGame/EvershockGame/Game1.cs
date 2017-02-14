@@ -8,7 +8,6 @@ using EvershockGame.Stages;
 using EvershockGame.Particles;
 using EvershockGame.Code;
 using EvershockGame.Code.Components;
-using EvershockGame.Code.Entities.UI;
 using EvershockGame.Code.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
