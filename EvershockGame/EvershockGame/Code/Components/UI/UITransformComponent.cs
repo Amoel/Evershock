@@ -111,7 +111,7 @@ namespace EvershockGame.Components.UI
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch)
+        public void Draw(SpriteBatch batch, float deltaTime)
         {
             if (UIManager.Get().IsUIDebugViewActive)
             {

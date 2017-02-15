@@ -26,7 +26,7 @@ namespace EvershockGame.Manager
         public void Render(GraphicsDevice device, SpriteBatch batch, float deltaTime)
         {
             CameraManager.Get().Render(batch, deltaTime);
-            UIManager.Get().Render(device, batch);
+            UIManager.Get().Render(device, batch, deltaTime);
 
             device.SetRenderTarget(null);
             device.Clear(Color.Transparent);

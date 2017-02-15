@@ -14,17 +14,36 @@ namespace EvershockGame.Code.Components
     {
         Texture2D m_CoinTexture;
         SpriteFont m_Font;
-        
-        short m_CurrentCoins;
 
-        private Dictionary<Player,short> m_PlayerCoins;
+        int m_CurrentCoins;
+        float m_PastCoins;
+        float m_CombinedDeltaTime;
+
+        private Dictionary<Player,int> m_PlayerCoins;
 
         public CoinCollectionComponent(Guid entity) : base(entity)
         {
             m_CoinTexture = AssetManager.Get().Find<Texture2D>(ESpriteAssets.CoinAnimation);
             m_Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
-            m_PlayerCoins = new Dictionary<Player, short>();
+            m_PlayerCoins = new Dictionary<Player, int>();
         }
+
+        //---------------------------------------------------------------------------
+
+        int InterpolateDisplay(int value, float deltaTime, float durationInSeconds = 0.5f)
+        {
+            m_CombinedDeltaTime += deltaTime;
+
+            if (m_CombinedDeltaTime >= durationInSeconds)
+                return m_CurrentCoins;
+            else
+            {
+                float temp = m_CurrentCoins - m_PastCoins;
+                return (int)(m_PastCoins + (temp * m_CombinedDeltaTime/durationInSeconds));
+            }
+        }
+
+        //---------------------------------------------------------------------------
 
         public void Bind(params Player[] players)
         {
@@ -35,20 +54,24 @@ namespace EvershockGame.Code.Components
 
                 UIManager.Get().RegisterListener(player.Attributes, "CurrentCoins", (value) =>
                 {
-                    m_PlayerCoins[player] = (short)value;
-                    m_CurrentCoins = (short)m_PlayerCoins.Values.Sum(coin => coin);
+                    m_PastCoins = m_CurrentCoins;
+                    m_PlayerCoins[player] = (int)value;
+                    m_CurrentCoins = m_PlayerCoins.Values.Sum(coin => coin);
+                    m_CombinedDeltaTime = 0; //noch unschön :P
                 });
             }
         }
 
-        public void Draw(SpriteBatch batch)
+        public void Draw(SpriteBatch batch, float deltaTime)
         {
             UITransformComponent transform = GetComponent<UITransformComponent>();
             if (transform != null)
             {
                 Rectangle bounds = transform.Bounds();
-                batch.DrawString(m_Font, m_CurrentCoins.ToString(), new Vector2(bounds.Center.X - m_Font.MeasureString("Coins").X, bounds.Y), Color.White);
+                batch.DrawString(m_Font, InterpolateDisplay(m_CurrentCoins,deltaTime).ToString(), new Vector2(bounds.Center.X - m_Font.MeasureString("Coins").X, bounds.Y), Color.White);
             }
+
+
         }
 
         public override void OnCleanup() { }

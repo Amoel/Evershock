@@ -19,7 +19,7 @@ namespace EvershockGame.Code.Components
                 if (collector is Player)
                 {
                     PlayerAttributesComponent attributes = collector.GetComponent<PlayerAttributesComponent>();
-                    attributes.AddCoins();
+                    attributes.AddCoins(10);
 
                     DespawnComponent despawn = GetComponent<DespawnComponent>();
                     if (despawn != null)

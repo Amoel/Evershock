@@ -58,12 +58,12 @@ namespace EvershockGame.Manager
 
         //---------------------------------------------------------------------------
 
-        public void Render(GraphicsDevice device, SpriteBatch batch)
+        public void Render(GraphicsDevice device, SpriteBatch batch, float deltaTime)
         {
             device.SetRenderTarget(m_Target);
             device.Clear(Color.Transparent);
             batch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp);
-            ComponentManager.Get().DrawUIComponents(batch);
+            ComponentManager.Get().DrawUIComponents(batch,deltaTime);
             batch.End();
         }
 

@@ -32,10 +32,10 @@ namespace EvershockGame.Code.Components
         }
 
         //Coins
-        short m_CurrentCoins;
-        short m_MaxCoins;
+        int m_CurrentCoins;
+        int m_MaxCoins;
 
-        public short CurrentCoins  //handle for UI
+        public int CurrentCoins  //handle for UI
         {
             get { return m_CurrentCoins; }
             set { if (m_CurrentCoins != value) { m_CurrentCoins = value; OnPropertyChanged(m_CurrentCoins); } }
@@ -259,7 +259,7 @@ namespace EvershockGame.Code.Components
                 CurrentCoins += 1;
         }
 
-        public void AddCoins(Int16 amount)
+        public void AddCoins(int amount)
         {
             if (m_CurrentCoins + amount > m_MaxCoins)
                 CurrentCoins = m_MaxCoins;
@@ -282,7 +282,7 @@ namespace EvershockGame.Code.Components
                 
         }
 
-        public bool SpendCoins(Int16 amount)
+        public bool SpendCoins(int amount)
         {
             if (m_CurrentCoins - amount < 0)
                 return false;
