@@ -80,10 +80,12 @@ namespace EvershockGame.Code.Components
             if (transform != null)
             {
                 Rectangle bounds = transform.Bounds();
-                batch.DrawString(m_Font, InterpolateDisplay(m_CurrentCoins,deltaTime, m_InterpolationTime).ToString(), new Vector2(bounds.Center.X - m_Font.MeasureString("Coins").X, bounds.Y), Color.White);
+                batch.DrawString(m_Font, InterpolateDisplay(m_CurrentCoins, deltaTime, m_InterpolationTime).ToString(), new Vector2(bounds.Center.X, bounds.Y), Color.White);
+
+                batch.Draw(m_CoinTexture, new Vector2(bounds.Center.X - m_Font.MeasureString("Coins").X, bounds.Y), Color.White);
             }
-
-
+            else
+                AssertManager.Get().Show("UITransformComponent in CoinCollectionComponent is null");
         }
 
         public override void OnCleanup() { }
