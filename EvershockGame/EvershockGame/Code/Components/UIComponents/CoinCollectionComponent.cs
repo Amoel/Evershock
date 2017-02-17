@@ -17,9 +17,11 @@ namespace EvershockGame.Code.Components
 
         bool m_Interpolating;
         int m_CurrentCoins;
+        int m_CoinTextureCompartments;  //thats how many sprites are in the CoinAnimationSheet
         float m_PastCoins;
         float m_CombinedDeltaTime;
         float m_InterpolationTime;
+        float m_CoinTextureScale;
 
         private Dictionary<Player,int> m_PlayerCoins;
 
@@ -29,6 +31,8 @@ namespace EvershockGame.Code.Components
             m_Font = AssetManager.Get().Find<SpriteFont>(EFontAssets.DebugFont);
             m_PlayerCoins = new Dictionary<Player, int>();
             m_InterpolationTime = 0.5f;
+            m_CoinTextureCompartments = 6;
+            m_CoinTextureScale = 0.25f;
         }
 
         //---------------------------------------------------------------------------
@@ -82,7 +86,10 @@ namespace EvershockGame.Code.Components
                 Rectangle bounds = transform.Bounds();
                 batch.DrawString(m_Font, InterpolateDisplay(m_CurrentCoins, deltaTime, m_InterpolationTime).ToString(), new Vector2(bounds.Center.X, bounds.Y), Color.White);
 
-                batch.Draw(m_CoinTexture, new Vector2(bounds.Center.X - m_Font.MeasureString("Coins").X, bounds.Y), Color.White);
+                int width_offset = (int)(m_CoinTexture.Width / m_CoinTextureCompartments * m_CoinTextureScale);
+                int magic_pixel_offset = 10;
+                batch.Draw(texture:m_CoinTexture, sourceRectangle:new Rectangle(0,0, m_CoinTexture.Width / m_CoinTextureCompartments, m_CoinTexture.Height), destinationRectangle:new Rectangle(bounds.Center.X - width_offset, bounds.Y - (int)(m_CoinTexture.Height / 2 * m_CoinTextureScale) + magic_pixel_offset, (int)(m_CoinTexture.Width / m_CoinTextureCompartments * m_CoinTextureScale), (int)(m_CoinTexture.Height * m_CoinTextureScale)), color:Color.White);
+                
             }
             else
                 AssertManager.Get().Show("UITransformComponent in CoinCollectionComponent is null");
