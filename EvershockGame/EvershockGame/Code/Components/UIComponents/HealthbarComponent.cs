@@ -68,7 +68,7 @@ namespace EvershockGame.Code.Components
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch)
+        public void Draw(SpriteBatch batch, float deltaTime)
         {
             if (m_Hearts != null)
             {

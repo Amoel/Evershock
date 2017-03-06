@@ -14,6 +14,7 @@ using EvershockGame.Code.Manager;
 using EvershockGame.Code.Factory;
 using EvershockGame.Code.Components.UI;
 using EvershockGame.Code.Stages;
+using EvershockGame.Code.Entities;
 
 namespace EvershockGame
 {

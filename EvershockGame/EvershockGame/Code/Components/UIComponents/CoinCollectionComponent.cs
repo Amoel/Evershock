@@ -1,10 +1,11 @@
 ﻿using System;
-using EvershockGame.Components.UI;
 using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 using System.Collections.Generic;
+using EvershockGame.Code.Components.UI;
+using EvershockGame.Code.Manager;
 
 namespace EvershockGame.Code.Components
 {
