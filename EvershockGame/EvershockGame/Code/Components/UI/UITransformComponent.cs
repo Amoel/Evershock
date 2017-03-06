@@ -3,10 +3,6 @@ using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvershockGame.Code.Components.UI
 {
@@ -116,7 +112,7 @@ namespace EvershockGame.Code.Components.UI
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch)
+        public void Draw(SpriteBatch batch, float deltaTime)
         {
             if (UIManager.Get().IsUIDebugViewActive)
             {

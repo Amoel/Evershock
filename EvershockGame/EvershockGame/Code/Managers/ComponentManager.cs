@@ -228,12 +228,12 @@ namespace EvershockGame.Code.Manager
 
         //---------------------------------------------------------------------------
 
-        public void DrawUIComponents(SpriteBatch batch)
+        public void DrawUIComponents(SpriteBatch batch, float deltaTime)
         {
             foreach (SmartContainer<IDrawableUIComponent> container in m_DrawableUIComponents.Values)
             {
                 if (!((IComponent)container.Data).IsEnabled) continue;
-                container.Data.Draw(batch);
+                container.Data.Draw(batch,deltaTime);
             }
         }
     }

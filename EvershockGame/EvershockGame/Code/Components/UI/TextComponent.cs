@@ -33,7 +33,7 @@ namespace EvershockGame.Code.Components.UI
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch)
+        public void Draw(SpriteBatch batch, float deltaTime)
         {
             if (Font != null)
             {

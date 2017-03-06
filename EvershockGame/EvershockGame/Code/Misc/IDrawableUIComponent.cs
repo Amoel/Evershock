@@ -9,6 +9,6 @@ namespace EvershockGame
 {
     public interface IDrawableUIComponent
     {
-        void Draw(SpriteBatch batch);
+        void Draw(SpriteBatch batch, float deltaTime);
     }
 }

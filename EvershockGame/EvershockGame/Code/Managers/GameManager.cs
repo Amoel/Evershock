@@ -1,12 +1,6 @@
 ﻿using Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EvershockGame.Code.Manager
 {
@@ -33,7 +27,7 @@ namespace EvershockGame.Code.Manager
         public void Render(GraphicsDevice device, SpriteBatch batch, float deltaTime)
         {
             CameraManager.Get().Render(batch, deltaTime);
-            UIManager.Get().Render(device, batch);
+            UIManager.Get().Render(device, batch, deltaTime);
 
             device.SetRenderTarget(null);
             device.Clear(Color.Transparent);

@@ -34,7 +34,7 @@ namespace EvershockGame.Code.Factory
 
         public static T CreateUI<T>(string name, Frame frame = null) where T : class, IEntity
         {
-            if (AssertManager.Get().Show(typeof(T).IsSubclassOf(typeof(UIEntity)), "Wrong Create<T> called for entity. Please use Create<T>."))
+            if (AssertManager.Get().Show(typeof(T) == typeof(UIEntity) || typeof(T).IsSubclassOf(typeof(UIEntity)), "Wrong Create<T> called for entity. Please use Create<T>."))
             {
                 return Create<T>(name);
             }
@@ -45,7 +45,7 @@ namespace EvershockGame.Code.Factory
 
         public static T CreateUI<T>(Guid parent, string name, Frame frame = null) where T : class, IEntity
         {
-            if (AssertManager.Get().Show(typeof(T).IsSubclassOf(typeof(UIEntity)), "Wrong Create<T> called for entity. Please use Create<T>."))
+            if (AssertManager.Get().Show(typeof(T) == typeof(UIEntity) || typeof(T).IsSubclassOf(typeof(UIEntity)), "Wrong Create<T> called for entity. Please use Create<T>."))
             {
                 return Create<T>(parent, name);
             }
