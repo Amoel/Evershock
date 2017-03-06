@@ -42,6 +42,12 @@ namespace EvershockGame.Code.Components
                     if (physics.HasTouchedFloor)
                     {
                         IsCollectable = true;
+
+                        CircleColliderComponent collider = GetComponent<CircleColliderComponent>();
+                        if (collider != null)
+                        {
+                            collider.SetCollidesWith(ECollisionCategory.Stage | ECollisionCategory.Player);
+                        }
                     }
                 }
             }

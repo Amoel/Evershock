@@ -1,5 +1,7 @@
-﻿using EvershockGame.Code.Factories;
-using EvershockGame.Items;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Factories;
+using EvershockGame.Code.Items;
+using EvershockGame.Code.Manager;
 using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using System;
@@ -8,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     public class InventoryComponent : Component, IInputReceiver
     {
@@ -35,6 +37,7 @@ namespace EvershockGame.Components
         public void SelectPrevious()
         {
             ActiveIndex = (ActiveIndex + Size - 1) % Size;
+            UpdateWeapon();
         }
 
         //---------------------------------------------------------------------------
@@ -42,6 +45,7 @@ namespace EvershockGame.Components
         public void SelectNext()
         {
             ActiveIndex = (ActiveIndex + 1) % Size;
+            UpdateWeapon();
         }
 
         //---------------------------------------------------------------------------
@@ -61,6 +65,7 @@ namespace EvershockGame.Components
                         if (m_Items[index] == null)
                         {
                             m_Items[index] = new InventorySlot(item);
+                            if (index == ActiveIndex) if (index == ActiveIndex) UpdateWeapon();
                         }
                         remaining = m_Items[index].Add(remaining);
                     }
@@ -79,13 +84,12 @@ namespace EvershockGame.Components
             if (index >= 0)
             {
                 InventorySlot slot = m_Items[index];
-                if (slot != null)
+                if (slot != null && slot.Drop())
                 {
-                    slot.Drop();
                     TransformComponent transform = GetComponent<TransformComponent>();
                     if (transform != null)
                     {
-                        PickupFactory.Create(slot.Item.Type, transform.Location, new Vector3(0, 0, 40));
+                        PickupFactory.Create(slot.Item.Type, transform.Location, new Vector3(transform.Orientation.X * 10, transform.Orientation.Y * 10, 40));
                     }
                     if (slot.Count == 0)
                     {
@@ -100,14 +104,15 @@ namespace EvershockGame.Components
         public void TryDrop(int index, int count)
         {
             InventorySlot slot = m_Items[index];
-            if (slot != null)
+            if (slot != null && slot.Drop())
             {
-                slot.Drop();
                 TransformComponent transform = GetComponent<TransformComponent>();
+
                 if (transform != null)
                 {
-                    PickupFactory.Create(slot.Item.Type, transform.Location, new Vector3(0, 0, 40));
+                    PickupFactory.Create(slot.Item.Type, transform.Location, new Vector3(transform.Orientation.X * 600, transform.Orientation.Y * 600, 40));
                 }
+
                 if (slot.Count == 0)
                 {
                     m_Items[index] = null;
@@ -125,10 +130,12 @@ namespace EvershockGame.Components
                 InventorySlot slot = m_Items[index];
                 if (slot != null)
                 {
-                    slot.Use();
-                    if (slot.Count == 0)
+                    if (slot.Use())
                     {
-                        m_Items[index] = null;
+                        if (slot.Count == 0)
+                        {
+                            m_Items[index] = null;
+                        }
                     }
                 }
             }
@@ -139,13 +146,29 @@ namespace EvershockGame.Components
         public void TryUse(int index)
         {
             InventorySlot slot = m_Items[index];
-            if (slot != null)
+            if (slot != null && slot.Use())
             {
-                slot.Use();
+                foreach (Weapon weapon in GetChildren<Weapon>())
+                {
+                    weapon.TryAttack();
+                }
+
                 if (slot.Count == 0)
                 {
                     m_Items[index] = null;
                 }
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        private void UpdateWeapon()
+        {
+            InventorySlot slot = ActiveSlot;
+            List<Weapon> weapons = GetChildren<Weapon>();
+            if (weapons != null && weapons.Count > 0)
+            {
+                weapons.First().TryUpdate(slot != null ? slot.Item : ItemDesc.Empty);
             }
         }
 
@@ -224,16 +247,36 @@ namespace EvershockGame.Components
 
         //---------------------------------------------------------------------------
 
-        public void Drop()
+        public bool Drop()
         {
-            Count--;
+            if (Count > 0)
+            {
+                Count--;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         //---------------------------------------------------------------------------
 
-        public void Use()
+        public bool Use()
         {
-            Count--;
+            if (Item.IsConsumable)
+            {
+                if (Count > 0)
+                {
+                    Count--;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

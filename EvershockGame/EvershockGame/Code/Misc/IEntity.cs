@@ -12,26 +12,26 @@ namespace EvershockGame
         string Name { get; }
 
         Guid Parent { get; }
-        List<Guid> Children { get; }
+        //Dictionary<Type, List<Guid>> Children { get; }
         Dictionary<Guid, Type> Components { get; }
 
         bool IsEnabled { get; }
 
         //---------------------------------------------------------------------------
 
-        void SetParent(Guid guid);
-        void SetParent(IEntity parent);
+        //void SetParent(Guid guid);
+        //void SetParent(IEntity parent);
 
         //---------------------------------------------------------------------------
 
         void AddChild(Guid guid);
-        void AddChild(IEntity child);
+        void AddChild<T>(T child) where T : class, IEntity;
 
         void AddChildren(List<Guid> guids);
         void AddChildren(List<IEntity> entities);
 
         void RemoveChild(Guid guid);
-        void RemoveChild(IEntity child);
+        void RemoveChild<T>(T child) where T : class, IEntity;
 
         void RemoveChildren(List<Guid> guids);
         void RemoveChildren(List<IEntity> entities);
@@ -39,9 +39,10 @@ namespace EvershockGame
         void RemoveChildren();
 
         bool HasChild(Guid guid);
-        bool HasChild(IEntity entity);
+        bool HasChild<T>(T entity) where T : class, IEntity;
 
         List<IEntity> GetChildren();
+        List<T> GetChildren<T>() where T : class, IEntity;
 
         //---------------------------------------------------------------------------
 

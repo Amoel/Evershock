@@ -1,0 +1,45 @@
+﻿<Window x:Class="ItemEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ItemEditor"
+        xmlns:code="clr-namespace:ItemEditor.Code"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+
+    <Window.Resources>
+        <code:SpritesheetScaleConverter x:Key="SpritesheetScaleConverter"/>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="30*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40*"/>
+                <RowDefinition Height="60*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Image VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100"/>
+            </Grid>
+            <Grid Grid.Row="1">
+
+            </Grid>
+        </Grid>
+        <Canvas Grid.Column="2">
+            <Canvas.LayoutTransform>
+                <ScaleTransform
+                    ScaleX="{Binding Path=CenterX, Converter={StaticResource SpritesheetScaleConverter}}" 
+                    ScaleY="{Binding Width, Converter={StaticResource SpritesheetScaleConverter}}"/>
+            </Canvas.LayoutTransform>
+            <Image Source="Resources/Items.png" HorizontalAlignment="Right"/>
+        </Canvas>
+    </Grid>
+</Window>

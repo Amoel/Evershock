@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FarseerPhysics.Dynamics;
 
 namespace EvershockGame.Code
 {
@@ -18,13 +19,13 @@ namespace EvershockGame.Code
 
         //---------------------------------------------------------------------------
 
-        public Enemy(string name) : base(name)
+        public Enemy(string name, Guid parent) : base(name, parent)
         {
             AddComponent<TransformComponent>();
             AddComponent<DespawnComponent>();
             AddComponent<AttributesComponent>();
             AddComponent<MovementAnimationComponent>();
-            AddComponent<ActorPhysicsComponent>().Init(0.9f, 1.0f, 0.0f);
+            AddComponent<ActorPhysicsComponent>().Init(BodyType.Dynamic, 0.9f, 1.0f, true);
             AddComponent<AIComponent>();
         }
     }

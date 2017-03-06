@@ -1,4 +1,5 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame
+namespace EvershockGame.Code
 {
     [Serializable]
     public abstract class Component : IComponent
@@ -57,6 +58,27 @@ namespace EvershockGame
 
         //---------------------------------------------------------------------------
 
+        public T GetComponentInAncestor<T>() where T : IComponent
+        {
+            Guid guid = Entity;
+            do
+            {
+                IEntity entity = EntityManager.Get().Find(guid);
+                if (entity != null)
+                {
+                    if (entity.HasComponent<T>())
+                    {
+                        return entity.GetComponent<T>();
+                    }
+                    guid = entity.Parent;
+                }
+            }
+            while (guid != Guid.Empty);
+            return default(T);
+        }
+
+        //---------------------------------------------------------------------------
+
         public List<IComponent> GetComponents()
         {
             IEntity entity = EntityManager.Get().Find(Entity);
@@ -65,6 +87,18 @@ namespace EvershockGame
                 return entity.GetComponents();
             }
             return null;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public List<T> GetChildren<T>() where T : class, IEntity
+        {
+            IEntity entity = EntityManager.Get().Find(Entity);
+            if (entity != null)
+            {
+                return entity.GetChildren<T>();
+            }
+            return new List<T>();
         }
 
         //---------------------------------------------------------------------------

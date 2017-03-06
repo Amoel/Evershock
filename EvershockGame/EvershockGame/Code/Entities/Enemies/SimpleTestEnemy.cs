@@ -1,4 +1,5 @@
 ﻿using EvershockGame;
+using EvershockGame.Code.Components;
 using EvershockGame.Components;
 using EvershockGame.Manager;
 using FarseerPhysics.Dynamics;
@@ -14,7 +15,7 @@ namespace EvershockGame.Code
 {
     public class SimpleTestEnemy : Enemy
     {
-        public SimpleTestEnemy(string name) : base(name)
+        public SimpleTestEnemy(string name, Guid parent) : base(name, parent)
         {
             Animation.Init(AssetManager.Get().Find<Texture2D>(ESpriteAssets.WalkingAnimation3), Vector2.One);
             Animation.AddSetting((int)Tag.MoveLeft, new AnimationSetting(8, 2, 8, 15, true, true));

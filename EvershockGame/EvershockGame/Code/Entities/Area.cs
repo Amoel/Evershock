@@ -1,4 +1,6 @@
-﻿using EvershockGame.Components;
+﻿using EvershockGame.Code.Components;
+using EvershockGame.Code.Manager;
+using EvershockGame.Components;
 using EvershockGame.Manager;
 using System;
 using System.Collections.Generic;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame
+namespace EvershockGame.Code
 {
     public delegate void AreaEnterEventHandler(IEntity entity);
     public delegate void AreaLeaveEventHandler(IEntity entity);
@@ -27,14 +29,15 @@ namespace EvershockGame
 
         //---------------------------------------------------------------------------
 
-        public Area(string name) : base(name)
+        public Area(string name, Guid parent) : base(name, parent)
         {
             AddComponent<TransformComponent>();
             AddComponent<PhysicsComponent>();
             AreaColliderComponent collider = AddComponent<AreaColliderComponent>();
             if (collider != null)
             {
-                collider.SetCollidesWith(ECollisionCategory.All);
+                collider.SetCollisionCategory(ECollisionCategory.None);
+                collider.SetCollidesWith(ECollisionCategory.Player);
                 collider.Enter += OnEnter;
                 collider.Leave += OnLeave;
             }

@@ -75,7 +75,7 @@ namespace AssetImporter
         {
             try
             {
-                if (!source.Equals(destination)) File.Copy(source, Path.Combine(RootPath, destination));
+                if (!string.IsNullOrEmpty(source) && !source.Equals(destination)) File.Copy(source, Path.Combine(RootPath, destination));
 
                 string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\", "EvershockGame/EvershockGame.csproj"));
                 var project = new Microsoft.Build.Evaluation.Project(@path);

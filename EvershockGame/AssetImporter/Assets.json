@@ -190,5 +190,13 @@
     "IncludeInDebug": false,
     "IncludeInRelease": false,
     "AssetType": 2
+  },
+  {
+    "Thumbnail": "D:\\Files\\Git\\Projects\\Evershock\\EvershockGame\\EvershockGame\\Content\\Graphics/Debug/RectTextureDebug.png",
+    "Name": "RectTextureDebug",
+    "Path": "Graphics/Debug/RectTextureDebug.png",
+    "IncludeInDebug": false,
+    "IncludeInRelease": false,
+    "AssetType": 1
   }
 ]

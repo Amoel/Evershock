@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Pathfinding
+namespace EvershockGame.Code.Pathfinding
 {
     public struct PathNode
     {

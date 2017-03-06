@@ -1,4 +1,5 @@
 ﻿using EvershockGame;
+using EvershockGame.Code.Components;
 using EvershockGame.Components;
 using Level;
 using Managers;
@@ -20,8 +21,6 @@ namespace EvershockGame.Code.Managers
         public void CreateCollisionFromMap(IEntity entity, Map map)
         {
             MultiPathColliderComponent path = entity.AddComponent<MultiPathColliderComponent>();
-            path.Init();
-
             if (path != null)
             {
                 for (int x = 0; x < map.Width - 1; x++)

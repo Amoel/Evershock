@@ -1,7 +1,8 @@
 ﻿using EvershockGame;
+using EvershockGame.Code.Manager;
+using EvershockGame.Code.Pathfinding;
 using EvershockGame.Components;
 using EvershockGame.Manager;
-using EvershockGame.Pathfinding;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

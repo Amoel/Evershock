@@ -1,9 +1,10 @@
 ﻿using EvershockGame.Components;
-using EvershockGame.Items;
 using EvershockGame.Manager;
 using EvershockGame.Code.Factories;
 using Microsoft.Xna.Framework;
 using System;
+using EvershockGame.Code.Manager;
+using EvershockGame.Code.Items;
 
 namespace EvershockGame.Code.Components
 {
@@ -46,7 +47,7 @@ namespace EvershockGame.Code.Components
             {
                 float rot = (SeedManager.Get().NextRandF() * (float)Math.PI * 2.0f);
                 float dist = (SeedManager.Get().NextRandF() * 120.0f + 400.0f);
-                Vector3 force = new Vector3((float)Math.Sin(rot) * dist, (float)Math.Cos(rot) * dist, SeedManager.Get().NextRandF(30f,46f));
+                Vector3 force = new Vector3((float)Math.Sin(rot) * dist, (float)Math.Cos(rot) * dist, SeedManager.Get().NextRandF(20, 40));
                 PickupFactory.Create(pickup, transform.Location, force);
             }
         }
@@ -61,7 +62,7 @@ namespace EvershockGame.Code.Components
             {
                 float rot = (SeedManager.Get().NextRandF() * (float)Math.PI * 2.0f);
                 float dist = (SeedManager.Get().NextRandF() * 120.0f + 400.0f);
-                Vector3 force = new Vector3((float)Math.Sin(rot) * dist, (float)Math.Cos(rot) * dist, SeedManager.Get().NextRandF(30f, 46f));
+                Vector3 force = new Vector3((float)Math.Sin(rot) * dist, (float)Math.Cos(rot) * dist, SeedManager.Get().NextRandF(20, 40));
                 PickupFactory.Create(item, transform.Location, force);
             }
         }

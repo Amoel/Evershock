@@ -1,4 +1,7 @@
-﻿using EvershockGame.Components;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Components;
+using EvershockGame.Code.Manager;
+using EvershockGame.Components;
 using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Particles
+namespace EvershockGame.Code.Particles
 {
     public abstract class ParticleEmitter : IParticleEmitter
     {

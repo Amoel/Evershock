@@ -16,7 +16,11 @@ namespace EvershockGame
         //---------------------------------------------------------------------------
         
         T GetComponent<T>() where T : IComponent;
+        T GetComponentInParent<T>() where T : IComponent;
+        T GetComponentInAncestor<T>() where T : IComponent;
         List<IComponent> GetComponents();
+
+        List<T> GetChildren<T>() where T : class, IEntity;
 
         void OnCleanup();
 

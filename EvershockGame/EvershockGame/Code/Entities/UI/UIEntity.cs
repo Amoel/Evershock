@@ -1,4 +1,5 @@
-﻿using EvershockGame.Components.UI;
+﻿using EvershockGame.Code.Components.UI;
+using EvershockGame.Code.Manager;
 using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Entities
+namespace EvershockGame.Code.Entities
 {
     public class UIEntity : Entity
     {
@@ -40,7 +41,7 @@ namespace EvershockGame.Entities
 
         //---------------------------------------------------------------------------
 
-        public UIEntity(string name, Frame frame) : base(name)
+        public UIEntity(string name, Guid parent, Frame frame) : base(name, parent)
         {
             AddComponent<UITransformComponent>();
         }

@@ -9,8 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using EvershockGame.Components;
 using System.Reflection;
+using EvershockGame.Code.Components;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     [Serializable]
     [SerializeManager(true, "data", "Managers")]

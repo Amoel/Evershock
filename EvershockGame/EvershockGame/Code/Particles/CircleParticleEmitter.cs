@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Particles
+namespace EvershockGame.Code.Particles
 {
     public class CircleParticleEmitter : ParticleEmitter
     {

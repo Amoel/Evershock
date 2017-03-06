@@ -1,4 +1,5 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Items
+namespace EvershockGame.Code.Items
 {
     public enum EItemPool
     {

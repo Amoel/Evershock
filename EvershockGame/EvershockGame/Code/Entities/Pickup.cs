@@ -1,11 +1,12 @@
 ﻿using EvershockGame;
 using EvershockGame.Code.Factories;
+using System;
 
 namespace EvershockGame.Code
 {
     public class Pickup : Entity
     {
-        public Pickup(string name) : base(name) { }
+        public Pickup(string name, Guid parent) : base(name, parent) { }
 
         //---------------------------------------------------------------------------
 

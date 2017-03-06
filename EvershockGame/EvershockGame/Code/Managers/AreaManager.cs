@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     public class AreaManager : BaseManager<AreaManager>
     {

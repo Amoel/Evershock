@@ -1,11 +1,13 @@
-﻿using EvershockGame.Factory;
-using EvershockGame.Manager;
+﻿using EvershockGame.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using EvershockGame.Code;
+using EvershockGame.Code.Manager;
+using EvershockGame.Code.Factory;
 
-namespace EvershockGame
+namespace EvershockGame.Code
 {
     [Serializable]
     public class Entity : IEntity
@@ -13,75 +15,55 @@ namespace EvershockGame
         public Guid GUID { get; private set; }
         public string Name { get; private set; }
 
-        public Guid Parent { get; private set; }
-        public List<Guid> Children { get; private set; }
+        public Guid Parent { get { return EntityManager.Get().GetParent(GUID); } }
         public Dictionary<Guid, Type> Components { get; private set; }
 
         public bool IsEnabled { get; private set; }
 
         //---------------------------------------------------------------------------
 
-        public Entity(string name)
+        public Entity(string name, Guid parent)
         {
             GUID = Guid.NewGuid();
             Name = name;
 
             EntityManager.Get().Register(this);
-
-            Children = new List<Guid>();
             Components = new Dictionary<Guid, Type>();
 
             IsEnabled = true;
 
-            SetParent(null);
+            if (parent != Guid.Empty)
+            {
+                EntityManager.Get().UpdateParent(GUID, parent);
+            }
         }
 
         //---------------------------------------------------------------------------
-
-        public void SetParent(Guid guid)
+        
+        public void AddChild<T>(T child) where T : class, IEntity
         {
-            Parent = guid;
-            EntityManager.Get().UpdateParent(GUID, Parent);
-        }
-
-        public void SetParent(IEntity parent)
-        {
-            if (parent != null)
+            if (child != null)
             {
-                Parent = parent.GUID;
-            }
-            else
-            {
-                Parent = Guid.Empty;
-            }
-            EntityManager.Get().UpdateParent(GUID, Parent);
-        }
-
-        //---------------------------------------------------------------------------
-
-        public void AddChild(Guid guid)
-        {
-            if (!HasChild(guid))
-            {
-                Children.Add(guid);
+                EntityManager.Get().UpdateParent(child.GUID, GUID);
             }
         }
 
-        public void AddChild(IEntity child)
+        public void AddChild(Guid child)
         {
-            if (child != null && !HasChild(child))
+            IEntity entity = EntityManager.Get().Find(child);
+            if (entity != null)
             {
-                Children.Add(child.GUID);
+                EntityManager.Get().UpdateParent(child, GUID);
             }
         }
 
-        public void AddChildren(List<Guid> guids)
+        public void AddChildren(List<Guid> children)
         {
-            if (guids != null && guids.Count > 0)
+            if (children != null && children.Count > 0)
             {
-                foreach (Guid guid in guids)
+                foreach (Guid child in children)
                 {
-                    AddChild(guid);
+                    AddChild(child);
                 }
             }
         }
@@ -97,20 +79,28 @@ namespace EvershockGame
             }
         }
 
-        public void RemoveChild(Guid guid)
+        public void RemoveChild<T>(T child) where T : class, IEntity
         {
-            if (HasChild(guid))
-            {
-                Children.Remove(guid);
-            }
+            EntityManager.Get().UpdateParent(child.GUID, Guid.Empty);
+            //if (Children.ContainsKey(typeof(T)))
+            //{
+            //    if (Children[typeof(T)].Contains(child.GUID))
+            //    {
+            //        Children[typeof(T)].Remove(child.GUID);
+            //    }
+            //}
         }
 
-        public void RemoveChild(IEntity child)
+        public void RemoveChild(Guid guid)
         {
-            if (child != null && HasChild(child))
-            {
-                Children.Remove(child.GUID);
-            }
+            EntityManager.Get().UpdateParent(guid, Guid.Empty);
+            //foreach (List<Guid> guids in Children.Values)
+            //{
+            //    if (guids.Contains(guid))
+            //    {
+            //        guids.Remove(guid);
+            //    }
+            //}
         }
 
         public void RemoveChildren(List<Guid> guids)
@@ -137,35 +127,44 @@ namespace EvershockGame
 
         public void RemoveChildren()
         {
-            Children.Clear();
+            //Children.Clear();
         }
 
         public bool HasChild(Guid guid)
         {
-            return Children.Contains(guid);
+            //foreach (List<Guid> guids in Children.Values)
+            //{
+            //    if (guids.Contains(guid)) return true;
+            //}
+            return false;
         }
         
-        public bool HasChild(IEntity child)
+        public bool HasChild<T>(T child) where T : class, IEntity
         {
             if (child != null)
             {
-                return Children.Contains(child.GUID);
+                return HasChild(child.GUID);
             }
             return false;
         }
 
+        public List<T> GetChildren<T>() where T : class, IEntity
+        {
+            return EntityManager.Get().GetChildren<T>(GUID);
+        }
+
         public List<IEntity> GetChildren()
         {
-            List<IEntity> children = new List<IEntity>();
-            foreach (Guid guid in Components.Keys)
+            return EntityManager.Get().GetChildren(GUID);
+        }
+
+        public IEntity GetParent()
+        {
+            if (Parent != Guid.Empty)
             {
-                IEntity child = EntityManager.Get().Find(guid);
-                if (child != null)
-                {
-                    children.Add(child);
-                }
+                return EntityManager.Get().Find(Parent);
             }
-            return children;
+            return null;
         }
 
         //---------------------------------------------------------------------------

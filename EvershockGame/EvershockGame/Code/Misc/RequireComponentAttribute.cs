@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame
+namespace EvershockGame.Code
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class RequireComponentAttribute : Attribute

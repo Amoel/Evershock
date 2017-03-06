@@ -1,5 +1,5 @@
-﻿using EvershockGame.Components;
-using EvershockGame.Stages;
+﻿using EvershockGame.Code.Stages;
+using EvershockGame.Components;
 using Level;
 using Managers;
 using Microsoft.Xna.Framework;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     public delegate void StageChangedEventHandler();
 

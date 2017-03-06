@@ -1,4 +1,5 @@
-﻿using EvershockGame.Components;
+﻿using EvershockGame.Code.Components;
+using EvershockGame.Components;
 using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EvershockGame
+namespace EvershockGame.Code
 {
     public interface ICollider
     {
@@ -14,9 +15,9 @@ namespace EvershockGame
         event CollisionLeaveEventHandler Leave;
 
         //---------------------------------------------------------------------------
-
-        Vector2 Step(Vector2 force);
-        void ResetLocation(Vector2 location);
+        
         void SetSensor(bool isSensor);
+        void SetRestitution(float restitution);
+        void ClearFixtures();
     }
 }

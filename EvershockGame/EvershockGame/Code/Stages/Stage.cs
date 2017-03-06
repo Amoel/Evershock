@@ -1,6 +1,7 @@
-﻿using EvershockGame.Factory;
+﻿using EvershockGame.Code.Factory;
+using EvershockGame.Code.Manager;
+using EvershockGame.Code.Pathfinding;
 using EvershockGame.Manager;
-using EvershockGame.Pathfinding;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Stages
+namespace EvershockGame.Code.Stages
 {
     public class Stage
     {

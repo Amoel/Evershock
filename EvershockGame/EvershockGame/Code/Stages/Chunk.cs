@@ -1,5 +1,7 @@
-﻿using EvershockGame.Components;
-using EvershockGame.Factory;
+﻿using EvershockGame.Code.Components;
+using EvershockGame.Code.Factory;
+using EvershockGame.Code.Manager;
+using EvershockGame.Components;
 using EvershockGame.Manager;
 using Level;
 using Microsoft.Xna.Framework;
@@ -9,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Stages
+namespace EvershockGame.Code.Stages
 {
     public class Chunk
     {
@@ -112,7 +114,7 @@ namespace EvershockGame.Stages
                 entity = EntityFactory.Create<Entity>(string.Format("Chunk[{0}|{0}]", X, Y));
                 entity.AddComponent<TransformComponent>();
                 entity.AddComponent<PhysicsComponent>();
-                entity.AddComponent<MultiPathColliderComponent>().Init();
+                entity.AddComponent<MultiPathColliderComponent>().SetCollisionCategory(ECollisionCategory.Stage);
             }
             MultiPathColliderComponent path = entity.GetComponent<MultiPathColliderComponent>();
 

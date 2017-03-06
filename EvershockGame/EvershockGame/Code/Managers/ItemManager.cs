@@ -1,5 +1,5 @@
 ﻿using EvershockGame.Code;
-using EvershockGame.Items;
+using EvershockGame.Code.Items;
 using Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,7 +12,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     public class ItemManager : BaseManager<ItemManager>
     {

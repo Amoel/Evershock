@@ -1,4 +1,6 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Pathfinding
+namespace EvershockGame.Code.Pathfinding
 {
     public enum EBehaviour
     {

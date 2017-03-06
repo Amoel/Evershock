@@ -1,7 +1,7 @@
 ﻿using Managers;
 using System;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     public class SeedManager : BaseManager<SeedManager>
     {
@@ -62,7 +62,7 @@ namespace EvershockGame.Manager
 
         public float NextRandF(float min, float max)
         {
-            return min + (float)m_Rand.NextDouble()* (max- min);
+            return min + (float)m_Rand.NextDouble()* (max - min);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     public class PhysicsManager : BaseManager<PhysicsManager>
     {
@@ -21,7 +21,7 @@ namespace EvershockGame.Manager
 
         protected override void Init()
         {
-            Gravity = new Vector3(0.0f, 0.0f, -1.0f);
+            Gravity = new Vector3(0.0f, 0.0f, -5.0f);
             World = new World(Vector2.Zero);
         }
 

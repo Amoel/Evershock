@@ -23,6 +23,7 @@ namespace EvershockGame.Code
         Arrows1,
         Barrel1,
         Spikes1,
+        RectTextureDebug,
     }
 
     //---------------------------------------------------------------------------
@@ -83,6 +84,7 @@ namespace EvershockGame.Code
             { ESpriteAssets.Arrows1, "Graphics/Debug/ArrowSheetP1" },
             { ESpriteAssets.Barrel1, "Graphics/Tiles/Barrel1" },
             { ESpriteAssets.Spikes1, "Graphics/Tilesets/Spikes" },
+            { ESpriteAssets.RectTextureDebug, "Graphics/Debug/RectTextureDebug" },
         };
 
         private Dictionary<Type, Dictionary<ESpriteAssets, dynamic>> m_SpriteAssets;

@@ -1,5 +1,5 @@
-﻿using EvershockGame.Components;
-using EvershockGame.Factory;
+﻿using EvershockGame.Code.Components;
+using EvershockGame.Components;
 using Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     public enum EColliderType
     {
@@ -67,20 +67,6 @@ namespace EvershockGame.Manager
             {
                 m_Collider.Remove(guid);
             }
-        }
-
-        //---------------------------------------------------------------------------
-
-        public Vector2 CheckCollision(TransformComponent transform, Guid entity, Vector2 force)
-        {
-            var collider = FindCollider(entity);
-
-            if (collider == null)
-            {
-                return transform.Location.To2D() + force;
-            }
-            
-            return collider.Step(force);
         }
 
         //---------------------------------------------------------------------------

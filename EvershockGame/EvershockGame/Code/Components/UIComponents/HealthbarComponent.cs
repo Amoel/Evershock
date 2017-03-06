@@ -1,7 +1,7 @@
 ﻿using EvershockGame;
+using EvershockGame.Code.Components.UI;
+using EvershockGame.Code.Manager;
 using EvershockGame.Components;
-using EvershockGame.Components.UI;
-using EvershockGame.Items;
 using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

@@ -1,4 +1,7 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
+using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
@@ -8,10 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     [Serializable]
-    [RequireComponent(typeof(PhysicsComponent))]
     public class RectColliderComponent : ColliderComponent
     {
         public float Width { get; set; }
@@ -49,25 +51,19 @@ namespace EvershockGame.Components
 
         public void Init(int width, int height, Vector2 offset, BodyType bodyType, float dampening)
         {
+            ClearFixtures();
+
             Width = width;
             Height = height;
-            Body = BodyFactory.CreateRectangle(PhysicsManager.Get().World, width / Unit, height / Unit, 0.0f, Entity);
-            foreach (Fixture fix in Body.FixtureList)
-            {
-                fix.UserData = Entity;
-            }
-            Body.BodyType = bodyType;
-            Body.IgnoreGravity = true;
-            Body.LinearDamping = dampening;
 
-            TransformComponent transform = GetComponent<TransformComponent>();
-            if (transform != null)
+            PhysicsComponent physics = GetComponentInAncestor<PhysicsComponent>();
+            if (physics != null)
             {
-                Body.Position = (transform.Location.To2D() + Offset) / Unit;
+                Fixture fixture = FixtureFactory.AttachRectangle(width / Unit, height / Unit, 0, offset / Unit, physics.Body, Entity);
+                fixture.OnCollision += OnCollision;
+                fixture.OnSeparation += OnSeparation;
+                Fixtures.Add(fixture);
             }
-
-            Body.OnCollision += OnCollision;
-            Body.OnSeparation += OnSeparation;
         }
         
         //---------------------------------------------------------------------------
@@ -76,18 +72,24 @@ namespace EvershockGame.Components
         {
             if (CollisionManager.Get().IsDebugViewActive)
             {
-                TransformComponent transform = GetComponent<TransformComponent>();
-                Texture2D tex = CollisionManager.Get().RectTexture;
-                if (transform != null && tex != null && Body != null)
+                Texture2D tex = CollisionManager.Get().PointTexture;
+                if (tex != null)
                 {
-                    Vector2 position = (Body.Position * Unit).ToLocal(data);
-                    batch.Draw(tex, new Rectangle((int)((int)position.X - Width / 2), (int)((int)position.Y - Height / 2), (int)Width, (int)Height), tex.Bounds, GetDebugColor(), 0, Vector2.Zero, SpriteEffects.None, 1.0f);
+                    foreach (Fixture fixture in Fixtures)
+                    {
+                        PolygonShape shape = fixture.Shape as PolygonShape;
+                        if (shape != null)
+                        {
+                            for (int i = 0; i < shape.Vertices.Count; i++)
+                            {
+                                Vector2 start = (fixture.Body.Position + shape.Vertices[i]) * Unit;
+                                Vector2 end = (fixture.Body.Position + shape.Vertices[(i + 1) % shape.Vertices.Count]) * Unit;
+                                DrawLine(batch, tex, start, end, data);
+                            }
+                        }
+                    }
                 }
             }
         }
-
-        //---------------------------------------------------------------------------
-
-        public override void OnCleanup() { }
     }
 }

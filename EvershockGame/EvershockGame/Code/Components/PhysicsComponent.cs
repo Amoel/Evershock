@@ -1,21 +1,29 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Joints;
+using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using System;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     [Serializable]
     [RequireComponent(typeof(TransformComponent))]
     public class PhysicsComponent : Component, ITickableComponent, IInputReceiver
     {
+        public static readonly float Unit = 10.0f;
+
         public float Inertia { get; set; }
-        public float Weight { get; set; }
-        public float Softness { get; set; }
+        public bool UseAbsoluteMovement { get; set; }
 
         public bool IsGravityAffected { get; set; }
 
         public bool IsResting { get; private set; }
         public bool HasTouchedFloor { get; private set; }
+
+        public Body Body { get; private set; }
 
         private Vector3 m_Force;
         private Vector3 m_Gravity;
@@ -27,22 +35,33 @@ namespace EvershockGame.Components
         public PhysicsComponent(Guid entity) : base(entity)
         {
             Inertia = 0.0f;
-            Weight = 1.0f;
-            Softness = 0.0f;
 
             IsGravityAffected = true;
 
             m_Force = Vector3.Zero;
             m_Gravity = Vector3.Zero;
+
+            Body = BodyFactory.CreateBody(PhysicsManager.Get().World, Entity);
+
+            TransformComponent transform = GetComponent<TransformComponent>();
+            if (transform != null)
+            {
+                Body.Position = transform.AbsoluteLocation.To2D() / Unit;
+            }
+            Body.IgnoreGravity = true;
+            Body.Mass = 0.0f;
+            Body.Friction = 0.0f;
         }
 
         //---------------------------------------------------------------------------
 
-        public void Init(float inertia = 0.0f, float weight = 1.0f, float softness = 0.0f)
+        public void Init(BodyType bodyType, float inertia, float dampening, bool useAbsoluteMovement = false)
         {
+            Body.BodyType = bodyType;
             Inertia = inertia;
-            Weight = weight;
-            Softness = softness;
+            Body.Inertia = inertia;
+            Body.LinearDamping = dampening;
+            UseAbsoluteMovement = useAbsoluteMovement;
         }
 
         //---------------------------------------------------------------------------
@@ -65,6 +84,7 @@ namespace EvershockGame.Components
         private void TickForce(float deltaTime)
         {
             TransformComponent transform = GetComponent<TransformComponent>();
+            TransformComponent parentTransform = GetComponentInParent<TransformComponent>();
 
             if (transform != null)
             {
@@ -87,10 +107,26 @@ namespace EvershockGame.Components
                     IsResting = false;
                 }
 
-                Vector2 newForce = CollisionManager.Get().CheckCollision(transform, Entity, GetForce().To2D());
-                transform.MoveTo(new Vector3(newForce.X, newForce.Y, transform.Location.Z + m_Force.Z));
-
+                if (Body != null && Body.BodyType != BodyType.Static)
+                {
+                    if (Body.Enabled)
+                    {
+                        Vector3 pos = new Vector3(Body.Position.X * Unit, Body.Position.Y * Unit, transform.Location.Z + m_Force.Z);
+                        if (parentTransform != null)
+                        {
+                            pos -= parentTransform.AbsoluteLocation;
+                        }
+                        transform.MoveTo(pos);
+                    }
+                    else
+                    {
+                        transform.MoveBy(m_Force);
+                    }
+                    
+                }
+                
                 m_Force *= Inertia;
+                if (UseAbsoluteMovement) Body.LinearVelocity = Vector2.Zero;
             }
         }
 
@@ -115,9 +151,14 @@ namespace EvershockGame.Components
 
         //---------------------------------------------------------------------------
 
-        public void ApplyForce(Vector3 force, bool ignoreInertia = false, float randomness = 0.0f)
+        public void ApplyForce(Vector3 force, bool ignoreInertia = false)
         {
             m_Force += (ignoreInertia ? force : force * (1.0f - Inertia));
+            if (m_Force.Length() > 0)
+            {
+                float factor = 1.0f - (Body.LinearVelocity.Length() / (m_Force.To2D().Length() / Unit));
+                if (factor > 0.0f) Body.ApplyLinearImpulse(m_Force.To2D() / Unit * factor);
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -125,45 +166,56 @@ namespace EvershockGame.Components
         public void ApplyAbsoluteForce(Vector3 force)
         {
             m_Force = force;
+            Body.LinearVelocity = force.To2D() / Unit;
         }
 
         //---------------------------------------------------------------------------
 
         protected void ApplyGravity(float deltaTime)
         {
-            if (Weight > 0.0f)
+            TransformComponent transform = GetComponent<TransformComponent>();
+            if (transform != null)
             {
-                TransformComponent transform = GetComponent<TransformComponent>();
-                if (transform != null)
+                Vector3 location = transform.AbsoluteLocation;
+
+                if (location.Z + m_Force.Z < 0.0f)
                 {
-                    Vector3 location = transform.AbsoluteLocation;
+                    m_Force = new Vector3(m_Force.X, m_Force.Y, m_Force.Z * -Body.Restitution);
+                    m_Gravity = Vector3.Zero;
 
-                    if (location.Z + m_Force.Z < 0.0f)
-                    {
-                        m_Force = new Vector3(m_Force.X, m_Force.Y, m_Force.Z * -Softness);
-                        m_Gravity = Vector3.Zero;
-
-                        HasTouchedFloor = true;
-                    }
-                    else
-                    {
-                        m_Gravity += PhysicsManager.Get().Gravity * Weight * deltaTime;
-                        m_Force += m_Gravity;
-                    }
+                    HasTouchedFloor = true;
+                }
+                else
+                {
+                    m_Gravity += PhysicsManager.Get().Gravity * deltaTime;
+                    m_Force += m_Gravity;
                 }
             }
         }
 
         //---------------------------------------------------------------------------
 
-        public void ResetLocation()
+        public void ResetLocation(Vector3? location = null)
         {
             TransformComponent transform = GetComponent<TransformComponent>();
-            ICollider collider = CollisionManager.Get().FindCollider(Entity);
-
-            if (transform != null && collider != null)
+            if (Body != null && transform != null)
             {
-                collider.ResetLocation(transform.Location.To2D());
+                if (location != null)
+                {
+                    transform.MoveTo(location.Value);
+                }
+                Body.Position = transform.AbsoluteLocation.To2D() / Unit;
+            }
+        }
+        
+        //---------------------------------------------------------------------------
+
+        public void AddJoint(PhysicsComponent other)
+        {
+            if (other != null && other.Body != null)
+            {
+                WeldJoint joint = JointFactory.CreateWeldJoint(PhysicsManager.Get().World, Body, other.Body, Vector2.Zero, Vector2.Zero);
+                joint.CollideConnected = false;
             }
         }
 
@@ -180,6 +232,9 @@ namespace EvershockGame.Components
 
         //---------------------------------------------------------------------------
 
-        public override void OnCleanup() { }
+        public override void OnCleanup()
+        {
+            PhysicsManager.Get().World.RemoveBody(Body);
+        }
     }
 }
