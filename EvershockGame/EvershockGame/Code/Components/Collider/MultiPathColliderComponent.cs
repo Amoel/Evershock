@@ -1,4 +1,6 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
+using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
@@ -9,43 +11,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     public class MultiPathColliderComponent : ColliderComponent
     {
-        public List<Edge> Edges { get; private set; }
-
-        //---------------------------------------------------------------------------
-
-        public MultiPathColliderComponent(Guid entity) : base(entity)
-        {
-            Edges = new List<Edge>();
-        }
-
-        //---------------------------------------------------------------------------
-        
-        public void Init()
-        {
-            Body = new Body(PhysicsManager.Get().World);
-            Body.BodyType = BodyType.Static;
-            Body.IgnoreGravity = true;
-        }
+        public MultiPathColliderComponent(Guid entity) : base(entity) { }
 
         //---------------------------------------------------------------------------
 
         public void Reset()
         {
-            Body.FixtureList.Clear();
+            ClearFixtures();
         }
 
         //---------------------------------------------------------------------------
 
         public void AddPath(Vector2 start, Vector2 end)
         {
-            Fixture fixture = FixtureFactory.AttachEdge(start / Unit, end / Unit, Body, Entity);
-            fixture.CollisionCategories = m_CategoryMapping[CollisionCategory];
-            //fixture.CollidesWith = m_CategoryMapping[CollidesWith];
-            Edges.Add(new Edge(start, end));
+            PhysicsComponent physics = GetComponent<PhysicsComponent>();
+            if (physics != null)
+            {
+                Fixture fixture = FixtureFactory.AttachEdge(start / Unit, end / Unit, physics.Body, Entity);
+                fixture.CollisionCategories = m_CategoryMapping[CollisionCategory];
+                Fixtures.Add(fixture);
+                //fixture.CollidesWith = m_CategoryMapping[CollidesWith];
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -54,16 +44,18 @@ namespace EvershockGame.Components
         {
             if (CollisionManager.Get().IsDebugViewActive)
             {
-                TransformComponent transform = GetComponent<TransformComponent>();
                 Texture2D tex = CollisionManager.Get().PointTexture;
-                if (transform != null && tex != null && Body != null)
+                if (tex != null)
                 {
-                    foreach (Edge edge in Edges)
+                    foreach (Fixture fixture in Fixtures)
                     {
-                        Vector2 location = edge.Start.ToLocal(data) + Vector2.One;
-                        float length = Vector2.Distance(edge.Start, edge.End);
-                        float angle = (float)Math.Atan2(edge.End.Y - edge.Start.Y, edge.End.X - edge.Start.X);
-                        batch.Draw(tex, new Rectangle((int)location.X, (int)location.Y, (int)length, 2), tex.Bounds, GetDebugColor(), angle, Vector2.Zero, SpriteEffects.None, 1.0f);
+                        EdgeShape shape = fixture.Shape as EdgeShape;
+                        if (shape != null)
+                        {
+                            Vector2 start = shape.Vertex1 * Unit;
+                            Vector2 end = shape.Vertex2 * Unit;
+                            DrawLine(batch, tex, start, end, data);
+                        }
                     }
                 }
             }
@@ -72,21 +64,5 @@ namespace EvershockGame.Components
         //---------------------------------------------------------------------------
 
         public override void OnCleanup() { }
-    }
-    
-    //---------------------------------------------------------------------------
-
-    public struct Edge
-    {
-        public Vector2 Start { get; private set; }
-        public Vector2 End { get; private set; }
-
-        //---------------------------------------------------------------------------
-
-        public Edge(Vector2 start, Vector2 end)
-        {
-            Start = start;
-            End = end;
-        }
     }
 }

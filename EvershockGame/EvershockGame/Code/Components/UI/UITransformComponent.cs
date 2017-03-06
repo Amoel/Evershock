@@ -1,9 +1,10 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace EvershockGame.Components.UI
+namespace EvershockGame.Code.Components.UI
 {
     public enum EVerticalAlignment
     {

@@ -716,7 +716,7 @@ namespace FarseerPhysics.Dynamics
                     Contact c = ContactManager.ContactList[i];
 #endif
 
-                    // Is this contact disabled?
+                    // Is this contact disabled?;
                     if (c.Enabled == false)
                     {
                         continue;

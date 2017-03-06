@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EvershockGame.Code;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     [Serializable]
     [RequireComponent(typeof(TransformComponent))]
@@ -12,6 +13,7 @@ namespace EvershockGame.Components
 
         public Sprite Sprite { get; set; }
         public Vector2 Offset { get; set; }
+        public SpriteEffects Orientation { get; set; }
 
         private Func<float, Color> m_ColorFunction;
         public Color Color
@@ -80,14 +82,16 @@ namespace EvershockGame.Components
             Scale = scale;
             Color = color;
             Opacity = opacity;
+            Orientation = SpriteEffects.None;
         }
 
         //---------------------------------------------------------------------------
 
         private Sprite GetSprite()
         {
-            if (!Sprite.IsEmpty) return Sprite;
-            return DefaultSprite;
+            return Sprite;
+            //if (!Sprite.IsEmpty) return Sprite;
+            //return DefaultSprite;
         }
 
         //---------------------------------------------------------------------------
@@ -100,7 +104,7 @@ namespace EvershockGame.Components
             if (!sprite.IsEmpty)
             {
                 TransformComponent transform = GetComponent<TransformComponent>();
-                if (transform != null && IsValidDistance(data, transform.Location))
+                if (transform != null && IsValidDistance(data, transform.AbsoluteLocation))
                 {
                     Color color = m_ColorFunction(m_Time);
                     float opacity = MathHelper.Clamp(m_OpacityFunction(m_Time), 0.0f, 1.0f);
@@ -115,7 +119,7 @@ namespace EvershockGame.Components
                         transform.Rotation,
                         new Vector2(sprite.Bounds.Width / 2 + Offset.X, sprite.Bounds.Height / 2 + Offset.Y),
                         scale,
-                        SpriteEffects.None,
+                        Orientation,
                         (absoluteLocation.Y + 10000.0f) / 100000.0f); // + Math.Max(0.0001f, absoluteLocation.Z / 1000.0f)
                 }
             }

@@ -7,7 +7,7 @@ using Managers;
 using Newtonsoft.Json;
 using System.IO;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     [Serializable]
     [SerializeManager(true, "data", "Managers")]
@@ -15,7 +15,9 @@ namespace EvershockGame.Manager
     {
         [JsonIgnore]
         private Dictionary<Guid, IEntity> m_Entities;
-        private Dictionary<Guid, Guid> m_Hierarchy;
+
+        private Dictionary<Guid, List<Guid>> m_HierarchyTopDown;
+        private Dictionary<Guid, Guid> m_HierarchyBottomUp;
 
         private Dictionary<Type, List<Guid>> m_Types;
 
@@ -28,7 +30,8 @@ namespace EvershockGame.Manager
         protected override void Init()
         {
             m_Entities = new Dictionary<Guid, IEntity>();
-            m_Hierarchy = new Dictionary<Guid, Guid>();
+            m_HierarchyTopDown = new Dictionary<Guid, List<Guid>>();
+            m_HierarchyBottomUp = new Dictionary<Guid, Guid>();
             m_Types = new Dictionary<Type, List<Guid>>();
         }
 
@@ -101,18 +104,18 @@ namespace EvershockGame.Manager
 
         //---------------------------------------------------------------------------
 
-        public T Find<T>(Guid guid) where T : IEntity
+        public T Find<T>(Guid guid) where T : class, IEntity
         {
             if (m_Entities.ContainsKey(guid))
             {
-                return (T)m_Entities[guid];
+                return m_Entities[guid] as T;
             }
             return default(T);
         }
 
         //---------------------------------------------------------------------------
 
-        public List<T> Find<T>() where T : IEntity
+        public List<T> Find<T>() where T : class, IEntity
         {
             List<T> entities = new List<T>();
             if (m_Types.ContainsKey(typeof(T)))
@@ -130,14 +133,42 @@ namespace EvershockGame.Manager
 
         public void UpdateParent(Guid child, Guid parent)
         {
-            m_Hierarchy[child] = parent;
+            if (m_HierarchyBottomUp.ContainsKey(child))
+            {
+                Guid oldParent = m_HierarchyBottomUp[child];
+                if (m_HierarchyTopDown[oldParent].Contains(child))
+                {
+                    m_HierarchyTopDown[oldParent].Remove(child);
+                }
+                m_HierarchyBottomUp[child] = parent;
+            }
+            else
+            {
+                m_HierarchyBottomUp.Add(child, parent);
+            }
+
+            if (m_HierarchyTopDown.ContainsKey(parent))
+            {
+                if (m_HierarchyTopDown[parent] == null)
+                {
+                    m_HierarchyTopDown[parent] = new List<Guid> { child };
+                }
+                else
+                {
+                    m_HierarchyTopDown[parent].Add(child);
+                }
+            }
+            else
+            {
+                m_HierarchyTopDown.Add(parent, new List<Guid> { child });
+            }
         }
 
         //---------------------------------------------------------------------------
 
         public Guid GetParent(Guid child)
         {
-            if (m_Hierarchy.ContainsKey(child)) return m_Hierarchy[child];
+            if (m_HierarchyBottomUp.ContainsKey(child)) return m_HierarchyBottomUp[child];
             return Guid.Empty;
         }
 
@@ -145,11 +176,41 @@ namespace EvershockGame.Manager
 
         public Guid GetRoot(Guid child)
         {
-            while (m_Hierarchy.ContainsKey(child))
+            while (m_HierarchyBottomUp.ContainsKey(child))
             {
-                child = m_Hierarchy[child];
+                child = m_HierarchyBottomUp[child];
             }
             return child;
+        }
+
+        //---------------------------------------------------------------------------
+
+        public List<IEntity> GetChildren(Guid parent)
+        {
+            List<IEntity> children = new List<IEntity>();
+            if (m_HierarchyTopDown.ContainsKey(parent))
+            {
+                foreach (Guid child in m_HierarchyTopDown[parent])
+                {
+                    IEntity entity = Find(child);
+                    if (entity != null) children.Add(entity);
+                }
+            }
+            return children;
+        }
+
+        public List<T> GetChildren<T>(Guid parent) where T : class, IEntity
+        {
+            List<T> children = new List<T>();
+            if (m_HierarchyTopDown.ContainsKey(parent))
+            {
+                foreach (Guid child in m_HierarchyTopDown[parent])
+                {
+                    T entity = Find<T>(child);
+                    if (entity != null) children.Add(entity);
+                }
+            }
+            return children;
         }
 
         //---------------------------------------------------------------------------
@@ -163,6 +224,22 @@ namespace EvershockGame.Manager
         public void Save()
         {
 
+        }
+
+        //---------------------------------------------------------------------------
+
+        struct EntityWrapper
+        {
+            public Type Type { get; private set; }
+            public Guid GUID { get; private set; }
+
+            //---------------------------------------------------------------------------
+
+            public EntityWrapper(Type type, Guid guid)
+            {
+                Type = type;
+                GUID = guid;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using EvershockGame.Components;
+﻿using EvershockGame.Code.Components;
+using EvershockGame.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Particles
+namespace EvershockGame.Code.Particles
 {
     public enum EEmitterType
     {

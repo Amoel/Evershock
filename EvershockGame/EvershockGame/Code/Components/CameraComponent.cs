@@ -1,4 +1,6 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
 using Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     public enum ECameraMode
     {

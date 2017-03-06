@@ -1,4 +1,5 @@
-﻿using EvershockGame.Components.UI;
+﻿using EvershockGame.Code.Components.UI;
+using EvershockGame.Code.Manager;
 using EvershockGame.Manager;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Entities
+namespace EvershockGame.Code.Entities
 {
     public delegate void ButtonClickEventHandler();
 
@@ -18,7 +19,7 @@ namespace EvershockGame.Entities
 
         //---------------------------------------------------------------------------
 
-        public ButtonControl(string name, Frame frame) : base(name, frame)
+        public ButtonControl(string name, Guid parent, Frame frame) : base(name, parent, frame)
         {
             AddComponent<ButtonComponent>();
         }

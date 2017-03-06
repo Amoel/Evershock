@@ -1,4 +1,7 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Components;
+using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
 using Microsoft.Xna.Framework;
@@ -9,26 +12,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     public delegate void CollisionEnterEventHandler(IEntity source, IEntity target);
     public delegate void CollisionLeaveEventHandler(IEntity source, IEntity target);
 
     //---------------------------------------------------------------------------
 
+    [Flags]
     public enum ECollisionCategory
     {
-        None,
-        All,
-        Player,
-        Stage,
-        Pickup
+        None = 0,
+        All = int.MaxValue,
+        Player = 1,
+        Stage = 2,
+        Pickup = 4,
+        Bullet = 8
     }
 
     //---------------------------------------------------------------------------
 
     [Serializable]
-    [RequireComponent(typeof(PhysicsComponent))]
     public abstract class ColliderComponent : Component, ICollider, IDrawableComponent
     {
         public static readonly float Unit = 10.0f;
@@ -39,13 +43,15 @@ namespace EvershockGame.Components
             { ECollisionCategory.All, Category.All },
             { ECollisionCategory.Player, Category.Cat1 },
             { ECollisionCategory.Stage, Category.Cat2 },
-            { ECollisionCategory.Pickup, Category.Cat3 }
+            { ECollisionCategory.Pickup, Category.Cat3 },
+            { ECollisionCategory.Bullet, Category.Cat4 }
         };
 
         public event CollisionEnterEventHandler Enter;
         public event CollisionLeaveEventHandler Leave;
 
-        protected Body Body { get; set; }
+        //protected Body Body { get; set; }
+        protected List<Fixture> Fixtures { get; set; }
 
         public Vector2 Offset { get; protected set; }
         public ECollisionCategory CollisionCategory { get; private set; }
@@ -53,35 +59,30 @@ namespace EvershockGame.Components
 
         //---------------------------------------------------------------------------
 
-        public ColliderComponent(Guid entity) : base(entity) { CollisionCategory = ECollisionCategory.All; }
-
-        //---------------------------------------------------------------------------
-
-        public Vector2 Step(Vector2 force)
+        public ColliderComponent(Guid entity) : base(entity)
         {
-            if (Body == null) return force;
-            if (Body.BodyType != BodyType.Static)
-            {
-                Body.LinearVelocity = force / Unit;
-            }
-            return (Body.Position - Offset) * Unit;
-        }
-
-        //---------------------------------------------------------------------------
-
-        public void ResetLocation(Vector2 location)
-        {
-            if (Body != null)
-            {
-                Body.Position = location / Unit;
-            }
+            Fixtures = new List<Fixture>();
+            CollisionCategory = ECollisionCategory.All;
         }
 
         //---------------------------------------------------------------------------
 
         public void SetSensor(bool isSensor)
         {
-            Body.IsSensor = isSensor;
+            foreach (Fixture fixture in Fixtures)
+            {
+                fixture.IsSensor = isSensor;
+            }
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void SetRestitution(float restitution)
+        {
+            foreach (Fixture fixture in Fixtures)
+            {
+                fixture.Restitution = restitution;
+            }
         }
 
         //---------------------------------------------------------------------------
@@ -89,10 +90,9 @@ namespace EvershockGame.Components
         public void SetCollisionCategory(ECollisionCategory category)
         {
             CollisionCategory = category;
-            Body.CollisionCategories = m_CategoryMapping[CollisionCategory];
-            foreach (Fixture fixture in Body.FixtureList)
+            foreach (Fixture fixture in Fixtures)
             {
-                fixture.CollisionCategories = m_CategoryMapping[CollisionCategory];
+                fixture.CollisionCategories = (Category)category; //m_CategoryMapping[CollisionCategory];
             }
         }
 
@@ -101,10 +101,9 @@ namespace EvershockGame.Components
         public void SetCollidesWith(ECollisionCategory category)
         {
             CollidesWith = category;
-            Body.CollidesWith = m_CategoryMapping[CollidesWith];
-            foreach (Fixture fixture in Body.FixtureList)
+            foreach (Fixture fixture in Fixtures)
             {
-                fixture.CollidesWith = m_CategoryMapping[CollidesWith];
+                fixture.CollidesWith = (Category)category; //m_CategoryMapping[CollidesWith];
             }
         }
 
@@ -169,21 +168,48 @@ namespace EvershockGame.Components
 
         protected Color GetDebugColor()
         {
-            if (Body == null) return Color.White;
-            switch (Body.BodyType)
+            if (Fixtures.Count == 0) return Color.White;
+            switch (Fixtures.First().Body.BodyType)
             {
                 case BodyType.Dynamic: return new Color(0.067f, 0.812f, 0.129f);
                 case BodyType.Static: return new Color(0.812f, 0.067f, 0.153f);
                 default: return Color.White;
             }
         }
-#if DEBUG
+
         //---------------------------------------------------------------------------
 
-        public void SetCollisionState(bool isEnabled)
+        public void ClearFixtures()
         {
-            Body.CollisionCategories = isEnabled ? Category.All : Category.None;
+            if (Fixtures.Count > 0)
+            {
+                Body body = Fixtures.First().Body;
+                if (body != null)
+                {
+                    foreach (Fixture fixture in Fixtures)
+                    {
+                        body.DestroyFixture(fixture);
+                    }
+                    Fixtures.Clear();
+                }
+            }
         }
-#endif
+
+        //---------------------------------------------------------------------------
+
+        protected void DrawLine(SpriteBatch batch, Texture2D tex, Vector2 start, Vector2 end, CameraData data)
+        {
+            Vector2 location = start.ToLocal(data) + Vector2.One;
+            float length = Vector2.Distance(start, end);
+            float angle = (float)Math.Atan2(end.Y - start.Y, end.X - start.X);
+            batch.Draw(tex, new Rectangle((int)location.X, (int)location.Y, (int)length, 2), tex.Bounds, GetDebugColor(), angle, Vector2.Zero, SpriteEffects.None, 1.0f);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public override void OnCleanup()
+        {
+            ClearFixtures();
+        }
     }
 }

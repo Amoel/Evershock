@@ -1,4 +1,5 @@
 ﻿using EvershockGame;
+using EvershockGame.Code.Components;
 using EvershockGame.Components;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace EvershockGame.Code
 {
     public class Particle : Entity
     {
-        public Particle(string name) : base(name)
+        public Particle(string name, Guid parent) : base(name, parent)
         {
             AddComponent<TransformComponent>();
         }

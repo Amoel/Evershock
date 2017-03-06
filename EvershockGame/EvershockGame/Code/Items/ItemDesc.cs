@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Items
+namespace EvershockGame.Code.Items
 {
     public enum EItemType
     {
@@ -47,18 +47,20 @@ namespace EvershockGame.Items
         
         public Sprite Sprite { get; set; }
         public bool IsStackable { get; set; }
+        public bool IsConsumable { get; set; }
 
         public bool IsEmpty { get; set; }
 
         //---------------------------------------------------------------------------
 
-        public ItemDesc(string name, EItemType type, EItemRarity rarity, Sprite sprite, bool isStackable) : this()
+        public ItemDesc(string name, EItemType type, EItemRarity rarity, Sprite sprite, bool isStackable, bool isConsumable) : this()
         {
             Name = name;
             Type = type;
             Rarity = rarity;
             Sprite = sprite;
             IsStackable = isStackable;
+            IsConsumable = isConsumable;
         }
 
         //---------------------------------------------------------------------------
@@ -79,7 +81,8 @@ namespace EvershockGame.Items
                 Rarity = desc.Rarity,
                 Category = desc.Category,
                 Sprite = new Sprite(itemSpritesheet, spritesheetWidth, spritesheetHeight, desc.SpriteX, desc.SpriteY),
-                IsStackable = desc.IsStackable
+                IsStackable = desc.IsStackable,
+                IsConsumable = desc.IsConsumable
             };
         }
     }
@@ -98,6 +101,7 @@ namespace EvershockGame.Items
         public int SpriteX { get; set; }
         public int SpriteY { get; set; }
         public bool IsStackable { get; set; }
+        public bool IsConsumable { get; set; }
 
         //---------------------------------------------------------------------------
 
@@ -111,7 +115,8 @@ namespace EvershockGame.Items
                 Category = desc.Category,
                 SpriteX = desc.Sprite.Bounds.X / desc.Sprite.Bounds.Width,
                 SpriteY = desc.Sprite.Bounds.Y / desc.Sprite.Bounds.Height,
-                IsStackable = desc.IsStackable
+                IsStackable = desc.IsStackable,
+                IsConsumable = desc.IsConsumable
             };
         }
     }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Stages
+namespace EvershockGame.Code.Stages
 {
     public class Exit
     {

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     public class GameManager : BaseManager<GameManager>
     {
@@ -13,6 +13,7 @@ namespace EvershockGame.Manager
         public void Tick(float deltaTime)
         {
             ComponentManager.Get().TickComponents(deltaTime);
+            
             PhysicsManager.Get().Step(deltaTime);
             CameraManager.Get().Tick();
 

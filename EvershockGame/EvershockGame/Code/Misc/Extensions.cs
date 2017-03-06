@@ -1,6 +1,6 @@
-﻿using EvershockGame.Components;
-using EvershockGame.Particles;
-using EvershockGame.Stages;
+﻿using EvershockGame.Code.Components;
+using EvershockGame.Components;
+using EvershockGame.Code.Particles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -9,8 +9,9 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using EvershockGame.Code.Stages;
 
-namespace EvershockGame
+namespace EvershockGame.Code
 {
     public static class Extensions
     {

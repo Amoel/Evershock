@@ -1,15 +1,16 @@
 ﻿using EvershockGame;
 using EvershockGame.Components;
-using EvershockGame.Factory;
-using EvershockGame.Items;
 using EvershockGame.Manager;
-using EvershockGame.Particles;
+using EvershockGame.Code.Particles;
 using EvershockGame.Code.Components;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using EvershockGame.Code.Manager;
+using EvershockGame.Code.Factory;
+using EvershockGame.Code.Items;
 
 namespace EvershockGame.Code.Factories
 {
@@ -116,13 +117,14 @@ namespace EvershockGame.Code.Factories
             pickup.AddComponent<TransformComponent>().Init(location);
 
             PhysicsComponent physics = pickup.AddComponent<PhysicsComponent>();
-            physics.Init(0.94f, 4.0f, 0.3f);
+            physics.Init(BodyType.Dynamic, 0.97f, 2.0f);
 
             CircleColliderComponent collider = pickup.AddComponent<CircleColliderComponent>();
-            collider.Init(8, BodyType.Dynamic);
-            collider.SetCollidesWith(ECollisionCategory.Player);
+            collider.Init(25, BodyType.Dynamic);
+            collider.SetCollidesWith(ECollisionCategory.Stage);
             collider.SetCollisionCategory(ECollisionCategory.Pickup);
-            collider.SetSensor(true);
+            collider.SetRestitution(0.3f);
+            //collider.SetSensor(true);
 
             physics.ApplyForce(force, true);
 
@@ -136,6 +138,7 @@ namespace EvershockGame.Code.Factories
         public static Pickup Create(string name, int cameraIndex)
         {
             EPickups pickupType;
+            EItemType itemType;
             if (Enum.TryParse(name, out pickupType))
             {
                 List<Camera> cams = EntityManager.Get().Find<Camera>();
@@ -143,6 +146,15 @@ namespace EvershockGame.Code.Factories
                 {
                     Vector3 location = cams[cameraIndex].Transform.Location;
                     return Create(pickupType, location, new Vector3(0, 0, 50));
+                }
+            }
+            else if (Enum.TryParse(name, out itemType))
+            {
+                List<Camera> cams = EntityManager.Get().Find<Camera>();
+                if (cams.Count > cameraIndex)
+                {
+                    Vector3 location = cams[cameraIndex].Transform.Location;
+                    return Create(itemType, location, new Vector3(0, 0, 50));
                 }
             }
             return null;

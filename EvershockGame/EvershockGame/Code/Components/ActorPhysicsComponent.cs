@@ -45,7 +45,21 @@ namespace EvershockGame.Code
                 if (movement.Length() > 0.01f)
                 {
                     //ApplyForce(new Vector3(xMovement, yMovement, 0), true);
-                    ApplyAbsoluteForce(Vector3.Normalize(new Vector3(xMovement, yMovement, 0)) * deltaTime * attributes.MovementSpeed * 200.0f);
+                    ApplyAbsoluteForce(Vector3.Normalize(movement) * deltaTime * attributes.MovementSpeed * 200.0f);
+
+                }
+
+                float xDirection = (actions[EGameAction.LOOK_RIGHT].Value - actions[EGameAction.LOOK_LEFT].Value);
+                float yDirection = (actions[EGameAction.LOOK_DOWN].Value - actions[EGameAction.LOOK_UP].Value);
+
+                Vector2 directon = new Vector2(xDirection, yDirection);
+                if (directon.Length() > 0.01f)
+                {
+                    TransformComponent transform = GetComponent<TransformComponent>();
+                    if (transform != null)
+                    {
+                        transform.OrientateTo(directon);
+                    }
                 }
             }
         }

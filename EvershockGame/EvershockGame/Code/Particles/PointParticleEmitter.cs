@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace EvershockGame.Particles
+namespace EvershockGame.Code.Particles
 {
     public class PointParticleEmitter : ParticleEmitter
     {

@@ -1,11 +1,13 @@
 ﻿using EvershockGame;
 using EvershockGame.Components;
-using EvershockGame.Factory;
 using EvershockGame.Manager;
 using EvershockGame.Code.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System;
+using EvershockGame.Code.Factory;
+using EvershockGame.Code.Manager;
 
 namespace EvershockGame.Code
 {
@@ -13,7 +15,7 @@ namespace EvershockGame.Code
     {
         bool closed = true;
 
-        public Chest(string name) : base(name)
+        public Chest(string name, Guid parent) : base(name, parent)
         {
             AddComponent<TransformComponent>();
             AddComponent<PhysicsComponent>();

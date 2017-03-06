@@ -2,10 +2,11 @@
 using Microsoft.Xna.Framework;
 using System;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     public delegate void LocationChangedEventHandler(Vector3 oldLocation, Vector3 newLocation);
     public delegate void ScaleChangedEventHandler(Vector2 oldScale, Vector2 newScale);
+    public delegate void OrientationChangedEventHandler(Vector2 oldOrientation, Vector2 newOrientation);
     public delegate void RotationChangedEventHandler(float oldRotation, float newRotation);
 
     //---------------------------------------------------------------------------
@@ -29,36 +30,38 @@ namespace EvershockGame.Components
         }
 
         public Vector2 Scale { get; set; }
+        public Vector2 Orientation { get; set; }
         public float Rotation { get; set; }
 
         public event LocationChangedEventHandler LocationChanged;
         public event ScaleChangedEventHandler ScaleChanged;
+        public event OrientationChangedEventHandler OrientationChanged;
         public event RotationChangedEventHandler RotationChanged;
 
         //---------------------------------------------------------------------------
 
         public TransformComponent(Guid entity) : base(entity)
         {
-            Init(Vector3.Zero, Vector2.One, 0.0f);
+            Init(Vector3.Zero, Vector2.One, Vector2.UnitY, 0.0f);
         }
 
         //---------------------------------------------------------------------------
 
         public void Init(Vector3 location)
         {
-            Init(location, Vector2.One, 0.0f);
+            Init(location, Vector2.One, Vector2.UnitY, 0.0f);
         }
 
         //---------------------------------------------------------------------------
 
         public void Init(Vector3 location, Vector2 scale)
         {
-            Init(location, scale, 0.0f);
+            Init(location, scale, Vector2.UnitY, 0.0f);
         }
 
         //---------------------------------------------------------------------------
 
-        public void Init(Vector3 location, Vector2 scale, float rotation)
+        public void Init(Vector3 location, Vector2 scale, Vector2 orientation, float rotation)
         {
             Vector3 oldLocation = Location;
             Location = location;
@@ -67,6 +70,10 @@ namespace EvershockGame.Components
             Vector2 oldScale = Scale;
             Scale = scale;
             OnScaleChanged(oldScale, Scale);
+
+            Vector2 oldOrientation = Orientation;
+            Orientation = orientation;
+            OnOrientationChanged(oldOrientation, Orientation);
 
             float oldRotation = Rotation;
             Rotation = rotation;
@@ -89,6 +96,15 @@ namespace EvershockGame.Components
             Vector3 oldLocation = Location;
             Location += delta;
             OnLocationChanged(oldLocation, Location);
+        }
+
+        //---------------------------------------------------------------------------
+
+        public void OrientateTo(Vector2 orientation)
+        {
+            Vector2 oldOrientation = Orientation;
+            Orientation = Vector2.Normalize(orientation);
+            OnOrientationChanged(oldOrientation, Orientation);
         }
 
         //---------------------------------------------------------------------------
@@ -133,6 +149,13 @@ namespace EvershockGame.Components
         private void OnScaleChanged(Vector2 oldScale, Vector2 newScale)
         {
             ScaleChanged?.Invoke(oldScale, newScale);
+        }
+
+        //---------------------------------------------------------------------------
+        
+        private void OnOrientationChanged(Vector2 oldOrientation, Vector2 newOrientation)
+        {
+            OrientationChanged?.Invoke(oldOrientation, newOrientation);
         }
 
         //---------------------------------------------------------------------------

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Components;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;

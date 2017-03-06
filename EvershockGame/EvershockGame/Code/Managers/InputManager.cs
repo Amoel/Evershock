@@ -65,6 +65,10 @@ namespace EvershockGame.Manager
         MOVE_DOWN,
         MOVE_LEFT,
         MOVE_RIGHT,
+        LOOK_UP,
+        LOOK_DOWN,
+        LOOK_LEFT,
+        LOOK_RIGHT,
         MENU_UP,
         MENU_DOWN,
         MENU_LEFT,
@@ -78,6 +82,8 @@ namespace EvershockGame.Manager
         REDUCE_HEALTH,
         INVENTORY_USE_ITEM,
         INVENTORY_DROP_ITEM,
+
+        PLAYER_ATTACK,
 
         TAKE_SCREENSHOT
     }

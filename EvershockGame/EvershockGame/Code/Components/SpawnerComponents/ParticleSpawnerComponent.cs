@@ -1,7 +1,7 @@
 ﻿using EvershockGame;
 using EvershockGame.Components;
 using EvershockGame.Manager;
-using EvershockGame.Particles;
+using EvershockGame.Code.Particles;
 using EvershockGame.Code.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

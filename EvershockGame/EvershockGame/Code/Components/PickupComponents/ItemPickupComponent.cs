@@ -1,12 +1,12 @@
 ﻿using EvershockGame;
 using EvershockGame.Components;
-using EvershockGame.Items;
-using EvershockGame.Particles;
+using EvershockGame.Code.Particles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EvershockGame.Code.Items;
 
 namespace EvershockGame.Code.Components
 {

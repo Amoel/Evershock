@@ -1,14 +1,16 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
+using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     [Serializable]
-    [RequireComponent(typeof(PhysicsComponent))]
     public class CircleColliderComponent : ColliderComponent
     {
         public float Radius { get; set; }
@@ -46,24 +48,16 @@ namespace EvershockGame.Components
         public void Init(int radius, Vector2 offset, BodyType bodyType, float dampening)
         {
             Radius = radius;
-            Body = BodyFactory.CreateCircle(PhysicsManager.Get().World, Radius / Unit, 0.0f, Entity);
-            foreach (Fixture fix in Body.FixtureList)
-            {
-                fix.UserData = Entity;
-            }
-            Body.BodyType = bodyType;
-            Body.IgnoreGravity = true;
-            Body.LinearDamping = dampening;
-            //Body.Restitution = 1.0f;
 
-            TransformComponent transform = GetComponent<TransformComponent>();
-            if (transform != null)
+            PhysicsComponent physics = GetComponentInAncestor<PhysicsComponent>();
+            if (physics != null)
             {
-                Body.Position = transform.Location.To2D() / Unit;
+                Fixture fixture = FixtureFactory.AttachCircle(radius / Unit, 0, physics.Body, offset / Unit, Entity);
+                fixture.Friction = 0.0f;
+                fixture.OnCollision += OnCollision;
+                fixture.OnSeparation += OnSeparation;
+                Fixtures.Add(fixture);
             }
-
-            Body.OnCollision += OnCollision;
-            Body.OnSeparation += OnSeparation;
         }
 
         //---------------------------------------------------------------------------
@@ -74,19 +68,12 @@ namespace EvershockGame.Components
             {
                 TransformComponent transform = GetComponent<TransformComponent>();
                 Texture2D tex = CollisionManager.Get().CircleTexture;
-                if (transform != null && tex != null && Body != null)
+                if (transform != null && tex != null && Fixtures.Count > 0)
                 {
-                    Vector2 position = (Body.Position * Unit).ToLocal(data);
-                    batch.Draw(tex, new Rectangle((int)(position.X - Radius), (int)(position.Y - Radius), (int)(Radius * 2), (int)(Radius * 2)), tex.Bounds, GetDebugColor(), 0, Vector2.Zero, SpriteEffects.None, 1.0f);
+                    //Vector2 position = (Body.Position * Unit).ToLocal(data);
+                    //batch.Draw(tex, new Rectangle((int)(position.X - Radius), (int)(position.Y - Radius), (int)(Radius * 2), (int)(Radius * 2)), tex.Bounds, GetDebugColor(), 0, Vector2.Zero, SpriteEffects.None, 1.0f);
                 }
             }
-        }
-
-        //---------------------------------------------------------------------------
-
-        public override void OnCleanup()
-        {
-            PhysicsManager.Get().World.RemoveBody(Body);
         }
     }
 }

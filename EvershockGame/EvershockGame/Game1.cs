@@ -1,11 +1,7 @@
 ﻿using EvershockGame;
 using EvershockGame.Components;
-using EvershockGame.Components.UI;
-using EvershockGame.Entities;
-using EvershockGame.Factory;
 using EvershockGame.Manager;
-using EvershockGame.Stages;
-using EvershockGame.Particles;
+using EvershockGame.Code.Particles;
 using EvershockGame.Code;
 using EvershockGame.Code.Components;
 using EvershockGame.Code.Factories;
@@ -14,7 +10,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
-using EvershockGame.Items;
+using EvershockGame.Code.Manager;
+using EvershockGame.Code.Factory;
+using EvershockGame.Code.Components.UI;
+using EvershockGame.Code.Stages;
 
 namespace EvershockGame
 {
@@ -75,7 +74,7 @@ namespace EvershockGame
                 int max = SeedManager.Get().NextSeed(3, 7);
                 for (int i = 0; i < max; i++)
                 {
-                    Vector2 position = new Vector2(room.Bounds.Center.X * 64 + (float)Math.Sin((i / (max / 2.0f)) * Math.PI) * 300, room.Bounds.Center.Y * 64 + (float)Math.Cos((i / (max / 2.0f)) * Math.PI) * 300);
+                    Vector2 position = new Vector2(room.Bounds.Center.X * 64 + (float)Math.Sin((i / (max / 2.0f)) * Math.PI) * 360, room.Bounds.Center.Y * 64 + (float)Math.Cos((i / (max / 2.0f)) * Math.PI) * 360);
                     EntityFactory.Create<Chest>("Chest").Init(position);
                 }
                 EntityFactory.Create<SimpleTestEnemy>("Enemy").Init(new Vector2(room.Bounds.Center.X * 64, room.Bounds.Center.Y * 64));

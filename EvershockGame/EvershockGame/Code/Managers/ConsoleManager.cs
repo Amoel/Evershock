@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     public delegate void CommandDelegate(object arg);
 

@@ -1,10 +1,11 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     [Serializable]
     public class DespawnComponent : Component, ITickableComponent

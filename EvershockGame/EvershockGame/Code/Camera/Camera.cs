@@ -1,4 +1,6 @@
-﻿using EvershockGame.Components;
+﻿using EvershockGame.Code.Components;
+using EvershockGame.Code.Manager;
+using EvershockGame.Components;
 using EvershockGame.Manager;
 using System;
 using System.Collections.Generic;
@@ -6,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame
+namespace EvershockGame.Code
 {
     public class Camera : Entity
     {
@@ -15,7 +17,7 @@ namespace EvershockGame
 
         //---------------------------------------------------------------------------
 
-        public Camera(string name) : base(name)
+        public Camera(string name, Guid parent) : base(name, parent)
         {
             AddComponent<TransformComponent>();
             AddComponent<CameraComponent>();

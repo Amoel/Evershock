@@ -1,9 +1,15 @@
-﻿using EvershockGame.Components;
-using EvershockGame.Components.UI;
+﻿using EvershockGame;
+using EvershockGame.Code.Components.UI;
+using EvershockGame.Code.Manager;
+using EvershockGame.Components;
 using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EvershockGame.Code.Components
 {
@@ -62,7 +68,7 @@ namespace EvershockGame.Code.Components
 
         //---------------------------------------------------------------------------
 
-        public void Draw(SpriteBatch batch, float deltaTime)
+        public void Draw(SpriteBatch batch)
         {
             if (m_Hearts != null)
             {

@@ -1,5 +1,7 @@
-﻿using EvershockGame.Components;
-using EvershockGame.Stages;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Components;
+using EvershockGame.Code.Stages;
+using EvershockGame.Components;
 using FarseerPhysics.Dynamics;
 using Managers;
 using Microsoft.Xna.Framework;
@@ -10,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     public class LightingManager : BaseManager<LightingManager>
     {

@@ -1,9 +1,10 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     [Serializable]
     public class InputComponent : Component, ITickableComponent

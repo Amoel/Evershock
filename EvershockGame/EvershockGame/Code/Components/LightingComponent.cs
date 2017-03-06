@@ -1,4 +1,6 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Components;
+using EvershockGame.Manager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -6,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EvershockGame.Components
+namespace EvershockGame.Code.Components
 {
     [RequireComponent(typeof(TransformComponent))]
     public class LightingComponent : Component, ILightingComponent

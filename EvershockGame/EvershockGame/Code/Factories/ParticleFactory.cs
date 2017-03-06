@@ -1,5 +1,7 @@
-﻿using EvershockGame.Components;
-using EvershockGame.Factory;
+﻿using EvershockGame.Code.Components;
+using EvershockGame.Code.Factory;
+using EvershockGame.Code.Manager;
+using EvershockGame.Components;
 using EvershockGame.Manager;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
@@ -30,7 +32,7 @@ namespace EvershockGame.Code.Factories
             particle.AddComponent<TransformComponent>().Init(location);
 
             PhysicsComponent physics = particle.AddComponent<PhysicsComponent>();
-            physics.Init(0.94f, 4.0f, 0.3f);
+            physics.Init(BodyType.Dynamic, 0.94f, 0.5f);
             physics.ApplyForce(force, true);
 
             SpriteComponent sprite = particle.AddComponent<SpriteComponent>();

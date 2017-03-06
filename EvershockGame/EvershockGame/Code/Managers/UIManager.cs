@@ -1,4 +1,4 @@
-﻿using EvershockGame.Entities;
+﻿using EvershockGame.Code.Entities;
 using Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     public delegate void PropertyChangedEventHandler(object value);
 

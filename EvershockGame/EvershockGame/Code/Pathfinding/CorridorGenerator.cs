@@ -1,4 +1,5 @@
-﻿using EvershockGame.Stages;
+﻿using EvershockGame.Code;
+using EvershockGame.Code.Stages;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Pathfinding
+namespace EvershockGame.Code.Pathfinding
 {
     public class CorridorGenerator
     {

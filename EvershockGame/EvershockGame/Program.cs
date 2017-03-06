@@ -1,4 +1,5 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
 using System;
 
 namespace EvershockGame

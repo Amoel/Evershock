@@ -1,11 +1,12 @@
-﻿using EvershockGame.Manager;
+﻿using EvershockGame.Code.Manager;
+using EvershockGame.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EvershockGame.Factory
+namespace EvershockGame.Code.Factory
 {
     public static class ComponentFactory
     {

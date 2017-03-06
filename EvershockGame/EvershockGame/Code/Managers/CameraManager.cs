@@ -1,12 +1,12 @@
-﻿using EvershockGame.Components;
-using EvershockGame.Factory;
+﻿using EvershockGame.Code.Components;
+using EvershockGame.Components;
 using Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace EvershockGame.Manager
+namespace EvershockGame.Code.Manager
 {
     public class CameraManager : BaseManager<CameraManager>
     {

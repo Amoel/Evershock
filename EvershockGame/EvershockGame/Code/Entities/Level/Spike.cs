@@ -1,4 +1,5 @@
 ﻿using EvershockGame;
+using EvershockGame.Code.Components;
 using EvershockGame.Components;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
@@ -17,7 +18,7 @@ namespace EvershockGame.Code
 
         //---------------------------------------------------------------------------
 
-        public Spike(string name) : base(name)
+        public Spike(string name, Guid parent) : base(name, parent)
         {
             IsActive = false;
 

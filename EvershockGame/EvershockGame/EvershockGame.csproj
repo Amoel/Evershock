@@ -51,6 +51,8 @@
     <Compile Include="Code\Components\AttributesComponents\AttributesComponent.cs" />
     <Compile Include="Code\Components\AttributesComponents\PlayerAttributesComponent.cs" />
     <Compile Include="Code\Components\AttributesComponents\SimpleFiendAttributesComponent.cs" />
+    <Compile Include="Code\Components\BulletPhysicsComponent.cs" />
+    <Compile Include="Code\Components\BulletSpawnerComponent.cs" />
     <Compile Include="Code\Components\CameraComponent.cs" />
     <Compile Include="Code\Components\Collider\AreaColliderComponent.cs" />
     <Compile Include="Code\Components\Collider\CircleColliderComponent.cs" />
@@ -99,6 +101,12 @@
     <Compile Include="Code\Entities\UI\ImageControl.cs" />
     <Compile Include="Code\Entities\UI\TextControl.cs" />
     <Compile Include="Code\Entities\UI\UIEntity.cs" />
+    <Compile Include="Code\Entities\Weapon\Bullets\Bullet.cs" />
+    <Compile Include="Code\Entities\Weapon\Bullets\BulletDesc.cs" />
+    <Compile Include="Code\Entities\Weapon\Weapon.cs" />
+    <Compile Include="Code\Entities\Weapon\MeleeWeapon.cs" />
+    <Compile Include="Code\Entities\Weapon\RangeWeapon.cs" />
+    <Compile Include="Code\Factories\BulletFactory.cs" />
     <Compile Include="Code\Factories\ComponentFactory.cs" />
     <Compile Include="Code\Factories\EntityFactory.cs" />
     <Compile Include="Code\Factories\ParticleFactory.cs" />
@@ -226,6 +234,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Debug\Healthbar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Debug\RectTextureDebug.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Debug\RectTextureDebug.png">
