@@ -2,7 +2,6 @@
 using EvershockGame.Code.Components;
 using EvershockGame.Code.Stages;
 using EvershockGame.Components;
-using FarseerPhysics.Dynamics;
 using Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VelcroPhysics.Collision.Filtering;
+using VelcroPhysics.Dynamics;
 
 namespace EvershockGame.Code.Manager
 {

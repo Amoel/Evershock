@@ -3,7 +3,6 @@ using EvershockGame.Code.Factory;
 using EvershockGame.Code.Manager;
 using EvershockGame.Components;
 using EvershockGame.Manager;
-using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VelcroPhysics.Dynamics;
 
 namespace EvershockGame.Code.Factories
 {

@@ -1,9 +1,9 @@
 ﻿using EvershockGame.Code;
 using EvershockGame.Code.Manager;
 using EvershockGame.Manager;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Dynamics.Joints;
-using FarseerPhysics.Factories;
+using VelcroPhysics.Dynamics;
+using VelcroPhysics.Dynamics.Joints;
+using VelcroPhysics.Factories;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -41,7 +41,7 @@ namespace EvershockGame.Code.Components
             m_Force = Vector3.Zero;
             m_Gravity = Vector3.Zero;
 
-            Body = BodyFactory.CreateBody(PhysicsManager.Get().World, Entity);
+            Body = BodyFactory.CreateBody(PhysicsManager.Get().World, Vector2.Zero, 0, BodyType.Static, Entity);
 
             TransformComponent transform = GetComponent<TransformComponent>();
             if (transform != null)
@@ -180,7 +180,7 @@ namespace EvershockGame.Code.Components
 
                 if (location.Z + m_Force.Z < 0.0f)
                 {
-                    m_Force = new Vector3(m_Force.X, m_Force.Y, m_Force.Z * -Body.Restitution);
+                    m_Force = new Vector3(m_Force.X, m_Force.Y, m_Force.Z);// * -Body.Restitution);
                     m_Gravity = Vector3.Zero;
 
                     HasTouchedFloor = true;

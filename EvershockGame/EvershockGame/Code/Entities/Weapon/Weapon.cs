@@ -1,9 +1,8 @@
 ﻿using EvershockGame.Code.Components;
 using EvershockGame.Code.Items;
 using EvershockGame.Components;
-using FarseerPhysics.Controllers;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Dynamics.Joints;
+using VelcroPhysics.Dynamics;
+using VelcroPhysics.Dynamics.Joints;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

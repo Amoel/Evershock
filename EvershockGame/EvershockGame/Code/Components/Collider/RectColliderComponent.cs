@@ -1,9 +1,9 @@
 ﻿using EvershockGame.Code;
 using EvershockGame.Code.Manager;
 using EvershockGame.Manager;
-using FarseerPhysics.Collision.Shapes;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Factories;
+using VelcroPhysics.Collision.Shapes;
+using VelcroPhysics.Dynamics;
+using VelcroPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

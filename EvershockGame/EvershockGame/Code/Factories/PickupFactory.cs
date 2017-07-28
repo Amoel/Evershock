@@ -3,7 +3,7 @@ using EvershockGame.Components;
 using EvershockGame.Manager;
 using EvershockGame.Code.Particles;
 using EvershockGame.Code.Components;
-using FarseerPhysics.Dynamics;
+using VelcroPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

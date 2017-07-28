@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using EvershockGame.Manager;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Factories;
+using VelcroPhysics.Dynamics;
+using VelcroPhysics.Factories;
 using EvershockGame.Code.Manager;
 
 namespace EvershockGame.Code.Components

@@ -2,8 +2,7 @@
 using EvershockGame.Code.Components;
 using EvershockGame.Code.Manager;
 using EvershockGame.Manager;
-using FarseerPhysics.Dynamics;
-using FarseerPhysics.Dynamics.Contacts;
+using VelcroPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VelcroPhysics.Collision.Filtering;
+using VelcroPhysics.Collision.ContactSystem;
 
 namespace EvershockGame.Code.Components
 {
@@ -109,7 +110,7 @@ namespace EvershockGame.Code.Components
 
         //---------------------------------------------------------------------------
 
-        protected bool OnCollision(Fixture source, Fixture target, Contact contact)
+        protected void OnCollision(Fixture source, Fixture target, Contact contact)
         {
             IEntity sourceEntity = null;
             IEntity targetEntity = null;
@@ -124,12 +125,11 @@ namespace EvershockGame.Code.Components
             }
 
             OnEnter(sourceEntity, targetEntity);
-            return true;
         }
 
         //---------------------------------------------------------------------------
 
-        protected void OnSeparation(Fixture source, Fixture target)
+        protected void OnSeparation(Fixture source, Fixture target, Contact contact)
         {
             IEntity sourceEntity = null;
             IEntity targetEntity = null;
