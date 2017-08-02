@@ -10,6 +10,8 @@ namespace EvershockGame.Code.Components
 {
     public class BulletPhysicsComponent : PhysicsComponent
     {
+        public int Test { get; set; } = 1;
+
         public BulletPhysicsComponent(Guid entity) : base(entity)
         {
             Body.IsSensor = true;
