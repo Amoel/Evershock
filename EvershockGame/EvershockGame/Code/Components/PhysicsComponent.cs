@@ -1,6 +1,7 @@
 ﻿using EvershockGame.Code;
 using EvershockGame.Code.Manager;
 using EvershockGame.Manager;
+using VelcroPhysics.Utilities;
 using VelcroPhysics.Dynamics;
 using VelcroPhysics.Dynamics.Joints;
 using VelcroPhysics.Factories;
@@ -16,10 +17,17 @@ namespace EvershockGame.Code.Components
         public static readonly float Unit = 10.0f;
 
         public float Inertia { get; set; }
+        
+        /// <summary>
+        /// Should be set between 0 and 0,7. Values outside this range get clamped.
+        /// </summary>
+        public float Bounciness {
+            get { return m_bounciness; }
+            set { m_bounciness = MathUtils.Clamp(value, 0, 0.7f); }
+        }
+
         public bool UseAbsoluteMovement { get; set; }
-
         public bool IsGravityAffected { get; set; }
-
         public bool IsResting { get; private set; }
         public bool HasTouchedFloor { get; private set; }
 
@@ -29,12 +37,14 @@ namespace EvershockGame.Code.Components
         private Vector3 m_Gravity;
 
         private float m_RestingTimer;
+        private float m_bounciness;
 
         //---------------------------------------------------------------------------
 
         public PhysicsComponent(Guid entity) : base(entity)
         {
             Inertia = 0.0f;
+            m_bounciness = 0.0f;
 
             IsGravityAffected = true;
 
@@ -55,14 +65,17 @@ namespace EvershockGame.Code.Components
 
         //---------------------------------------------------------------------------
 
-        public void Init(BodyType bodyType, float inertia, float dampening, bool useAbsoluteMovement = false)
+        public void Init(BodyType bodyType, float inertia, float dampening, bool useAbsoluteMovement = false, float bounciness = 0.0f)
         {
             Body.BodyType = bodyType;
             Inertia = inertia;
             Body.Inertia = inertia;
             Body.LinearDamping = dampening;
             UseAbsoluteMovement = useAbsoluteMovement;
+            Bounciness = bounciness;
         }
+        
+            
 
         //---------------------------------------------------------------------------
 
@@ -180,7 +193,7 @@ namespace EvershockGame.Code.Components
 
                 if (location.Z + m_Force.Z < 0.0f)
                 {
-                    m_Force = new Vector3(m_Force.X, m_Force.Y, m_Force.Z);// * -Body.Restitution);
+                    m_Force = new Vector3(m_Force.X, m_Force.Y, Math.Abs(m_Force.Z) * Bounciness);
                     m_Gravity = Vector3.Zero;
 
                     HasTouchedFloor = true;

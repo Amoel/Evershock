@@ -32,7 +32,7 @@ namespace EvershockGame.Code.Factories
             particle.AddComponent<TransformComponent>().Init(location);
 
             PhysicsComponent physics = particle.AddComponent<PhysicsComponent>();
-            physics.Init(BodyType.Dynamic, 0.94f, 0.5f);
+            physics.Init(BodyType.Dynamic, 0.94f, 0.5f); //bounciness required?
             physics.ApplyForce(force, true);
 
             SpriteComponent sprite = particle.AddComponent<SpriteComponent>();

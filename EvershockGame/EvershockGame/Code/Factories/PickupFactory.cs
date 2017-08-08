@@ -117,7 +117,7 @@ namespace EvershockGame.Code.Factories
             pickup.AddComponent<TransformComponent>().Init(location);
 
             PhysicsComponent physics = pickup.AddComponent<PhysicsComponent>();
-            physics.Init(BodyType.Dynamic, 0.97f, 2.0f);
+            physics.Init(BodyType.Dynamic, 0.97f, 2.0f, false, 0.3f);
 
             CircleColliderComponent collider = pickup.AddComponent<CircleColliderComponent>();
             collider.Init(25, BodyType.Dynamic);
