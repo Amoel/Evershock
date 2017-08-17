@@ -15,8 +15,8 @@ namespace EvershockGame.Code
 {
     public abstract class Weapon : Entity
     {
-        public TransformComponent Transform { get { return GetComponent<TransformComponent>(); } }
-        public SpriteComponent Sprite { get { return GetComponent<SpriteComponent>(); } }
+        protected TransformComponent transform;
+        protected SpriteComponent sprite;
         //public EngineComponent Engine { get { return GetComponent<EngineComponent>(); } }
 
         public bool IsAttacking { get; protected set; }
@@ -25,12 +25,16 @@ namespace EvershockGame.Code
 
         public Weapon(string name, Guid parent) : base(name, parent)
         {
-            TransformComponent transform = AddComponent<TransformComponent>();
-            transform.Init(new Vector3(40, 1, 20), Vector2.One, Vector2.UnitY, 0.0f);
+            //commented out 16.8. - 16:17
+            //TransformComponent transform = AddComponent<TransformComponent>();
+            //transform.Init(new Vector3(40, 1, 20), Vector2.One, Vector2.UnitY, 0.0f);
 
+            //Why does every Weapon have a Sprite Component, and!! every Melee or Ranged weapon has one as well?
             SpriteComponent sprite = AddComponent<SpriteComponent>();
             sprite.Scale = new Vector2(1.5f, 1.5f);
             sprite.Offset = new Vector2(-20, 20);
+
+            Init();
 
             //EngineComponent engine = AddComponent<EngineComponent>();
 
@@ -43,8 +47,6 @@ namespace EvershockGame.Code
             //pathLeft.AddKeyframe(new Keyframe(new Vector3(-15, 1, 80), -0.4f, 0.0f));
             //pathLeft.AddKeyframe(new Keyframe(new Vector3(-15, 1, 80), -2.0f, 0.12f));
             //pathLeft.AddKeyframe(new Keyframe(new Vector3(-15, 1, 80), -0.4f, 0.24f));
-
-            Init();
         }
 
         //---------------------------------------------------------------------------
@@ -60,12 +62,12 @@ namespace EvershockGame.Code
                     parentTransform.OrientationChanged += OnParentOrientationChanged;
                 }
 
-                PhysicsComponent parentPhysics = parent.GetComponent<PhysicsComponent>();
-                PhysicsComponent physics = GetComponent<PhysicsComponent>();
-                if (parentPhysics != null)
-                {
-                    parentPhysics.AddJoint(physics);
-                }
+                //PhysicsComponent parentPhysics = parent.GetComponent<PhysicsComponent>();
+                //PhysicsComponent physics = GetComponent<PhysicsComponent>();
+                //if (parentPhysics != null)
+                //{
+                //    parentPhysics.AddJoint(physics,JointType.Distance);
+                //}
             }
         }
 

@@ -13,11 +13,12 @@ namespace EvershockGame.Code.Components
     [Serializable]
     [RequireComponent(typeof(TransformComponent))]
     public class PhysicsComponent : Component, ITickableComponent, IInputReceiver
-    {
+
+    {    /// <summary>
+         /// Used to convert from pixels to Velcros internal computational position Unit
+         /// </summary>
         public static readonly float Unit = 10.0f;
 
-        public float Inertia { get; set; }
-        
         /// <summary>
         /// Should be set between 0 and 0,7. Values outside this range get clamped.
         /// </summary>
@@ -25,6 +26,8 @@ namespace EvershockGame.Code.Components
             get { return m_bounciness; }
             set { m_bounciness = MathUtils.Clamp(value, 0, 0.7f); }
         }
+
+        public float Inertia { get; set; }
 
         public bool UseAbsoluteMovement { get; set; }
         public bool IsGravityAffected { get; set; }
@@ -58,6 +61,7 @@ namespace EvershockGame.Code.Components
             {
                 Body.Position = transform.AbsoluteLocation.To2D() / Unit;
             }
+
             Body.IgnoreGravity = true;
             Body.Mass = 0.0f;
             Body.Friction = 0.0f;
@@ -73,6 +77,12 @@ namespace EvershockGame.Code.Components
             Body.LinearDamping = dampening;
             UseAbsoluteMovement = useAbsoluteMovement;
             Bounciness = bounciness;
+
+            TransformComponent transform = GetComponent<TransformComponent>();
+            if (transform != null)
+            {
+                Body.Position = transform.AbsoluteLocation.To2D() / Unit;
+            }
         }
         
             
@@ -106,6 +116,7 @@ namespace EvershockGame.Code.Components
                     ApplyGravity(deltaTime);
                 }
 
+
                 if (m_Force.Length() < 1.0f)
                 {
                     m_RestingTimer += deltaTime;
@@ -120,9 +131,10 @@ namespace EvershockGame.Code.Components
                     IsResting = false;
                 }
 
-                if (Body != null && Body.BodyType != BodyType.Static)
-                {
-                    if (Body.Enabled)
+
+                if (Body.Enabled)
+                { 
+                    if (Body != null && Body.BodyType == BodyType.Dynamic)
                     {
                         Vector3 pos = new Vector3(Body.Position.X * Unit, Body.Position.Y * Unit, transform.Location.Z + m_Force.Z);
                         if (parentTransform != null)
@@ -131,15 +143,17 @@ namespace EvershockGame.Code.Components
                         }
                         transform.MoveTo(pos);
                     }
-                    else
+
+                    if (UseAbsoluteMovement) Body.LinearVelocity = Vector2.Zero;
+
+                    if (Body != null && Body.BodyType == BodyType.Kinematic)
                     {
-                        transform.MoveBy(m_Force);
+                        transform.MoveBy(Body.LinearVelocity.To3D());
                     }
-                    
                 }
-                
+             
                 m_Force *= Inertia;
-                if (UseAbsoluteMovement) Body.LinearVelocity = Vector2.Zero;
+
             }
         }
 
@@ -223,12 +237,19 @@ namespace EvershockGame.Code.Components
         
         //---------------------------------------------------------------------------
 
-        public void AddJoint(PhysicsComponent other)
+        public void AddJoint(PhysicsComponent secondBody, JointType jointType)
         {
-            if (other != null && other.Body != null)
+            if (secondBody != null && secondBody.Body != null)
             {
-                WeldJoint joint = JointFactory.CreateWeldJoint(PhysicsManager.Get().World, Body, other.Body, Vector2.Zero, Vector2.Zero);
-                joint.CollideConnected = false;
+                if (jointType == JointType.Weld)
+                {
+                    WeldJoint joint = JointFactory.CreateWeldJoint(PhysicsManager.Get().World, Body, secondBody.Body, Vector2.Zero, Vector2.Zero);
+                    joint.CollideConnected = false;
+                }
+                else
+                {
+                    AssertManager.Get().Show(jointType.ToString() + " is not a defined Joint type (yet)");
+                }
             }
         }
 

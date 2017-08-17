@@ -26,7 +26,7 @@ namespace EvershockGame.Code
             AddComponent<PhysicsComponent>();
 
             RectColliderComponent collider = AddComponent<RectColliderComponent>();
-            collider.Init(64, 64, BodyType.Static);
+            collider.Init(64, 64);
             collider.SetSensor(true);
 
             AnimationComponent animation = AddComponent<AnimationComponent>();

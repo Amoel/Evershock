@@ -96,6 +96,7 @@
     <Compile Include="Code\Entities\Particle.cs" />
     <Compile Include="Code\Entities\Pickup.cs" />
     <Compile Include="Code\Entities\Player.cs" />
+    <Compile Include="Code\Entities\TestObject.cs" />
     <Compile Include="Code\Entities\UI\AreaControl.cs" />
     <Compile Include="Code\Entities\UI\ButtonControl.cs" />
     <Compile Include="Code\Entities\UI\ImageControl.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Code\Entities\UI\UIEntity.cs" />
     <Compile Include="Code\Entities\Weapon\Bullets\Bullet.cs" />
     <Compile Include="Code\Entities\Weapon\Bullets\BulletDesc.cs" />
+    <Compile Include="Code\Entities\Weapon\MeleeWeapons\Dagger.cs" />
     <Compile Include="Code\Entities\Weapon\Weapon.cs" />
     <Compile Include="Code\Entities\Weapon\MeleeWeapon.cs" />
     <Compile Include="Code\Entities\Weapon\RangeWeapon.cs" />

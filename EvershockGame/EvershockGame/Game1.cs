@@ -42,7 +42,7 @@ namespace EvershockGame
         {
             base.Initialize();
             Window.AllowUserResizing = true;
-            GameWindowSettings.SetWindowSettings(graphics, Window, 1680, 1050);
+            GameWindowSettings.SetWindowSettings(graphics, Window, 1600, 900);
 
             oldKeyboardState = Keyboard.GetState();
 
@@ -61,6 +61,7 @@ namespace EvershockGame
 
             ItemManager.Get().LoadItems();
             ItemManager.Get().LoadItemPools();
+            //MeleeWeapon blab = EntityFactory.Create<MeleeWeapon>("something");
 
             /*--------------------------------------------------------------------------
                        Stage
@@ -131,7 +132,12 @@ namespace EvershockGame
 
             CameraManager.Get().FuseCameras(cam1, cam2, width / 2);
 
+            /*--------------------------------------------------------------------------
+                        Test
+            --------------------------------------------------------------------------*/
 
+            TestObject testobject = EntityFactory.Create<TestObject>("testobject");
+            
             /*--------------------------------------------------------------------------
                         UI
             --------------------------------------------------------------------------*/

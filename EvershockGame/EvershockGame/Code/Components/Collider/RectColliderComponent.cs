@@ -7,9 +7,6 @@ using VelcroPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace EvershockGame.Code.Components
 {
@@ -30,31 +27,32 @@ namespace EvershockGame.Code.Components
 
         public void Init(int width, int height)
         {
-            Init(width, height, Vector2.Zero, BodyType.Static, 0.0f);
+            Init(width, height, Vector2.Zero, 0.0f, ECollisionCategory.All);
         }
 
         //---------------------------------------------------------------------------
 
         public void Init(int width, int height, Vector2 offset)
         {
-            Init(width, height, offset, BodyType.Static, 0.0f);
+            Init(width, height, offset, 0.0f, ECollisionCategory.All);
         }
-
+        
         //---------------------------------------------------------------------------
 
-        public void Init(int width, int height, BodyType bodyType)
+        public void Init(int width, int height, ECollisionCategory collisionCategory)
         {
-            Init(width, height, Vector2.Zero, bodyType, 0.0f);
+            Init(width, height, Vector2.Zero, 0.0f, collisionCategory);
         }
 
         //---------------------------------------------------------------------------
 
-        public void Init(int width, int height, Vector2 offset, BodyType bodyType, float dampening)
+        public void Init(int width, int height, Vector2 offset, float dampening, ECollisionCategory collisionCategory)
         {
             ClearFixtures();
 
             Width = width;
             Height = height;
+            Offset = offset;
 
             PhysicsComponent physics = GetComponentInAncestor<PhysicsComponent>();
             if (physics != null)

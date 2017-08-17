@@ -72,7 +72,7 @@ namespace EvershockGame.Code
                         input.MapAction(EGameAction.INVENTORY_PREVIOUS_ITEM, EInput.KEYBOARD_Q, EInput.GAMEPAD_DPAD_UP);
                         input.MapAction(EGameAction.INVENTORY_USE_ITEM, EInput.GAMEPAD_X);
                         input.MapAction(EGameAction.INVENTORY_DROP_ITEM, EInput.GAMEPAD_TRIGGER_RIGHT);
-                        input.MapAction(EGameAction.PLAYER_ATTACK, EInput.GAMEPAD_TRIGGER_LEFT);
+                        input.MapAction(EGameAction.PLAYER_ATTACK, EInput.GAMEPAD_TRIGGER_LEFT, EInput.KEYBOARD_ENTER);
                         break;
                     case PlayerIndex.Two:
                         input.MapAction(EGameAction.MOVE_LEFT, EInput.KEYBOARD_A, EInput.GAMEPAD_THUMBSTICK_LEFT_LEFT);
@@ -87,7 +87,7 @@ namespace EvershockGame.Code
                         input.MapAction(EGameAction.INVENTORY_PREVIOUS_ITEM, EInput.KEYBOARD_Q, EInput.GAMEPAD_DPAD_UP);
                         input.MapAction(EGameAction.INVENTORY_USE_ITEM, EInput.GAMEPAD_X);
                         input.MapAction(EGameAction.INVENTORY_DROP_ITEM, EInput.GAMEPAD_TRIGGER_RIGHT);
-                        input.MapAction(EGameAction.PLAYER_ATTACK, EInput.GAMEPAD_TRIGGER_LEFT);
+                        input.MapAction(EGameAction.PLAYER_ATTACK, EInput.GAMEPAD_TRIGGER_LEFT, EInput.KEYBOARD_SPACE);
                         break;
                 }
             }
@@ -110,7 +110,7 @@ namespace EvershockGame.Code
             MeleeWeapon weapon = EntityFactory.Create<MeleeWeapon>(GUID, "Primary Weapon P1");
             if (Index == PlayerIndex.One)
             {
-                GetComponent<ActorPhysicsComponent>().AddJoint(weapon.GetComponent<PhysicsComponent>());
+                GetComponent<ActorPhysicsComponent>().AddJoint(weapon.GetComponent<PhysicsComponent>(),VelcroPhysics.Dynamics.Joints.JointType.Distance);
             }
         }
     }
